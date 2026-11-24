@@ -1,4 +1,3 @@
-import { usePage } from '@inertiajs/react'
 import { isValidElement, useLayoutEffect, useRef, useState, useSyncExternalStore, type ComponentType, type MouseEvent, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -6,7 +5,7 @@ import { actionHref } from '../../js/actions'
 import { cn } from '../../js/cn'
 import { customIcon } from '../../js/iconResolver'
 import { own, toastIcons } from '../../js/icons'
-import { handleActionClick, handleFlash, toastStore } from '../../js/toast'
+import { handleActionClick, toastStore } from '../../js/toast'
 import {
     DEFAULT_HOTKEY,
     createToasterController,
@@ -20,7 +19,7 @@ import { trans, type TranslationValue } from '../../js/translations'
 import type { Toast, ToastClasses, ToastPosition, ToastTypeLabels } from '../../js/types'
 import * as styles from './classes'
 import type { IconComponent, IconResolverFn } from './iconResolver'
-import { initNotifications } from './notifications'
+import { useFlashedToasts } from './notifications'
 import { Icon, renderIcon } from './parts'
 
 export interface ToastRenderHelpers {
@@ -123,7 +122,7 @@ export default function Toaster({
     components = {},
     aboveModals = true,
 }: ToasterProps) {
-    const { flash } = usePage()
+    useFlashedToasts()
     const toasts = useSyncExternalStore(toastStore.subscribe, toastStore.getSnapshot, () => serverSnapshot)
     // The toasts render into an element of their own, which can move into an open modal dialog. Rendering starts after
     // hydration, since the server renders no toasts.
@@ -144,13 +143,6 @@ export default function Toaster({
     useLayoutEffect(() => {
         settings.current = { name, hotkey, typeLabels, visibleToasts, expand, aboveModals }
     })
-
-    useLayoutEffect(() => {
-        initNotifications()
-
-        // Flash data that arrived before this component mounted, when the application did not call initNotifications().
-        handleFlash(flash as Record<string, unknown>)
-    }, [])
 
     useLayoutEffect(() => {
         if (!host || !hydrated) {

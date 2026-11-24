@@ -1,10 +1,9 @@
-import { usePage } from '@inertiajs/react'
 import { useLayoutEffect, useMemo, useState, useSyncExternalStore, type MouseEvent } from 'react'
 
-import { createPauseScope, handleActionClick, handleFlash, runToastAction, toast, toastRevision, toastStore, type ToastFunction } from '../../js/toast'
+import { createPauseScope, handleActionClick, runToastAction, toast, toastRevision, toastStore, type ToastFunction } from '../../js/toast'
 import type { ToastStore } from '../../js/toastStore'
 import type { Toast } from '../../js/types'
-import { initNotifications } from './notifications'
+import { useFlashedToasts } from './notifications'
 
 export type UseToasts = Pick<ToastStore, 'update' | 'dismiss' | 'pause' | 'resume' | 'timer'> & {
     /**
@@ -28,7 +27,7 @@ const runAction: UseToasts['runAction'] = (id, index, event) => (event ? handleA
  * Pauses made with its `pause()` end when the component unmounts.
  */
 export function useToasts(name?: string): UseToasts {
-    const { flash } = usePage()
+    useFlashedToasts()
     const snapshot = useSyncExternalStore(toastStore.subscribe, toastStore.getSnapshot, () => serverSnapshot)
     // Timers that pause or resume keep the same snapshot; this re-renders, so what shows `timer()` updates.
     useSyncExternalStore(toastStore.subscribe, toastRevision, () => 0)
@@ -37,15 +36,8 @@ export function useToasts(name?: string): UseToasts {
 
     useLayoutEffect(() => toastStore.attach(name), [name])
 
-    useLayoutEffect(() => {
-        initNotifications()
-
-        // Flash data that arrived before this component mounted, when the application did not call initNotifications().
-        handleFlash(flash as Record<string, unknown>)
-
-        // An action can navigate away while the pointer still pauses the toasts.
-        return scope.release
-    }, [])
+    // An action can navigate away while the pointer still pauses the toasts.
+    useLayoutEffect(() => scope.release, [])
 
     return {
         toasts,

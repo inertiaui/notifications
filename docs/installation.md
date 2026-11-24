@@ -160,6 +160,22 @@ export default function Layout({ children }) {
 
 :::
 
+In React, you may also render the `Toaster` next to the app in the `withApp` option of `createInertiaApp()`, where the Laravel React starter kit renders its sonner `Toaster`:
+
+```jsx
+createInertiaApp({
+    withApp(app) {
+        return (
+            <>
+                {app}
+                <Toaster />
+            </>
+        )
+    },
+    // ...
+})
+```
+
 Your application is now ready to [flash toasts from Laravel](/toasts/flashing-from-laravel).
 
 ## Server-Side Rendering
