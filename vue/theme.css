@@ -1,0 +1,410 @@
+/**
+ * Semantic Notifications tokens and the toast stack layout. Import after Tailwind and override the tokens in
+ * :root, .dark, or a local wrapper. Dark defaults follow the application's Tailwind dark variant: the media query
+ * by default, or a configured selector such as &:where(.dark, .dark *) or &:is(.dark *).
+ */
+@theme {
+    --color-iui-toast-surface: #ffffff;
+    --color-iui-toast-foreground: var(--color-gray-900);
+    --color-iui-toast-muted-foreground: var(--color-gray-600);
+    --color-iui-toast-border: var(--color-gray-200);
+    --color-iui-toast-icon: var(--color-gray-500);
+    --color-iui-toast-icon-hover: var(--color-gray-600);
+    --color-iui-toast-control-hover: var(--color-gray-100);
+    --color-iui-toast-ring: var(--color-blue-500);
+    --color-iui-toast-action: var(--color-blue-600);
+    --color-iui-toast-default: var(--color-gray-500);
+    --color-iui-toast-info: var(--color-blue-500);
+    --color-iui-toast-success: var(--color-emerald-600);
+    --color-iui-toast-warning: var(--color-amber-600);
+    --color-iui-toast-error: var(--color-red-500);
+    --color-iui-toast-loading: var(--color-gray-500);
+
+    --radius-iui-toast: 0.5rem;
+
+    --color-iui-inbox-surface: #ffffff;
+    --color-iui-inbox-foreground: var(--color-gray-900);
+    --color-iui-inbox-muted-foreground: var(--color-gray-600);
+    --color-iui-inbox-border: var(--color-gray-200);
+    --color-iui-inbox-icon: var(--color-gray-500);
+    --color-iui-inbox-icon-hover: var(--color-gray-700);
+    --color-iui-inbox-control-hover: var(--color-gray-100);
+    --color-iui-inbox-ring: var(--color-blue-500);
+    --color-iui-inbox-accent: var(--color-blue-600);
+    --color-iui-inbox-accent-subtle: var(--color-blue-50);
+    --color-iui-inbox-badge: var(--color-red-600);
+    --color-iui-inbox-badge-foreground: #ffffff;
+    --color-iui-inbox-unread: var(--color-blue-600);
+    --color-iui-inbox-tooltip: var(--color-gray-900);
+    --color-iui-inbox-tooltip-foreground: #ffffff;
+
+    --radius-iui-inbox: 0.5rem;
+}
+
+/*
+ * Dark defaults. The dark variant applies to the children of the root, a .dark wrapper, or a shadow host, and the
+ * tokens go on that parent, so they also switch under a selector that needs a .dark ancestor, such as &:is(.dark *),
+ * which never matches the root itself. :where() leaves the specificity of an override in :root ahead.
+ */
+@layer base {
+    * {
+        @variant dark {
+            :where(:root:has(> &), .dark:has(> &)),
+            :host:has(> &) {
+                --iui-color-scheme: dark;
+
+                --color-iui-toast-surface: var(--color-zinc-900);
+                --color-iui-toast-foreground: var(--color-zinc-100);
+                --color-iui-toast-muted-foreground: var(--color-zinc-400);
+                --color-iui-toast-border: var(--color-zinc-700);
+                --color-iui-toast-icon: var(--color-zinc-500);
+                --color-iui-toast-icon-hover: var(--color-zinc-300);
+                --color-iui-toast-control-hover: var(--color-zinc-800);
+                --color-iui-toast-ring: var(--color-blue-400);
+                --color-iui-toast-action: var(--color-blue-400);
+                --color-iui-toast-default: var(--color-zinc-500);
+                --color-iui-toast-info: var(--color-blue-400);
+                --color-iui-toast-success: var(--color-emerald-400);
+                --color-iui-toast-warning: var(--color-amber-400);
+                --color-iui-toast-error: var(--color-red-400);
+                --color-iui-toast-loading: var(--color-zinc-400);
+
+                --color-iui-inbox-surface: var(--color-zinc-900);
+                --color-iui-inbox-foreground: var(--color-zinc-100);
+                --color-iui-inbox-muted-foreground: var(--color-zinc-400);
+                --color-iui-inbox-border: var(--color-zinc-700);
+                --color-iui-inbox-icon: var(--color-zinc-500);
+                --color-iui-inbox-icon-hover: var(--color-zinc-200);
+                --color-iui-inbox-control-hover: var(--color-zinc-800);
+                --color-iui-inbox-ring: var(--color-blue-400);
+                --color-iui-inbox-accent: var(--color-blue-400);
+                --color-iui-inbox-accent-subtle: color-mix(in oklab, var(--color-blue-400) 15%, transparent);
+                --color-iui-inbox-badge: var(--color-red-500);
+                --color-iui-inbox-badge-foreground: #ffffff;
+                --color-iui-inbox-unread: var(--color-blue-400);
+                --color-iui-inbox-tooltip: var(--color-zinc-700);
+                --color-iui-inbox-tooltip-foreground: var(--color-zinc-100);
+            }
+        }
+    }
+}
+
+/*
+ * The distance between the bell and the notification center panel, and the panel's smallest distance from the edges of
+ * the screen. Registered as lengths, so the NotificationCenter reads them in pixels.
+ */
+@property --inbox-gap {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 8px;
+}
+
+@property --inbox-offset {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 8px;
+}
+
+/*
+ * The stack. The Toaster measures each toast and sets these variables:
+ * on each list: --toast-count, --toast-visible, --toast-front-height, --toast-heights (all open toasts);
+ * on each toast: --toast-index (0 is the newest), --toast-height, --toast-before (heights of newer toasts),
+ * and --toast-swipe while it is dragged.
+ */
+@layer components {
+    .iui-toast-list {
+        --toast-offset: 1rem;
+        --toast-gap: 0.5rem;
+        --toast-peek: 0.875rem;
+        --toast-width: min(24rem, 100vw - max(var(--toast-offset), env(safe-area-inset-left)) - max(var(--toast-offset), env(safe-area-inset-right)));
+        --toast-duration: 400ms;
+        --toast-easing: cubic-bezier(0.21, 1.02, 0.73, 1);
+
+        position: fixed;
+        z-index: 50;
+        width: var(--toast-width);
+        height: calc(var(--toast-front-height, 0px) + (var(--toast-visible, 1) - 1) * var(--toast-peek));
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        transition: height var(--toast-duration) var(--toast-easing);
+    }
+
+    .iui-toast-list[data-expanded='true'] {
+        height: calc(var(--toast-heights, 0px) + (var(--toast-count, 1) - 1) * var(--toast-gap));
+    }
+
+    .iui-toast-list[data-position^='top'] {
+        --toast-dir: 1;
+        top: max(var(--toast-offset), env(safe-area-inset-top));
+    }
+
+    .iui-toast-list[data-position^='bottom'] {
+        --toast-dir: -1;
+        bottom: max(var(--toast-offset), env(safe-area-inset-bottom));
+    }
+
+    .iui-toast-list[data-position$='left'] {
+        left: max(var(--toast-offset), env(safe-area-inset-left));
+    }
+
+    .iui-toast-list[data-position$='right'] {
+        right: max(var(--toast-offset), env(safe-area-inset-right));
+    }
+
+    .iui-toast-list[data-position$='center'] {
+        left: calc(50% - var(--toast-width) / 2);
+    }
+
+    .iui-toast {
+        --toast-y: calc(var(--toast-dir) * var(--toast-index, 0) * var(--toast-peek));
+        --toast-scale: calc(1 - var(--toast-index, 0) * 0.05);
+
+        position: absolute;
+        inset-inline: 0;
+        /* Toasts behind the newest one take its height, so the stack looks even. */
+        height: var(--toast-front-height, auto);
+        overflow: hidden;
+        transform: translateX(var(--toast-swipe, 0px)) translateY(var(--toast-y)) scale(var(--toast-scale));
+        transition:
+            transform var(--toast-duration) var(--toast-easing),
+            opacity var(--toast-duration) var(--toast-easing),
+            height var(--toast-duration) var(--toast-easing);
+        touch-action: pan-y;
+    }
+
+    .iui-toast-list[data-position^='top'] > .iui-toast {
+        top: 0;
+        transform-origin: 50% 100%;
+    }
+
+    .iui-toast-list[data-position^='bottom'] > .iui-toast {
+        bottom: 0;
+        transform-origin: 50% 0;
+    }
+
+    .iui-toast > [data-toast-body] {
+        transition: opacity var(--toast-duration) var(--toast-easing);
+    }
+
+    .iui-toast-list[data-expanded='false'] > .iui-toast[data-front='false'] > [data-toast-body] {
+        opacity: 0;
+    }
+
+    .iui-toast-list[data-expanded='false'] > .iui-toast[data-overflow='true'] {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .iui-toast-list[data-expanded='true'] > .iui-toast {
+        --toast-y: calc(var(--toast-dir) * (var(--toast-before, 0px) + var(--toast-index, 0) * var(--toast-gap)));
+        --toast-scale: 1;
+
+        height: var(--toast-height, auto);
+    }
+
+    .iui-toast[data-swiping='true'] {
+        transition: none;
+        user-select: none;
+    }
+
+    .iui-toast[data-state='closing'] {
+        --toast-scale: 0.95;
+
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .iui-toast[data-swipe-out='right'] {
+        --toast-swipe: 110%;
+    }
+
+    .iui-toast[data-swipe-out='left'] {
+        --toast-swipe: -110%;
+    }
+
+    @starting-style {
+        .iui-toast {
+            opacity: 0;
+            transform: translateY(calc(var(--toast-dir) * -100%));
+        }
+    }
+
+    .iui-toast-progress {
+        position: absolute;
+        inset-inline: 0;
+        bottom: 0;
+        height: 2px;
+        background: currentColor;
+        opacity: 0.5;
+        transform-origin: left;
+    }
+
+    /* Like Tailwind's rtl variant, as the build turns :dir() into a list of right-to-left languages. */
+    .iui-toast-progress:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+        transform-origin: right;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .iui-toast,
+        .iui-toast-list {
+            transition-property: opacity;
+        }
+    }
+
+    /*
+     * The notification center panel, a popover in the top layer. The NotificationCenter places it next to the bell
+     * with inline styles and sets data-side to the side it opened on. On narrow screens, where --inbox-layout is sheet,
+     * it is a sheet at the bottom of the screen and the NotificationCenter leaves its position to these rules. Its body
+     * caps the height at --inbox-max-height, since the placement sets the panel's max-height to the room it has.
+     */
+    .iui-inbox-panel {
+        --inbox-offset: 0.5rem;
+        --inbox-gap: 0.5rem;
+        --inbox-width: min(26rem, 100vw - 2 * var(--inbox-offset));
+        --inbox-max-height: 36rem;
+        --inbox-duration: 150ms;
+        --inbox-enter: translateY(-0.25rem);
+
+        position: fixed;
+        inset: auto;
+        width: var(--inbox-width);
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        border-width: 1px;
+        border-radius: var(--radius-iui-inbox);
+        flex-direction: column;
+        /* Native scrollbars follow the tokens. */
+        color-scheme: var(--iui-color-scheme, light);
+        opacity: 0;
+        transform: var(--inbox-enter);
+        transition:
+            opacity var(--inbox-duration) ease-out,
+            transform var(--inbox-duration) ease-out,
+            display var(--inbox-duration) allow-discrete,
+            overlay var(--inbox-duration) allow-discrete;
+    }
+
+    .iui-inbox-panel[data-side='top'] {
+        --inbox-enter: translateY(0.25rem);
+    }
+
+    .iui-inbox-panel[data-side='left'] {
+        --inbox-enter: translateX(0.25rem);
+    }
+
+    .iui-inbox-panel[data-side='right'] {
+        --inbox-enter: translateX(-0.25rem);
+    }
+
+    .iui-inbox-panel:popover-open {
+        display: flex;
+        opacity: 1;
+        transform: none;
+    }
+
+    @starting-style {
+        .iui-inbox-panel:popover-open {
+            opacity: 0;
+            transform: var(--inbox-enter);
+        }
+    }
+
+    .iui-inbox-panel-body {
+        max-height: var(--inbox-max-height);
+    }
+
+    /*
+     * While another list loads with nothing to show yet, its spinner keeps the height of the list before it, which the
+     * NotificationCenter keeps in --inbox-list-height, so the panel does not shrink and grow back.
+     */
+    .iui-inbox-panel [data-inbox-scroller] > [role='status'] {
+        min-height: var(--inbox-list-height, auto);
+        justify-content: center;
+    }
+
+    @media (width < 40rem) {
+        .iui-inbox-panel {
+            --inbox-layout: sheet;
+            --inbox-enter: translateY(1rem);
+
+            inset-inline: 0;
+            top: auto;
+            bottom: 0;
+            width: 100%;
+            /* A fixed height, so the tabs at its top stay under the finger when the next list is shorter. */
+            height: 85dvh;
+            /* Clear of the home indicator in applications with viewport-fit=cover. */
+            padding-bottom: env(safe-area-inset-bottom);
+            border-bottom-width: 0;
+            border-radius: calc(var(--radius-iui-inbox) * 2) calc(var(--radius-iui-inbox) * 2) 0 0;
+        }
+
+        .iui-inbox-panel-body {
+            max-height: none;
+        }
+
+        /* The loading, empty, and error states sit in the middle of the sheet. */
+        .iui-inbox-panel [data-inbox-scroller] > :is([role='status'], [data-inbox-empty], [data-inbox-error]) {
+            min-height: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .iui-inbox-panel,
+        .iui-inbox-panel[data-side] {
+            --inbox-enter: none;
+        }
+    }
+
+    /*
+     * The tabs and the categories scroll sideways without a scrollbar, so they fade out at their edges to show that more
+     * follows. Their padding is as wide as the fade, so nothing fades until they overflow. The last 2px stay, so their
+     * bottom border and the line under the selected tab do not fade.
+     */
+    .iui-inbox-fade {
+        --inbox-fade: linear-gradient(to right, transparent, #000 0.5rem, #000 calc(100% - 2rem), transparent);
+
+        mask:
+            var(--inbox-fade),
+            linear-gradient(#000 0 0) bottom / 100% 2px no-repeat;
+    }
+
+    .iui-inbox-fade:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+        --inbox-fade: linear-gradient(to left, transparent, #000 0.5rem, #000 calc(100% - 2rem), transparent);
+    }
+
+    /*
+     * The buttons of a notification. On devices that hover, they float over the end of its title, so the text keeps the
+     * full width; while notifications are selected, they sit next to the text instead, so they cover no titles. Touch
+     * screens show them in a row below the text, lined up with it.
+     */
+    .iui-inbox-controls {
+        position: relative;
+        margin-inline-end: -0.5rem;
+    }
+
+    @media (hover: hover) {
+        .iui-inbox-controls {
+            position: absolute;
+            inset-inline-end: 0.5rem;
+            top: 0.375rem;
+            margin: 0;
+            padding: 0.125rem;
+            border-width: 1px;
+            background-color: var(--color-iui-inbox-surface);
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+    }
+
+    @media (hover: none) {
+        .iui-inbox-controls {
+            /* The row and its indent together take the width of the notification, so the list does not scroll sideways. */
+            flex-basis: calc(100% - 2.625rem);
+            margin-top: -0.375rem;
+            margin-inline: 2.625rem 0;
+        }
+    }
+}

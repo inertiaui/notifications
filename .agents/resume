@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+# Dependencies come from the snapshot. Fail clearly instead of reinstalling on wake.
+for command in php composer node pnpm; do
+    command -v "$command" >/dev/null
+done
+test -f vendor/autoload.php
+test -f demo-app/vendor/autoload.php
+test -d node_modules
+echo 'Orb toolchain and dependencies are ready. Run `amp orb services ensure` to start the demo servers.'

@@ -1,0 +1,60 @@
+# Dependencies
+node_modules
+vendor
+composer.lock
+
+# Build output
+# /vue/dist and /react/dist are committed: the frontend packages ship inside
+# the Composer package, so consumers do not build package source.
+/demo-app/public/build-vue
+/demo-app/public/build-react
+/demo-app/public/hot-vue
+/demo-app/public/hot-react
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea
+.vscode
+.claude
+*.swp
+*.swo
+
+# Local agent configuration
+/AGENTS.md
+/solo.yml
+/agents
+
+# Amp orb portal manifests are generated per thread.
+/.amp/portals/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.phpunit.cache
+.phpunit.result.cache
+phpunit.xml
+phpstan.neon
+coverage
+/demo-app/tests/Browser/Screenshots/
+/.playwright-mcp
+
+# Docs
+/docs/.vitepress/cache
+/docs/.vitepress/dist
+/docs/.vitepress/dist-ci
+/docs/dist
+
+# Laravel (demo-app)
+/demo-app/bootstrap/cache/*.php
+/demo-app/database/*.sqlite
+/demo-app/storage/*.key
+
+# Logs
+*.log

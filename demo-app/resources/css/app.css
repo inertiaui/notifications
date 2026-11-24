@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@import '@inertiaui/notifications-vue/theme.css';
+
+/* The dark variant of the Laravel starter kits, which app.blade.php turns on from the system preference. */
+@custom-variant dark (&:is(.dark *));
+
+@source '../../vendor/inertiaui/notifications/{vue,react}/src/**/*.{ts,tsx,vue}';
+
+/* Custom toast types use the default color, which each type can change. */
+.iui-toast[data-type='deployment'] {
+    --color-iui-toast-default: var(--color-violet-600);
+}

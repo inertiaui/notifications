@@ -1,0 +1,217 @@
+{
+    "index": {
+        "items": [
+            {
+                "id": "9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47",
+                "type": "App\\Notifications\\InvoicePaid",
+                "title": "Invoice INV-7 paid",
+                "body": "Sophie paid $120.00.",
+                "icon": null,
+                "image": null,
+                "url": "/invoices/7",
+                "actions": [
+                    {
+                        "label": "Download receipt",
+                        "href": "/invoices/7/receipt"
+                    }
+                ],
+                "actor": null,
+                "actors": [],
+                "actorCount": 0,
+                "total": 1,
+                "toast": "info",
+                "category": "billing",
+                "group": "invoice:7",
+                "data": {
+                    "invoice": 7
+                },
+                "readAt": null,
+                "seenAt": null,
+                "archivedAt": null,
+                "snoozedUntil": null,
+                "result": null,
+                "muted": false,
+                "createdAt": "2026-11-15T10:00:00+00:00",
+                "revision": 1794736800000000,
+                "announcement": false,
+                "expiresAt": null
+            }
+        ],
+        "nextCursor": null,
+        "counts": {
+            "unread": 1,
+            "unseen": 1,
+            "categories": {
+                "billing": 1
+            },
+            "latest": "2026-11-15T10:00:00+00:00",
+            "latestIds": ["9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47"],
+            "revision": 1794736800000000
+        }
+    },
+    "read": {
+        "counts": {
+            "unread": 0,
+            "unseen": 0,
+            "categories": [],
+            "latest": "2026-11-15T10:00:00+00:00",
+            "latestIds": ["9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47"],
+            "revision": 1794736860000000
+        },
+        "change": {
+            "kind": "item",
+            "id": "9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47",
+            "readAt": "2026-11-15T10:01:00+00:00",
+            "seenAt": "2026-11-15T10:01:00+00:00",
+            "archivedAt": null,
+            "snoozedUntil": null,
+            "result": null
+        }
+    },
+    "changes": {
+        "item": {
+            "kind": "item",
+            "id": "7b2e9f4a-1c6d-4e8b-a3f5-2d9c0b6e8a14",
+            "readAt": null,
+            "seenAt": null,
+            "archivedAt": null,
+            "snoozedUntil": null,
+            "result": null,
+            "item": {
+                "id": "7b2e9f4a-1c6d-4e8b-a3f5-2d9c0b6e8a14",
+                "type": "App\\Notifications\\RenewDomain",
+                "title": "Renew the domain",
+                "body": null,
+                "icon": null,
+                "image": null,
+                "url": null,
+                "actions": [],
+                "actor": null,
+                "actors": [],
+                "actorCount": 0,
+                "total": 1,
+                "toast": null,
+                "category": null,
+                "group": null,
+                "data": {},
+                "readAt": null,
+                "seenAt": null,
+                "archivedAt": null,
+                "snoozedUntil": null,
+                "result": null,
+                "muted": false,
+                "createdAt": "2026-11-15T10:05:00+00:00",
+                "revision": null,
+                "announcement": false,
+                "expiresAt": null
+            }
+        },
+        "read": {
+            "kind": "read",
+            "before": "2026-11-15T10:02:00+00:00",
+            "ids": null,
+            "category": "billing"
+        },
+        "seen": {
+            "kind": "seen",
+            "before": "2026-11-15T10:00:00+00:00",
+            "ids": ["9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47"],
+            "category": null
+        },
+        "archive": {
+            "kind": "archive",
+            "before": "2026-11-15T10:03:00+00:00",
+            "ids": null,
+            "category": null,
+            "onlyRead": true
+        },
+        "delete": {
+            "kind": "delete",
+            "ids": ["3f6a2c1d-8e4b-4d7a-b2c9-0e5f1a7d6b38"]
+        },
+        "update": {
+            "kind": "update",
+            "item": {
+                "id": "9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47",
+                "type": "App\\Notifications\\InvoicePaid",
+                "title": "Invoice INV-7 refunded",
+                "body": "Sophie got $120.00 back.",
+                "icon": null,
+                "image": null,
+                "url": null,
+                "actions": [],
+                "actor": null,
+                "actors": [],
+                "actorCount": 0,
+                "total": 1,
+                "toast": null,
+                "category": "billing",
+                "group": "invoice:7",
+                "data": {},
+                "readAt": "2026-11-15T10:02:00+00:00",
+                "seenAt": "2026-11-15T10:02:00+00:00",
+                "archivedAt": "2026-11-15T10:03:00+00:00",
+                "snoozedUntil": null,
+                "result": null,
+                "muted": true,
+                "createdAt": "2026-11-15T10:00:00+00:00",
+                "revision": 1794737100000000,
+                "announcement": false,
+                "expiresAt": null
+            }
+        },
+        "items": {
+            "kind": "items",
+            "action": "read",
+            "ids": ["3f6a2c1d-8e4b-4d7a-b2c9-0e5f1a7d6b38"],
+            "at": "2026-11-15T10:04:00+00:00"
+        },
+        "mute": {
+            "kind": "mute",
+            "group": "invoice:7",
+            "muted": true
+        },
+        "pause": {
+            "kind": "pause",
+            "until": "2026-11-15T12:00:00+00:00"
+        }
+    },
+    "shared": {
+        "url": "/_inertia-notifications",
+        "channel": "InertiaUI.Notifications.Tests.Fixtures.User.1",
+        "announcementsChannel": "inertiaui.announcements",
+        "user": "user-identity",
+        "allowedActions": ["snooze", "archive", "mute", "delete"],
+        "selectable": false,
+        "categoryFilter": {
+            "billing": "Billing"
+        },
+        "tabs": {
+            "releases": {
+                "label": "Releases",
+                "category": "product",
+                "data": {
+                    "major": true
+                }
+            }
+        },
+        "pause": {
+            "until": "2026-11-15T12:00:00+00:00",
+            "presets": [15, "tomorrow"]
+        },
+        "push": {
+            "publicKey": "vapid-public-key",
+            "worker": "/_inertia-notifications/push/worker.js?v=worker-version",
+            "subscribed": true
+        },
+        "unread": 1,
+        "unseen": 1,
+        "categories": {
+            "billing": 1
+        },
+        "latest": "2026-11-15T10:00:00+00:00",
+        "latestIds": ["9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47"],
+        "revision": 1794736800000000,
+        "context": "b2435067295c076e00c9ab452b1640b6"
+    }
+}

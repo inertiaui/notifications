@@ -1,0 +1,22 @@
+{
+    "name": "inertiaui-notifications-docs",
+    "private": true,
+    "scripts": {
+        "docs:dev": "vitepress dev",
+        "docs:build": "inertiaui-vitepress-build --redirects .vitepress/redirects"
+    },
+    "dependencies": {
+        "@inertiajs/vue3": "^3.11.0",
+        "@inertiaui/docs-theme": "github:inertiaui/docs-theme#main",
+        "@inertiaui/notifications-vue": "workspace:*",
+        "@tailwindcss/vite": "^4.3.0",
+        "tailwindcss": "^4.3.0",
+        "vitepress": "^1.6.4",
+        "vitepress-plugin-llms": "^1.13.3",
+        "vue": "^3.5.0"
+    },
+    "devDependencies": {
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1"
+    }
+}

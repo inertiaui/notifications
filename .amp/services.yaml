@@ -1,0 +1,22 @@
+# Laravel demo servers, one per frontend stack. They serve the built demo assets:
+# run `pnpm build && pnpm build:demo` after changes, or the dev:* watchers.
+services:
+    demo-vue:
+        cwd: demo-app
+        command: APP_STACK=vue APP_URL="$PUBLIC_URL" php artisan serve --host=127.0.0.1 --port="$PORT"
+        health: /
+        portal:
+            title: Demo (Vue)
+    demo-react:
+        cwd: demo-app
+        command: APP_STACK=react APP_URL="$PUBLIC_URL" php artisan serve --host=127.0.0.1 --port="$PORT"
+        health: /
+        portal:
+            title: Demo (React)
+    # The VitePress docs, which reload as you edit them.
+    docs:
+        cwd: docs
+        command: pnpm exec vitepress dev --host 127.0.0.1 --port "$PORT" --strictPort
+        health: /introduction
+        portal:
+            title: Docs

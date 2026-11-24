@@ -1,0 +1,36 @@
+packages:
+    - vue
+    - react
+    - demo-app
+    - docs
+
+minimumReleaseAgeExclude:
+    - '@inertiajs/core'
+    - '@inertiajs/react'
+    - '@inertiajs/vue3'
+    - '@inertiaui/vanilla'
+
+allowBuilds:
+    esbuild: true
+
+catalog:
+    vite: npm:@voidzero-dev/vite-plus-core@1.6.0
+    vite-plus: 1.6.0
+
+# Align modern Vite consumers with Vite+. VitePress v1 depends on Vite 5, which has no
+# release patched for GHSA-587h-7wmj-h5pm; it builds on the patched Vite 6.4 line.
+overrides:
+    'vite@>=7': 'catalog:'
+    'vite@<6.4.4': '^6.4.6'
+
+peerDependencyRules:
+    allowAny:
+        - vite
+    allowedVersions:
+        vite: '*'
+
+# picomatch has no release patched for GHSA-fc5q-39xc-vjpf yet. Only the build, test, and docs tooling uses it,
+# with glob patterns from this repository. Remove this once a patched version is out and the lockfile has it.
+auditConfig:
+    ignoreGhsas:
+        - GHSA-fc5q-39xc-vjpf

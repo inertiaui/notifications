@@ -1,0 +1,7 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.vue"]
+}

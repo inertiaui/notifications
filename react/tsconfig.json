@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "strict": true,
+        "declaration": true,
+        "declarationDir": "./dist",
+        "allowImportingTsExtensions": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "lib": ["DOM", "DOM.Iterable", "ES2022"],
+        "outDir": "./dist",
+        "rootDir": "..",
+        "jsx": "react-jsx",
+        "types": ["vite/client"]
+    },
+    "include": ["src/**/*.ts", "src/**/*.tsx", "../js/**/*.ts"],
+    "exclude": ["node_modules", "dist", "../js/**/*.test.ts"]
+}
