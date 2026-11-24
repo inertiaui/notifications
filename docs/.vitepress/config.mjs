@@ -19,7 +19,7 @@ const SITE_DESCRIPTION =
     'Toasts and a notification center for Laravel + Inertia.js. Flash toasts from your controllers, store notifications in an inbox, and render both in Vue or React.'
 const OG_IMAGE = 'https://inertiaui.com/socialcard.jpeg'
 const TWITTER_HANDLE = '@pascalbaljet'
-const ARTICLE_DEPENDENCIES = 'PHP 8.3+, Laravel 12 or 13, Inertia Laravel 3.7+, Inertia.js 3.11+, Vue 3.5+ or React 19, Tailwind CSS 4.3+'
+const ARTICLE_DEPENDENCIES = 'PHP 8.3+, Laravel 12 or 13, Inertia Laravel 3.8+, Inertia.js 3.11+, Vue 3.5+ or React 19, Tailwind CSS 4.3+'
 
 const sectionBySlug = new Map(
     docsSections.flatMap((section) => section.items.map(({ link }) => [link.slice(1), { name: section.name, url: `${SITE_URL}${section.canonicalPath}` }])),
