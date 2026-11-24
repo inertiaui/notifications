@@ -5,6 +5,7 @@ namespace InertiaUI\Notifications\Console;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
 
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -48,6 +49,7 @@ class InstallCommand extends Command
     public function handle(Filesystem $files): int
     {
         $this->publishResources();
+        $this->addToBoost($files);
 
         $frontend = $this->frontend($files);
         $this->step = 1;
@@ -78,6 +80,46 @@ class InstallCommand extends Command
                 fn (): bool => $this->callSilent('vendor:publish', ['--tag' => $tag]) === self::SUCCESS,
             );
         }
+    }
+
+    /**
+     * Add the package to the packages in the boost.json file, and update the Boost guidelines and skills.
+     *
+     * Boost only asks which new packages to add while it runs interactively and not as a Composer script.
+     * The starter kits run boost:update as a Composer script, so Boost never adds the package by itself.
+     */
+    protected function addToBoost(Filesystem $files): void
+    {
+        $path = $this->laravel->basePath('boost.json');
+
+        if (! $files->exists($path) || ! $this->getApplication()?->has('boost:update')) {
+            return;
+        }
+
+        $config = json_decode($files->get($path), true);
+        $packages = is_array($config) ? $config['packages'] ?? [] : null;
+
+        if (! is_array($packages)) {
+            $this->components->warn('The boost.json file is not valid, so the package was not added to Laravel Boost.');
+
+            return;
+        }
+
+        if (in_array('inertiaui/notifications', $packages, true)) {
+            return;
+        }
+
+        if (! confirm('Would you like to add the Inertia Notifications guidelines and skill to Laravel Boost?')) {
+            return;
+        }
+
+        $config['packages'] = [...$packages, 'inertiaui/notifications'];
+
+        ksort($config);
+
+        $files->put($path, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).PHP_EOL);
+
+        $this->call('boost:update');
     }
 
     /**
@@ -135,6 +177,7 @@ class InstallCommand extends Command
     {
         $package = "@inertiaui/notifications-{$frontend}";
         $extensions = $frontend === 'vue' ? '{ts,vue}' : '{ts,tsx}';
+        $starterKit = $this->usesStarterKit($frontend, $files);
 
         $this->components->info('Next, set up the toasts in your frontend.');
 
@@ -142,8 +185,11 @@ class InstallCommand extends Command
             $this->installCommand($frontend, $files),
         ]);
 
-        $this->printStep("Import the theme after Tailwind in resources/css/app.css, and add the package's sources:", [
+        $theme = $starterKit ? 'the theme and the starter kit colors' : 'the theme';
+
+        $this->printStep("Import {$theme} after Tailwind in resources/css/app.css, and add the package's sources:", [
             "@import '{$package}/theme.css';",
+            ...$starterKit ? ["@import '{$package}/shadcn.css';"] : [],
             "@source '../../vendor/inertiaui/notifications/{$frontend}/src/**/*.{$extensions}';",
         ]);
 
@@ -152,9 +198,73 @@ class InstallCommand extends Command
             'initNotifications()',
         ]);
 
+        if ($starterKit) {
+            $this->printStarterKitSteps($frontend);
+
+            return;
+        }
+
         $this->printStep('Render one Toaster in your persistent layout:', [
             "import { Toaster } from '{$package}'",
             '<Toaster />',
+        ]);
+    }
+
+    /**
+     * Determine if the application is built on a Laravel starter kit, which shows its flashed toasts with sonner.
+     *
+     * @param  'vue'|'react'  $frontend
+     */
+    protected function usesStarterKit(string $frontend, Filesystem $files): bool
+    {
+        $listener = $frontend === 'vue' ? 'js/lib/flashToast.ts' : 'js/hooks/use-flash-toast.ts';
+
+        return $files->exists($this->laravel->resourcePath($listener));
+    }
+
+    /**
+     * Print the steps that replace the sonner Toaster of a Laravel starter kit and show the kit's flashed toasts.
+     *
+     * @param  'vue'|'react'  $frontend
+     */
+    protected function printStarterKitSteps(string $frontend): void
+    {
+        if ($frontend === 'vue') {
+            $this->printStep('Import the Toaster from the package instead of sonner in resources/js/layouts/app/AppSidebarLayout.vue and AppHeaderLayout.vue:', [
+                "import { Toaster } from '@inertiaui/notifications-vue'",
+            ]);
+
+            $this->printStep('Import toast from the package instead of vue-sonner in resources/js/lib/flashToast.ts:', [
+                "import { toast } from '@inertiaui/notifications-vue'",
+            ]);
+
+            return;
+        }
+
+        $this->printStep('Import the Toaster from the package instead of sonner in resources/js/app.tsx:', [
+            "import { Toaster } from '@inertiaui/notifications-react'",
+        ]);
+
+        $this->printStep('Delete resources/js/components/ui/sonner.tsx and resources/js/hooks/use-flash-toast.ts, and listen for the toasts in resources/js/app.tsx:', [
+            "import { router } from '@inertiajs/react'",
+            "import { toast } from '@inertiaui/notifications-react'",
+            '',
+            "router.on('flash', (event) => {",
+            '    const data = event.detail.flash.toast',
+            '',
+            '    if (data) {',
+            '        toast[data.type](data.message)',
+            '    }',
+            '})',
+        ]);
+
+        $this->printStep('Type the flash data in the InertiaConfig interface of resources/js/types/global.d.ts:', [
+            "import type { InertiaUIFlashData } from '@inertiaui/notifications-react'",
+            "import type { FlashToast } from '@/types/ui'",
+            '',
+            'flashDataType: InertiaUIFlashData & {',
+            '    toast?: FlashToast',
+            '}',
         ]);
     }
 
@@ -217,7 +327,7 @@ class InstallCommand extends Command
         foreach ($code as $line) {
             $escaped = OutputFormatter::escape($line);
 
-            $this->line("     {$escaped}");
+            $this->line($line === '' ? '' : "     {$escaped}");
         }
 
         $this->newLine();
