@@ -1,0 +1,90 @@
+{
+    "channels": [
+        {
+            "key": "inbox",
+            "label": "In the app",
+            "globalSwitch": true,
+            "enabled": true,
+            "digest": false,
+            "inbox": true,
+            "push": false
+        },
+        {
+            "key": "mail",
+            "label": "Email",
+            "globalSwitch": true,
+            "enabled": false,
+            "digest": true,
+            "inbox": false,
+            "push": false
+        },
+        {
+            "key": "devices",
+            "label": "On your devices",
+            "globalSwitch": true,
+            "enabled": true,
+            "digest": false,
+            "inbox": false,
+            "push": true
+        }
+    ],
+    "groups": [
+        {
+            "key": "account",
+            "label": "Account",
+            "description": "Your payments and sign-ins."
+        }
+    ],
+    "categories": [
+        {
+            "key": "billing",
+            "label": "Billing",
+            "description": "Invoices and payments.",
+            "group": "account",
+            "locked": false,
+            "channels": {
+                "inbox": true,
+                "mail": true,
+                "devices": false
+            },
+            "frequency": "daily"
+        },
+        {
+            "key": "comments",
+            "label": "Comments",
+            "description": null,
+            "group": null,
+            "locked": false,
+            "channels": {
+                "inbox": true
+            },
+            "frequency": null
+        },
+        {
+            "key": "security",
+            "label": "Security",
+            "description": null,
+            "group": "account",
+            "locked": true,
+            "channels": {
+                "inbox": true,
+                "mail": true,
+                "devices": true
+            },
+            "frequency": null
+        }
+    ],
+    "frequencies": ["instant", "daily", "weekly"],
+    "notificationHours": {
+        "enabled": true,
+        "days": {
+            "monday": ["09:00-12:00", "13:00-17:00"],
+            "tuesday": ["07:00-22:00"],
+            "wednesday": ["07:00-22:00"],
+            "thursday": ["07:00-22:00"],
+            "friday": ["07:00-22:00"],
+            "saturday": [],
+            "sunday": []
+        }
+    }
+}

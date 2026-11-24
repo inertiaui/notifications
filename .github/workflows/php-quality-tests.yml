@@ -1,0 +1,186 @@
+name: PHP Quality, Style, and Tests
+
+on:
+    # Commits of pull requests run on pull_request, so pushes run only for main.
+    push:
+        branches: [main]
+        paths:
+            - '**.php'
+            - 'composer.json'
+            - 'phpstan.neon.dist'
+            - 'phpunit.xml.dist'
+            - 'pint.json'
+            - 'src/**'
+            - 'stubs/**'
+            - 'tests/**'
+            - '.github/workflows/php-quality-tests.yml'
+    pull_request:
+        paths:
+            - '**.php'
+            - 'composer.json'
+            - 'phpstan.neon.dist'
+            - 'phpunit.xml.dist'
+            - 'pint.json'
+            - 'src/**'
+            - 'stubs/**'
+            - 'tests/**'
+            - '.github/workflows/php-quality-tests.yml'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.ref_name }}
+    cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+    quality:
+        name: PHP Quality and Style
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions:
+            contents: read
+
+        steps:
+            - name: Harden runner
+              uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+              with:
+                  egress-policy: audit
+
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+              with:
+                  php-version: '8.3'
+                  extensions: json, dom, curl, libxml, mbstring, zip
+                  tools: composer:v2
+                  coverage: none
+
+            - name: Install dependencies
+              run: composer update --no-progress --prefer-dist --no-interaction
+
+            - name: Validate Composer metadata
+              run: composer metadata:check
+
+            - name: Audit Composer dependencies
+              run: composer audit --abandoned=ignore
+
+            - name: Check Rector
+              run: composer refactor:check
+
+            - name: Check Pint and PHP CS Fixer
+              run: composer format:check
+
+            - name: Run PHPStan
+              run: composer analyse
+
+    tests:
+        name: Tests (PHP ${{ matrix.php }}, Laravel ${{ matrix.laravel }}, ${{ matrix.dependencies }})
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        permissions:
+            contents: read
+        strategy:
+            fail-fast: false
+            matrix:
+                php: ['8.3', '8.4', '8.5']
+                laravel: ['12', '13']
+                dependencies: [prefer-lowest, prefer-stable]
+                include:
+                    - laravel: '12'
+                      testbench: ^10.0
+                    - laravel: '13'
+                      testbench: ^11.0
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: json, dom, curl, libxml, mbstring, zip
+                  tools: composer:v2
+                  coverage: none
+
+            - name: Install dependencies
+              run: |
+                  composer require "illuminate/contracts:^${{ matrix.laravel }}.0" "illuminate/support:^${{ matrix.laravel }}.0" --no-update --no-interaction
+                  composer require "orchestra/testbench:${{ matrix.testbench }}" --dev --no-update --no-interaction
+                  composer update --${{ matrix.dependencies }} --prefer-stable --with-all-dependencies --no-progress --prefer-dist --no-interaction
+
+            - name: Run tests
+              run: composer test
+
+    database-tests:
+        name: Tests (PHP 8.5, Laravel 13, ${{ matrix.database }})
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        permissions:
+            contents: read
+        strategy:
+            fail-fast: false
+            matrix:
+                database: [mysql, pgsql]
+
+        # GitHub does not start a service without an image, so each leg only starts the server of its database.
+        services:
+            mysql:
+                image: ${{ matrix.database == 'mysql' && 'mysql:8.4' || '' }}
+                env:
+                    MYSQL_DATABASE: testing
+                    MYSQL_USER: testing
+                    MYSQL_PASSWORD: secret
+                    MYSQL_ROOT_PASSWORD: secret
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="mysqladmin ping"
+                    --health-interval=5s
+                    --health-timeout=5s
+                    --health-retries=20
+            postgres:
+                image: ${{ matrix.database == 'pgsql' && 'postgres:17' || '' }}
+                env:
+                    POSTGRES_DB: testing
+                    POSTGRES_USER: testing
+                    POSTGRES_PASSWORD: secret
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd="pg_isready --username=testing"
+                    --health-interval=5s
+                    --health-timeout=5s
+                    --health-retries=20
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+              with:
+                  php-version: '8.5'
+                  extensions: json, dom, curl, libxml, mbstring, zip, pdo_mysql, pdo_pgsql
+                  tools: composer:v2
+                  coverage: none
+
+            - name: Install dependencies
+              run: composer update --prefer-stable --with-all-dependencies --no-progress --prefer-dist --no-interaction
+
+            # Testbench's connections read these variables, and the ports of the services are their defaults.
+            - name: Run tests
+              run: composer test
+              env:
+                  DB_CONNECTION: ${{ matrix.database }}
+                  DB_DATABASE: testing
+                  DB_USERNAME: testing
+                  DB_PASSWORD: secret

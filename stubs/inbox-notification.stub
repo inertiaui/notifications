@@ -1,0 +1,42 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
+use InertiaUI\Notifications\Concerns\InteractsWithInbox;
+use InertiaUI\Notifications\InboxMessage;
+
+class {{ class }} extends Notification
+{
+    use InteractsWithInbox, Queueable;
+
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @return array<int, string>
+     */
+    public function via(object $notifiable): array
+    {
+        return ['inbox'];
+    }
+
+    /**
+     * Get the inbox representation of the notification.
+     */
+    public function toInbox(object $notifiable): InboxMessage
+    {
+        return InboxMessage::make('The title of the notification.')
+            ->body('The body of the notification.')
+            ->url(url('/'));
+    }
+}

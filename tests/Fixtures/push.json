@@ -1,0 +1,19 @@
+{
+    "web_push": 8030,
+    "notification": {
+        "title": "Invoice INV-7 paid",
+        "body": "Paid by card.",
+        "navigate": "https://acme.test/_inertia-notifications/9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47/open",
+        "tag": "inertiaui-inbox-9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47",
+        "icon": "https://acme.test/avatars/sophie.png",
+        "silent": false,
+        "lang": "en",
+        "dir": "auto",
+        "timestamp": 1794938400000,
+        "data": {
+            "id": "9d3c1b6e-0b7a-4c1e-9a64-5f0d2a8e1c47",
+            "context": "5e2800deb8d23927533bbbae89e7b58b"
+        }
+    },
+    "mutable": true
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true">
+    <testsuites>
+        <testsuite name="Browser">
+            <directory>tests/Browser</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_KEY" value="base64:7aoT3+OqL1cXqL8yIwgr8v7LbqNfZx2vHq7yZ5Y9xGQ="/>
+        <env name="CACHE_STORE" value="array"/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <!-- Test keys of web push, which the demo turns on. Generate your own with php artisan inertia-notifications:vapid. -->
+        <env name="VAPID_PUBLIC_KEY" value="BA7q-dtQOfrXDPRiKn5OLMYMt5DIEDn-_NBL6dXSLfi5P_cT_BSEKX9kpu1vwT1nm-4p5maVZpUP1PC5k-SoodA"/>
+        <env name="VAPID_PRIVATE_KEY" value="kn0yaKf4VmfxfbftPdw79ano3LKe1sPuTeuwi8x7ILs"/>
+        <env name="VAPID_SUBJECT" value="mailto:demo@inertiaui.com"/>
+    </php>
+</phpunit>

@@ -1,0 +1,41 @@
+{
+    "inertiaui": {
+        "toasts": [
+            {
+                "uuid": "toast-uuid",
+                "type": "info",
+                "title": "Sophie asked to join Acme",
+                "id": "join-request-7",
+                "description": "She signed up with sophie@acme.test.",
+                "actions": [
+                    {
+                        "label": "View profile",
+                        "href": "/users/sophie"
+                    },
+                    {
+                        "label": "Copy email",
+                        "event": "copy-email",
+                        "payload": {
+                            "email": "sophie@acme.test"
+                        }
+                    },
+                    {
+                        "label": "Approve",
+                        "href": "/teams/acme/requests/7/approve",
+                        "method": "post",
+                        "result": "Approved"
+                    }
+                ],
+                "icon": "user-plus",
+                "image": "https://acme.test/avatars/sophie.jpg",
+                "dismissible": false,
+                "position": "top-center",
+                "toaster": "teams",
+                "data": {
+                    "team": "Acme"
+                },
+                "duration": null
+            }
+        ]
+    }
+}

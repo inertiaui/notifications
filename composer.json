@@ -1,0 +1,105 @@
+{
+    "name": "inertiaui/notifications",
+    "description": "Toasts and notifications for Laravel + Inertia.js",
+    "keywords": [
+        "laravel",
+        "inertia",
+        "inertiajs",
+        "notifications",
+        "notification-center",
+        "toasts",
+        "web-push",
+        "vue",
+        "react",
+        "tailwindcss"
+    ],
+    "homepage": "https://inertiaui.com/inertia-notifications/docs",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/inertiaui/notifications/issues",
+        "source": "https://github.com/inertiaui/notifications",
+        "docs": "https://inertiaui.com/inertia-notifications/docs",
+        "security": "https://github.com/inertiaui/notifications/security/policy"
+    },
+    "authors": [
+        {
+            "name": "Pascal Baljet",
+            "email": "pascal@protone.media"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "illuminate/contracts": "^12.0||^13.0",
+        "illuminate/support": "^12.14.1||^13.0",
+        "inertiajs/inertia-laravel": "^3.8"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.29",
+        "orchestra/testbench": "^10.0||^11.0",
+        "pestphp/pest": "^4.6",
+        "rector/rector": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "InertiaUI\\Notifications\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "InertiaUI\\Notifications\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "metadata:check": "composer validate --strict",
+        "analyse": "vendor/bin/phpstan analyse --memory-limit=512M",
+        "format": [
+            "vendor/bin/pint",
+            "vendor/bin/php-cs-fixer fix"
+        ],
+        "format:check": [
+            "vendor/bin/pint --test",
+            "vendor/bin/php-cs-fixer check"
+        ],
+        "refactor": "vendor/bin/rector",
+        "refactor:check": "vendor/bin/rector --dry-run",
+        "test": "vendor/bin/pest",
+        "all": [
+            "@metadata:check",
+            "@analyse",
+            "@refactor:check",
+            "@format:check",
+            "@test",
+            "pnpm run lint:check",
+            "pnpm run format:check",
+            "pnpm run test:unit",
+            "pnpm run typecheck",
+            "pnpm run docs:guide:check"
+        ],
+        "build": [
+            "@all",
+            "pnpm run build",
+            "pnpm run typecheck:demo",
+            "pnpm run build:demo",
+            "pnpm run pack:check",
+            "pnpm run docs:build"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "InertiaUI\\Notifications\\NotificationsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

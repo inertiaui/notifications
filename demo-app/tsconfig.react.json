@@ -1,0 +1,8 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "composite": true,
+        "jsx": "react-jsx"
+    },
+    "include": ["resources/js/**/*.tsx", "resources/js/demo.ts", "resources/js/moreToasts.ts"]
+}

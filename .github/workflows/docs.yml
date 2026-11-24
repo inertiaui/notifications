@@ -1,0 +1,71 @@
+name: Docs
+
+on:
+    # Commits of pull requests run on pull_request, so pushes run only for main.
+    push:
+        branches: [main]
+        paths:
+            - 'docs/**'
+            - 'js/**'
+            - 'vue/**'
+            - 'resources/boost/**'
+            - 'scripts/boost-guide.mjs'
+            - 'package.json'
+            - 'pnpm-lock.yaml'
+            - 'pnpm-workspace.yaml'
+            - '.github/workflows/docs.yml'
+    pull_request:
+        paths:
+            - 'docs/**'
+            - 'js/**'
+            - 'vue/**'
+            - 'resources/boost/**'
+            - 'scripts/boost-guide.mjs'
+            - 'package.json'
+            - 'pnpm-lock.yaml'
+            - 'pnpm-workspace.yaml'
+            - '.github/workflows/docs.yml'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.ref_name }}
+    cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+    docs:
+        name: Docs
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        permissions:
+            contents: read
+
+        steps:
+            - name: Harden runner
+              uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+              with:
+                  egress-policy: audit
+
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Setup Node
+              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: 24
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+              with:
+                  version: 11.5.0
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Check the Boost guide
+              run: pnpm run docs:guide:check
+
+            - name: Build docs
+              run: pnpm run docs:build

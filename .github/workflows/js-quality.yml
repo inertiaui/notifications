@@ -1,0 +1,102 @@
+name: JS Quality, Style, and Types
+
+on:
+    # Commits of pull requests run on pull_request, so pushes run only for main.
+    push:
+        branches: [main]
+        paths:
+            - '**.js'
+            - '**.mjs'
+            - '**.ts'
+            - '**.tsx'
+            - '**.vue'
+            - '**.css'
+            - '**.json'
+            - '**.jsonc'
+            - '**.yml'
+            - '**.yaml'
+            - 'vue/dist/**'
+            - 'react/dist/**'
+    pull_request:
+        paths:
+            - '**.js'
+            - '**.mjs'
+            - '**.ts'
+            - '**.tsx'
+            - '**.vue'
+            - '**.css'
+            - '**.json'
+            - '**.jsonc'
+            - '**.yml'
+            - '**.yaml'
+            - 'vue/dist/**'
+            - 'react/dist/**'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.ref_name }}
+    cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+    js-quality:
+        name: JS Quality, Style, and Types
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        permissions:
+            contents: read
+
+        steps:
+            - name: Harden runner
+              uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+              with:
+                  egress-policy: audit
+
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Setup Node
+              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: 24
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+              with:
+                  version: 11.5.0
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Audit pnpm dependencies
+              run: pnpm audit --audit-level=high
+
+            - name: Run Oxlint
+              run: pnpm run lint:check
+
+            - name: Check formatting
+              run: pnpm run format:check
+
+            - name: Run unit tests
+              run: pnpm run test:unit
+
+            - name: Type check frontend packages
+              run: pnpm run typecheck
+
+            - name: Build frontend packages
+              run: pnpm run build
+
+            # The dist folders ship inside the Composer package, so they must match the source.
+            - name: Check committed builds
+              run: git diff --exit-code -- vue/dist react/dist
+
+            - name: Check package contents
+              run: pnpm run pack:check
+
+            - name: Type check demo app
+              run: pnpm run typecheck:demo
+
+            - name: Build demo app assets
+              run: pnpm run build:demo

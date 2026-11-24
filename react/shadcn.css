@@ -1,0 +1,37 @@
+/**
+ * Maps the Notifications tokens to the shadcn/ui variables of the Laravel starter kits, such as --popover, --border,
+ * and --radius. Import after theme.css. The variables switch under .dark, so the tokens switch with them, and an
+ * override in :root still wins, as :where() has no specificity. The info, success, and warning colors have no shadcn
+ * equivalent and keep the theme's values. So does the focus ring, as --ring is too faint on the surface for a 2px ring.
+ */
+:where(:root, :host, .dark) {
+    --color-iui-toast-surface: var(--popover);
+    --color-iui-toast-foreground: var(--popover-foreground);
+    --color-iui-toast-muted-foreground: var(--muted-foreground);
+    --color-iui-toast-border: var(--border);
+    --color-iui-toast-icon: var(--muted-foreground);
+    --color-iui-toast-icon-hover: var(--accent-foreground);
+    --color-iui-toast-control-hover: var(--accent);
+    --color-iui-toast-action: var(--primary);
+    --color-iui-toast-default: var(--muted-foreground);
+    --color-iui-toast-error: var(--destructive-foreground, var(--destructive));
+    --color-iui-toast-loading: var(--muted-foreground);
+
+    --radius-iui-toast: var(--radius);
+
+    --color-iui-inbox-surface: var(--popover);
+    --color-iui-inbox-foreground: var(--popover-foreground);
+    --color-iui-inbox-muted-foreground: var(--muted-foreground);
+    --color-iui-inbox-border: var(--border);
+    --color-iui-inbox-icon: var(--muted-foreground);
+    --color-iui-inbox-icon-hover: var(--accent-foreground);
+    --color-iui-inbox-control-hover: var(--accent);
+    --color-iui-inbox-accent: var(--primary);
+    --color-iui-inbox-accent-subtle: var(--accent);
+    --color-iui-inbox-badge: var(--destructive);
+    --color-iui-inbox-unread: var(--primary);
+    --color-iui-inbox-tooltip: var(--foreground);
+    --color-iui-inbox-tooltip-foreground: var(--background);
+
+    --radius-iui-inbox: calc(var(--radius) - 2px);
+}

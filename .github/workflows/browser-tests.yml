@@ -1,0 +1,109 @@
+name: Browser Tests
+
+on:
+    # Commits of pull requests run on pull_request, so pushes run only for main.
+    push:
+        branches: [main]
+        paths:
+            - '**.php'
+            - '**.ts'
+            - '**.tsx'
+            - '**.vue'
+            - '**.css'
+            - '**/composer.json'
+            - '**/package.json'
+            - 'pnpm-lock.yaml'
+            - 'demo-app/**'
+            - 'js/**'
+            - 'react/**'
+            - 'resources/push/**'
+            - 'src/**'
+            - 'vue/**'
+            - '.github/workflows/browser-tests.yml'
+    pull_request:
+        paths:
+            - '**.php'
+            - '**.ts'
+            - '**.tsx'
+            - '**.vue'
+            - '**.css'
+            - '**/composer.json'
+            - '**/package.json'
+            - 'pnpm-lock.yaml'
+            - 'demo-app/**'
+            - 'js/**'
+            - 'react/**'
+            - 'resources/push/**'
+            - 'src/**'
+            - 'vue/**'
+            - '.github/workflows/browser-tests.yml'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.ref_name }}
+    cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+    browser-tests:
+        name: Browser Tests (${{ matrix.stack }})
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        permissions:
+            contents: read
+        strategy:
+            fail-fast: false
+            matrix:
+                stack: [vue, react]
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+              with:
+                  php-version: '8.4'
+                  extensions: json, dom, curl, libxml, mbstring, zip, sockets, pdo_sqlite
+                  tools: composer:v2
+                  coverage: none
+
+            - name: Setup Node
+              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: 24
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+              with:
+                  version: 11.5.0
+
+            - name: Install dependencies
+              run: |
+                  pnpm install --frozen-lockfile
+                  composer update --no-progress --prefer-dist --no-interaction --working-dir=demo-app
+
+            - name: Build the library and demo assets
+              run: |
+                  pnpm run build:${{ matrix.stack }}
+                  pnpm --filter demo-app build:${{ matrix.stack }}
+
+            - name: Install Chromium
+              run: pnpm --dir demo-app exec playwright install --with-deps chromium
+
+            - name: Run browser tests
+              run: vendor/bin/pest
+              working-directory: demo-app
+              env:
+                  APP_STACK: ${{ matrix.stack }}
+
+            - name: Upload logs
+              if: failure()
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+              with:
+                  name: browser-test-logs-${{ matrix.stack }}
+                  path: |
+                      demo-app/storage/logs
+                      demo-app/tests/Browser/Screenshots

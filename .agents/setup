@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+export DEBIAN_FRONTEND=noninteractive
+
+step() {
+    local label="$1" started=$SECONDS
+    shift
+    printf '\n==> %s\n' "$label"
+    "$@"
+    printf '==> %s finished in %ss\n' "$label" "$((SECONDS - started))"
+}
+
+install_php() {
+    local packages=(php8.4-cli php8.4-curl php8.4-gd php8.4-intl php8.4-mbstring php8.4-sqlite3 php8.4-xml php8.4-zip php8.4-bcmath unzip)
+    local missing=() package
+    for package in "${packages[@]}"; do
+        dpkg-query -W -f='${Status}' "$package" 2>/dev/null | grep -qx 'install ok installed' || missing+=("$package")
+    done
+    if ((${#missing[@]})); then
+        if [[ ! -f /etc/apt/sources.list.d/php.list ]]; then
+            local keyring
+            keyring=$(mktemp --suffix=.deb)
+            curl -fsSL https://packages.sury.org/debsuryorg-archive-keyring.deb -o "$keyring"
+            sudo dpkg -i "$keyring"
+            rm -f "$keyring"
+            echo 'deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ bookworm main' |
+                sudo tee /etc/apt/sources.list.d/php.list >/dev/null
+        fi
+        sudo apt-get update -qq
+        sudo --preserve-env=DEBIAN_FRONTEND apt-get install -y -qq --no-install-recommends "${missing[@]}"
+    fi
+    if ! command -v composer >/dev/null; then
+        local installer
+        installer=$(mktemp)
+        curl -fsSL https://getcomposer.org/installer -o "$installer"
+        [[ "$(sha384sum "$installer" | cut -d ' ' -f 1)" == "$(curl -fsSL https://composer.github.io/installer.sig)" ]]
+        sudo php "$installer" --2 --quiet --install-dir=/usr/local/bin --filename=composer
+        rm -f "$installer"
+    fi
+    php --version | head -1
+}
+
+install_node_tools() {
+    node -e 'process.exit(Number(process.versions.node.split(".")[0]) >= 24 ? 0 : 1)' || {
+        echo 'Node 24 or newer is required.' >&2
+        return 1
+    }
+    # pnpm switches to the version pinned in package.json's packageManager field.
+    command -v pnpm >/dev/null || sudo npm install --global --silent pnpm
+    pnpm install --frozen-lockfile --reporter=append-only
+}
+
+install_php_dependencies() {
+    local directory="$1"
+    # composer.lock is ignored in this library but kept in orb snapshots.
+    # Re-resolve only when composer.json changed since the lock was written.
+    if [[ -f "$directory/composer.lock" ]] && composer --working-dir="$directory" validate --no-check-publish --no-check-all --quiet; then
+        composer --working-dir="$directory" install --no-interaction --no-progress --prefer-dist
+    else
+        composer --working-dir="$directory" update --no-interaction --no-progress --prefer-dist
+    fi
+}
+
+prepare_demo_environment() {
+    [[ -f demo-app/.env ]] || cp demo-app/.env.example demo-app/.env
+    grep -Eq '^APP_KEY=.+' demo-app/.env || php demo-app/artisan key:generate --no-interaction --quiet
+    # The demo turns web push on, which needs VAPID keys.
+    grep -Eq '^VAPID_PUBLIC_KEY=.+' demo-app/.env || php demo-app/artisan inertia-notifications:vapid --subject=mailto:demo@inertiaui.com --no-interaction --quiet
+    # Snapshots made before the demo had a database lack the connection.
+    grep -Eq '^DB_CONNECTION=' demo-app/.env || echo 'DB_CONNECTION=sqlite' >>demo-app/.env
+    # A new database gets sample notifications. An existing one only gets new migrations.
+    if [[ -f demo-app/database/database.sqlite ]]; then
+        php demo-app/artisan migrate --force --no-interaction
+    else
+        touch demo-app/database/database.sqlite
+        php demo-app/artisan migrate --seed --force --no-interaction
+    fi
+}
+
+step 'PHP 8.4 and Composer' install_php
+step 'JavaScript dependencies' install_node_tools
+step 'PHP package dependencies' install_php_dependencies .
+step 'Demo PHP dependencies' install_php_dependencies demo-app
+step 'Demo environment' prepare_demo_environment
+step 'Frontend library builds' pnpm run build
+step 'Demo assets (Vue and React)' pnpm run build:demo
+# Skips browsers already present. The orb image has Chromium's system libraries.
+step 'Chromium for Pest browser tests' pnpm --dir demo-app exec playwright install chromium

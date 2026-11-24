@@ -1,0 +1,61 @@
+{
+    "name": "@inertiaui/notifications-react",
+    "version": "0.1.0",
+    "description": "React components for Inertia Notifications",
+    "keywords": [
+        "inertia",
+        "inertiajs",
+        "laravel",
+        "react",
+        "notifications",
+        "notification-center",
+        "toast",
+        "toasts",
+        "tailwindcss"
+    ],
+    "homepage": "https://inertiaui.com/inertia-notifications/docs",
+    "bugs": {
+        "url": "https://github.com/inertiaui/notifications/issues"
+    },
+    "author": "Pascal Baljet <pascal@protone.media>",
+    "license": "MIT",
+    "private": false,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/inertiaui/notifications.git",
+        "directory": "react"
+    },
+    "type": "module",
+    "files": [
+        "dist",
+        "shadcn.css",
+        "theme.css"
+    ],
+    "module": "./dist/inertiaui-notifications.js",
+    "types": "./dist/inertiaui-notifications.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/inertiaui-notifications.d.ts",
+            "import": "./dist/inertiaui-notifications.js"
+        },
+        "./theme.css": "./theme.css",
+        "./shadcn.css": "./shadcn.css"
+    },
+    "scripts": {
+        "dev": "NODE_ENV=development vp build --watch",
+        "build": "vp build",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@inertiaui/vanilla": "^1.7.0",
+        "tailwind-merge": "^3.7.0"
+    },
+    "peerDependencies": {
+        "@inertiajs/react": "^3.11.0",
+        "react": "^19.0",
+        "react-dom": "^19.0"
+    },
+    "sideEffects": [
+        "*.css"
+    ]
+}
