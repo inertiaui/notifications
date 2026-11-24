@@ -101,7 +101,19 @@ Laravel's React and Vue starter kits flash their toasts under Inertia's `toast` 
 Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
 ```
 
-The package does not read this key. To show these toasts, render the package's [Toaster](installation.md#render-the-toaster) in place of the kit's sonner `Toaster`, delete the kit's toast listener in `resources/js/lib/flashToast.ts` (Vue) or `resources/js/hooks/use-flash-toast.ts` (React), and choose one of the two ways below.
+The package does not read this key. To show these toasts, replace the kit's sonner `Toaster` with the package's [Toaster](installation.md#render-the-toaster), then choose one of the two ways below. The [install command](installation.md#run-the-install-command) lists these steps once it finds a starter kit.
+
+The Vue starter kit renders sonner's `Toaster` in the `resources/js/layouts/app/AppSidebarLayout.vue` and `resources/js/layouts/app/AppHeaderLayout.vue` layouts. The React starter kit renders it in the `withApp` option of `createInertiaApp()`, in `resources/js/app.tsx`. Import the package's `Toaster` there instead of the kit's:
+
+```js
+// Vue
+import { Toaster } from '@inertiaui/notifications-vue'
+```
+
+```js
+// React
+import { Toaster } from '@inertiaui/notifications-react'
+```
 
 ### Moving to the Toast Class
 
@@ -117,26 +129,21 @@ Toast::success('You left the team ":name"', ['name' => $team->name])->flash();
 
 The starter kits with teams flash more toasts, in their team, invitation, and member controllers. Once moved, these toasts work like every other flashed toast. They may show from the response header of a [JSON endpoint](toasts-json-endpoints.md), and the [testing helpers](toasts-testing.md) see them.
 
+Once every call is moved, you may delete the kit's toast listener. In the Vue starter kit, delete `resources/js/lib/flashToast.ts` and its call in `resources/js/app.ts`. In the React starter kit, delete `resources/js/components/ui/sonner.tsx` and the `resources/js/hooks/use-flash-toast.ts` hook that it calls.
+
 ### Keeping the Starter Kit Calls
 
-To show the toasts without changing your controllers, listen for Inertia's `flash` event and pass the kit's toast to the package's `toast` function. Add the listener to your frontend entry point, next to `initNotifications()`:
+To show the toasts without changing your controllers, pass the kit's toasts to the package's `toast` function instead of sonner's.
 
-```js
-// Vue
-import { router } from '@inertiajs/vue3'
+In the Vue starter kit, the listener in `resources/js/lib/flashToast.ts` already passes each toast to `toast[data.type]`. Import `toast` from the package instead of `vue-sonner`:
+
+```ts
 import { toast } from '@inertiaui/notifications-vue'
-
-router.on('flash', (event) => {
-    const data = event.detail.flash.toast
-
-    if (data) {
-        toast[data.type](data.message)
-    }
-})
 ```
 
-```js
-// React
+In the React starter kit, the listener is the `resources/js/hooks/use-flash-toast.ts` hook, which sonner's component in `resources/js/components/ui/sonner.tsx` calls. Delete both files, and listen for Inertia's `flash` event in `resources/js/app.tsx` instead, next to `initNotifications()`:
+
+```tsx
 import { router } from '@inertiajs/react'
 import { toast } from '@inertiaui/notifications-react'
 
@@ -147,6 +154,24 @@ router.on('flash', (event) => {
         toast[data.type](data.message)
     }
 })
+```
+
+TypeScript needs the type of the kit's toast to check this listener. Add it to the `flashDataType` in `resources/js/types/global.d.ts`, together with the package's flash data, as [Typing the Flash Data](#typing-the-flash-data) describes. The kit defines the `FlashToast` type in `resources/js/types/ui.ts`:
+
+```ts
+import type { InertiaUIFlashData } from '@inertiaui/notifications-react'
+import type { FlashToast } from '@/types/ui'
+
+declare module '@inertiajs/core' {
+    export interface InertiaConfig {
+        flashDataType: InertiaUIFlashData & {
+            toast?: FlashToast
+        }
+        sharedPageProps: {
+            // ...
+        }
+    }
+}
 ```
 
 > [!WARNING] Browser toasts

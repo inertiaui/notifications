@@ -18,7 +18,25 @@ Next, run the `inertia-notifications:install` command:
 php artisan inertia-notifications:install
 ```
 
-The command publishes the configuration file and the migrations, skipping files you already published. It then lists the frontend steps below and the steps that set up the [notification center](notification-center-setup.md).
+The command publishes the configuration file and the migrations, skipping files you already published. It then lists the frontend steps below and the steps that set up the [notification center](notification-center-setup.md). In an application built on a Laravel starter kit, it also lists the steps that move the kit's toasts to the package, as described in [Starter Kit Toasts](toasts-flashing-from-laravel.md#starter-kit-toasts).
+
+### Laravel Boost
+
+The package includes guidelines and a skill for [Laravel Boost](https://github.com/laravel/boost). Boost installs them only for the packages listed under `packages` in your `boost.json` file. The install command offers to add the package to this list, then runs `boost:update`.
+
+Boost itself asks about new packages only while it runs interactively, so the `boost:update` script that the Laravel starter kits run after `composer require` does not add the package. You may also add it to `boost.json` yourself:
+
+```json
+{
+    "packages": ["inertiaui/notifications"]
+}
+```
+
+Then update the Boost guidelines and skills:
+
+```bash
+php artisan boost:update
+```
 
 ## Install the Frontend Package
 
@@ -143,6 +161,22 @@ export default function Layout({ children }) {
         </>
     )
 }
+```
+
+In React, you may also render the `Toaster` next to the app in the `withApp` option of `createInertiaApp()`, where the Laravel React starter kit renders its sonner `Toaster`:
+
+```jsx
+createInertiaApp({
+    withApp(app) {
+        return (
+            <>
+                {app}
+                <Toaster />
+            </>
+        )
+    },
+    // ...
+})
 ```
 
 Your application is now ready to [flash toasts from Laravel](toasts-flashing-from-laravel.md).
