@@ -19,6 +19,23 @@ export function sameOrigin(url: string): boolean {
 }
 
 /**
+ * Whether the page a visit lands on is the one the browser shows now, such as after a redirect back. It compares the
+ * origin, path, and query, and ignores the hash and the order of the query's keys: Laravel sorts them, while Inertia's
+ * infinite scroll adds its page key last.
+ */
+function landsOnCurrentPage(page: { url: string }): boolean {
+    const current = new URL(window.location.href)
+    const destination = new URL(page.url, current)
+
+    for (const url of [current, destination]) {
+        url.hash = ''
+        url.searchParams.sort()
+    }
+
+    return destination.href === current.href
+}
+
+/**
  * A click on a notification or on an action, with what the package reads from it. Every handler takes this one type and
  * each guard picks its parts from it, since a copy without `target` would take every click on a link for one on a button.
  */
@@ -170,6 +187,8 @@ export function performAction<Target>(
     bindings.visit(href, {
         method,
         data: action.data,
+        // Like an Undo that redirects back, a change that lands on the page the user is on keeps its state and scroll position.
+        ...(method === 'get' ? {} : { preserveState: landsOnCurrentPage, preserveScroll: landsOnCurrentPage }),
         ...action.visit,
         onSuccess: () => void (succeeded = true),
         onFinish: () => {

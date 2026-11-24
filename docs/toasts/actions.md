@@ -26,7 +26,6 @@ use InertiaUI\Notifications\ToastAction;
 Toast::make('Message archived')
     ->action(ToastAction::make('Undo')
         ->post(route('messages.restore', $message))
-        ->preserveScroll()
     )
     ->flash();
 ```
@@ -40,7 +39,7 @@ The `ToastAction` class has the following methods:
 | `external()` | Load the URL in the browser instead of visiting it with Inertia, such as for a download or another site. |
 | `openUrlInNewTab()` | Open the URL in a new tab. |
 | `event($name, $payload)` | Dispatch a `CustomEvent` with this name on `window`, with the payload as its `detail`. |
-| `preserveScroll()`, `preserveState()`, `only([...])` | Options for the Inertia visit. |
+| `preserveScroll()`, `preserveState()`, `only([...])` | Options for the Inertia visit. See [Preserving State and Scroll](#preserving-state-and-scroll). |
 | `keepOpen()` | Keep the toast open after the action ran. |
 | `altText($text)` | Tell screen reader users how to do the same without the toast, such as "Undo from the Trash page". A toast whose actions all have one closes after its duration. |
 | `result($text, $replace)` | Set what a notification shows in place of its actions once this action succeeds, such as "Approved". See [Action Results](/notification-center/reading-and-changing#action-results). |
@@ -53,6 +52,23 @@ A toast with actions stays open until the user dismisses it, unless you set a du
 
 > [!WARNING] Actions need a fallback
 > A toast may close before a keyboard or screen reader user reaches it. Make sure the user can do the same thing somewhere else in your app.
+
+## Preserving State and Scroll
+
+An action that sends a POST, PUT, PATCH, or DELETE request keeps the page's state and scroll position once it lands on the page the user is on, such as an Undo that redirects back. Inertia updates the page with the new props instead of mounting it again, so form input stays and animations do not restart. An action that lands on another page, or on the same page with another query string, starts fresh at the top, like a GET visit.
+
+You may override this per action with the `preserveState` and `preserveScroll` methods, such as to reset a form that reads its values from the props when it mounts:
+
+```php
+Toast::make('Post saved')
+    ->action(ToastAction::make('Revert')
+        ->put(route('posts.revert', $post))
+        ->preserveState(false)
+    )
+    ->flash();
+```
+
+Actions from the browser take the same options in their `visit` field, such as `visit: { preserveState: false }`.
 
 ## Actions in the Browser
 

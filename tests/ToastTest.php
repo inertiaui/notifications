@@ -196,6 +196,7 @@ it('serializes the ID, actions, and display options the frontend reads', functio
             ToastAction::make('Cancel')
                 ->delete('/imports/7', ['reason' => 'user'])
                 ->preserveScroll()
+                ->preserveState(false)
                 ->keepOpen(),
         )
         ->action(
@@ -222,7 +223,7 @@ it('serializes the ID, actions, and display options the frontend reads', functio
                 'href' => '/imports/7',
                 'method' => 'delete',
                 'data' => ['reason' => 'user'],
-                'visit' => ['preserveScroll' => true],
+                'visit' => ['preserveScroll' => true, 'preserveState' => false],
                 'keepOpen' => true,
             ],
             [
