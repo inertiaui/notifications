@@ -97,32 +97,37 @@ function ne(e) {
 	}
 }
 function U(e) {
-	return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+	let t = new URL(window.location.href), n = new URL(e.url, t);
+	for (let e of [t, n]) e.hash = "", e.searchParams.sort();
+	return n.href === t.href;
 }
 function re(e) {
+	return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+}
+function ie(e) {
 	let t = e.target;
 	return typeof t?.closest == "function" && t.closest("a[href]") !== null;
 }
-function ie(e, t, n) {
-	return !e.onClick && re(n) && (U(n) || e.external || e.newTab || !ne(t));
+function ae(e, t, n) {
+	return !e.onClick && ie(n) && (re(n) || e.external || e.newTab || !ne(t));
 }
-var ae = 1500;
-function oe(e, t) {
+var oe = 1500;
+function se(e, t) {
 	let n, r = () => {
 		n !== void 0 && (clearTimeout(n), n = void 0, window.location.assign(t));
 	};
-	n = setTimeout(r, ae), e.then(r, r);
+	n = setTimeout(r, oe), e.then(r, r);
 }
-function se(e, t, n, r, i) {
+function W(e, t, n, r, i) {
 	r();
 	let a = i?.();
-	a && !U(n) && !t.newTab && (n.preventDefault(), oe(a, e));
+	a && !re(n) && !t.newTab && (n.preventDefault(), se(a, e));
 }
-var W = (e) => typeof e?.then == "function";
-function ce(e, t, n, r, i) {
+var ce = (e) => typeof e?.then == "function";
+function le(e, t, n, r, i) {
 	e.event && window.dispatchEvent(new CustomEvent(e.event, { detail: e.payload }));
 	let a = e.onClick?.(t);
-	if (W(a)) return a.then(() => {
+	if (ce(a)) return a.then(() => {
 		i?.(), r(!0);
 	}, () => r(!1)), "pending";
 	let o = L(e.href);
@@ -132,7 +137,7 @@ function ce(e, t, n, r, i) {
 		if (e.newTab) window.open(o, "_blank", "noopener"), i?.();
 		else {
 			let e = i?.();
-			e ? oe(e, o) : window.location.assign(o);
+			e ? se(e, o) : window.location.assign(o);
 		}
 		return "done";
 	}
@@ -141,6 +146,10 @@ function ce(e, t, n, r, i) {
 	return n.visit(o, {
 		method: s,
 		data: e.data,
+		...s === "get" ? {} : {
+			preserveState: U,
+			preserveScroll: U
+		},
 		...e.visit,
 		onSuccess: () => void (c = !0),
 		onFinish: () => {
@@ -149,48 +158,48 @@ function ce(e, t, n, r, i) {
 	}), "pending";
 }
 // ../js/cn.ts
-var le = h({ extend: { theme: { radius: ["iui-toast", "iui-inbox"] } } });
+var ue = h({ extend: { theme: { radius: ["iui-toast", "iui-inbox"] } } });
 function G(...e) {
-	return le(e.filter(Boolean).join(" "));
+	return ue(e.filter(Boolean).join(" "));
 }
 // ../js/icons.ts
-var K = (e, t) => Object.hasOwn(e, t) ? e[t] : void 0, ue = {
+var K = (e, t) => Object.hasOwn(e, t) ? e[t] : void 0, de = {
 	success: "M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z",
 	info: "M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z",
 	warning: "M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z",
 	error: "M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z"
-}, de = "M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z", q = "M10 3a7 7 0 0 1 7 7", fe = ["M10 2a6 6 0 0 0-6 6c0 1.887-.454 3.665-1.257 5.234a.75.75 0 0 0 .515 1.076 32.91 32.91 0 0 0 3.256.508 3.5 3.5 0 0 0 6.972 0 32.903 32.903 0 0 0 3.256-.508.75.75 0 0 0 .515-1.076A11.448 11.448 0 0 1 16 8a6 6 0 0 0-6-6ZM8.05 14.943a33.54 33.54 0 0 0 3.9 0 2 2 0 0 1-3.9 0Z"], pe = ["M4 8c0-.26.017-.517.049-.77l7.722 7.723a33.56 33.56 0 0 1-3.722-.01 2 2 0 0 0 3.862.15l1.134 1.134a3.5 3.5 0 0 1-6.53-1.409 32.91 32.91 0 0 1-3.257-.508.75.75 0 0 1-.515-1.076A11.448 11.448 0 0 0 4 8ZM17.266 13.9a.756.756 0 0 1-.068.116L6.389 3.207A6 6 0 0 1 16 8c.001 1.887.455 3.665 1.258 5.234a.75.75 0 0 1 .01.666ZM3.28 2.22a.75.75 0 0 0-1.06 1.06l14.5 14.5a.75.75 0 1 0 1.06-1.06L3.28 2.22Z"], me = ["M1 11.27c0-.246.033-.492.099-.73l1.523-5.521A2.75 2.75 0 0 1 5.273 3h9.454a2.75 2.75 0 0 1 2.651 2.019l1.523 5.52c.066.239.099.485.099.732V15a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3.73Zm3.068-5.852A1.25 1.25 0 0 1 5.273 4.5h9.454a1.25 1.25 0 0 1 1.205.918l1.523 5.52c.006.02.01.041.015.062H14a1 1 0 0 0-.86.49l-.606 1.02a1 1 0 0 1-.86.49H8.236a1 1 0 0 1-.894-.553l-.448-.894A1 1 0 0 0 6 11H2.53l.015-.062 1.523-5.52Z"], he = {
-	dismiss: [de],
-	bell: fe,
-	notification: fe,
+}, q = "M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z", fe = "M10 3a7 7 0 0 1 7 7", pe = ["M10 2a6 6 0 0 0-6 6c0 1.887-.454 3.665-1.257 5.234a.75.75 0 0 0 .515 1.076 32.91 32.91 0 0 0 3.256.508 3.5 3.5 0 0 0 6.972 0 32.903 32.903 0 0 0 3.256-.508.75.75 0 0 0 .515-1.076A11.448 11.448 0 0 1 16 8a6 6 0 0 0-6-6ZM8.05 14.943a33.54 33.54 0 0 0 3.9 0 2 2 0 0 1-3.9 0Z"], me = ["M4 8c0-.26.017-.517.049-.77l7.722 7.723a33.56 33.56 0 0 1-3.722-.01 2 2 0 0 0 3.862.15l1.134 1.134a3.5 3.5 0 0 1-6.53-1.409 32.91 32.91 0 0 1-3.257-.508.75.75 0 0 1-.515-1.076A11.448 11.448 0 0 0 4 8ZM17.266 13.9a.756.756 0 0 1-.068.116L6.389 3.207A6 6 0 0 1 16 8c.001 1.887.455 3.665 1.258 5.234a.75.75 0 0 1 .01.666ZM3.28 2.22a.75.75 0 0 0-1.06 1.06l14.5 14.5a.75.75 0 1 0 1.06-1.06L3.28 2.22Z"], he = ["M1 11.27c0-.246.033-.492.099-.73l1.523-5.521A2.75 2.75 0 0 1 5.273 3h9.454a2.75 2.75 0 0 1 2.651 2.019l1.523 5.52c.066.239.099.485.099.732V15a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3.73Zm3.068-5.852A1.25 1.25 0 0 1 5.273 4.5h9.454a1.25 1.25 0 0 1 1.205.918l1.523 5.52c.006.02.01.041.015.062H14a1 1 0 0 0-.86.49l-.606 1.02a1 1 0 0 1-.86.49H8.236a1 1 0 0 1-.894-.553l-.448-.894A1 1 0 0 0 6 11H2.53l.015-.062 1.523-5.52Z"], ge = {
+	dismiss: [q],
+	bell: pe,
+	notification: pe,
 	read: ["M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"],
 	unread: ["M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z", "m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z"],
 	archive: ["M2 3a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2Z", "M2 7.5h16l-.811 7.71a2 2 0 0 1-1.99 1.79H4.802a2 2 0 0 1-1.99-1.79L2 7.5ZM7 11a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1Z"],
-	unarchive: me,
+	unarchive: he,
 	snooze: ["M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z"],
-	unsnooze: me,
-	mute: pe,
-	unmute: fe,
+	unsnooze: he,
+	mute: me,
+	unmute: pe,
 	pause: ["M2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm5-2.25A.75.75 0 0 1 7.75 7h.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1-.75-.75v-4.5Zm4 0a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1-.75-.75v-4.5Z"],
-	paused: pe,
+	paused: me,
 	more: ["M3 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM8.5 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM15.5 8.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"],
 	delete: ["M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z"],
-	empty: me,
+	empty: he,
 	result: ["M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"],
 	announcement: ["M13.92 3.845a19.362 19.362 0 0 1-6.3 1.98C6.765 5.942 5.89 6 5 6a4 4 0 0 0-.504 7.969 15.97 15.97 0 0 0 1.271 3.34c.397.771 1.342 1 2.05.59l.867-.5c.726-.419.94-1.32.588-2.02-.166-.331-.315-.666-.448-1.004 1.8.357 3.511.963 5.096 1.78A17.964 17.964 0 0 0 15 10c0-2.162-.381-4.235-1.08-6.155ZM15.243 3.097A19.456 19.456 0 0 1 16.5 10c0 2.43-.445 4.758-1.257 6.904l-.03.077a.75.75 0 0 0 1.401.537 20.903 20.903 0 0 0 1.312-5.745 2 2 0 0 0 0-3.546 20.902 20.902 0 0 0-1.312-5.745.75.75 0 0 0-1.4.537l.029.078Z"]
-}, ge = null;
-function J(e) {
-	ge = e;
+}, J = null;
+function _e(e) {
+	J = e;
 }
-function _e(e, t = {}) {
-	return ge?.(e, t) ?? null;
+function ve(e, t = {}) {
+	return J?.(e, t) ?? null;
 }
-function ve(e, t, n = {}, r) {
-	let i = K(n, e) ?? (r ? r(e, t) : _e(e, t));
+function ye(e, t, n = {}, r) {
+	let i = K(n, e) ?? (r ? r(e, t) : ve(e, t));
 	return i == null || i === !1 ? void 0 : i;
 }
 // ../js/translations.ts
-var ye = {
+var be = {
 	toaster_label: "Notifications",
 	toaster_label_with_hotkey: ":label (:hotkey)",
 	toaster_hotkey_alt: "Alt",
@@ -329,28 +338,28 @@ var ye = {
 	preferences_retry: "Try again",
 	preferences_save_failed: "Your preferences could not be saved.",
 	preferences_push_device_remove_failed: "The device could not be removed."
-}, be = Object.assign(Object.create(null), ye);
-function xe(e) {
-	for (let [t, n] of Object.entries(e)) n !== void 0 && (be[t] = n);
+}, xe = Object.assign(Object.create(null), be);
+function Se(e) {
+	for (let [t, n] of Object.entries(e)) n !== void 0 && (xe[t] = n);
 }
-var Se = (e) => Object.hasOwn(be, e) ? be[e] : void 0;
-function Ce(e, t = {}) {
+var Ce = (e) => Object.hasOwn(xe, e) ? xe[e] : void 0;
+function we(e, t = {}) {
 	return typeof e == "function" ? e(t) : T(e, t);
 }
-function we(e, t = {}) {
-	let n = Se(e);
-	return n === void 0 ? e : Ce(n, t);
+function Te(e, t = {}) {
+	let n = Ce(e);
+	return n === void 0 ? e : we(n, t);
 }
-var Te = (e, t) => e + t.replace(/[A-Z]/g, (e) => `_${e.toLowerCase()}`);
-function Ee(e, t) {
-	return Object.fromEntries(t.map((t) => [t, ye[Te(e, t)]]));
+var Ee = (e, t) => e + t.replace(/[A-Z]/g, (e) => `_${e.toLowerCase()}`);
+function De(e, t) {
+	return Object.fromEntries(t.map((t) => [t, be[Ee(e, t)]]));
 }
-function De(e, t, n) {
+function Oe(e, t, n) {
 	let r = (e) => n && Object.hasOwn(n, e) ? n[e] : void 0;
-	return Object.fromEntries(t.map((t) => [t, r(t) ?? Se(Te(e, t)) ?? Te(e, t)]));
+	return Object.fromEntries(t.map((t) => [t, r(t) ?? Ce(Ee(e, t)) ?? Ee(e, t)]));
 }
 // ../js/inbox.ts
-var Oe = [
+var ke = [
 	"read",
 	"unread",
 	"seen",
@@ -359,41 +368,41 @@ var Oe = [
 	"snooze",
 	"unsnooze",
 	"delete"
-], ke = [
+], Ae = [
 	"snooze",
 	"archive",
 	"mute",
 	"delete"
-], Ae = [
+], je = [
 	"snooze",
 	"archive",
 	"mute"
-], je = {
+], Me = {
 	archive: "archive",
 	unarchive: "archive",
 	snooze: "snooze",
 	unsnooze: "snooze",
 	delete: "delete"
-}, Me = (e, t) => (e !== "snoozed" || t.includes("snooze")) && (e !== "archived" || t.includes("archive")), Ne = 100, Pe = "inertiauiInbox", Y = (e) => e ? Date.parse(e) : NaN, Fe = ({ counts: e, category: t, categoryCounts: n }) => t === null ? e.unread : n[t] ?? 0, Ie = (e) => e.expiresAt !== null && Y(e.expiresAt) <= Date.now(), Le = (e, t = Date.now()) => e.snoozedUntil !== null && Y(e.snoozedUntil) > t, Re = (e, t, n) => {
+}, Ne = (e, t) => (e !== "snoozed" || t.includes("snooze")) && (e !== "archived" || t.includes("archive")), Pe = 100, Fe = "inertiauiInbox", Y = (e) => e ? Date.parse(e) : NaN, Ie = ({ counts: e, category: t, categoryCounts: n }) => t === null ? e.unread : n[t] ?? 0, Le = (e) => e.expiresAt !== null && Y(e.expiresAt) <= Date.now(), Re = (e, t = Date.now()) => e.snoozedUntil !== null && Y(e.snoozedUntil) > t, ze = (e, t, n) => {
 	if (t === null || n === 0) return e;
 	let { [t]: r = 0, ...i } = e, a = Math.max(0, r + n);
 	return a === 0 ? i : {
 		...i,
 		[t]: a
 	};
-}, ze = (e, t) => Y(e.createdAt) > Y(t.createdAt) || Y(e.createdAt) === Y(t.createdAt) && e.total > t.total, Be = (e, t) => {
+}, Be = (e, t) => Y(e.createdAt) > Y(t.createdAt) || Y(e.createdAt) === Y(t.createdAt) && e.total > t.total, Ve = (e, t) => {
 	let n = new Map(t.map((e) => [e.id, e])), r = e.filter((e) => {
 		let t = n.get(e.id);
-		return t === void 0 || ze(e, t);
+		return t === void 0 || Be(e, t);
 	}), i = new Set(r.map((e) => e.id));
 	return [...r, ...t.filter((e) => !i.has(e.id))];
-}, Ve = (e, { latest: t, latestIds: n }) => t !== null && (Y(e.createdAt) < Y(t) || Y(e.createdAt) === Y(t) && n.includes(e.id)), He = (e) => N(e) ? {
+}, He = (e, { latest: t, latestIds: n }) => t !== null && (Y(e.createdAt) < Y(t) || Y(e.createdAt) === Y(t) && n.includes(e.id)), Ue = (e) => N(e) ? {
 	name: P(e.name) ?? void 0,
 	avatar: L(e.avatar)
 } : null;
-function Ue(e) {
+function We(e) {
 	if (!N(e) || typeof e.id != "string" || typeof e.title != "string" || typeof e.createdAt != "string") return;
-	let t = He(e.actor), n = (Array.isArray(e.actors) ? e.actors.map(He) : [t]).filter((e) => e !== null);
+	let t = Ue(e.actor), n = (Array.isArray(e.actors) ? e.actors.map(Ue) : [t]).filter((e) => e !== null);
 	return {
 		id: e.id,
 		type: P(e.type) ?? "",
@@ -424,8 +433,8 @@ function Ue(e) {
 		expiresAt: P(e.expiresAt)
 	};
 }
-var We = (e) => Array.isArray(e) ? {} : N(e) ? Object.fromEntries(Object.entries(e).filter((e) => typeof e[1] == "number")) : void 0, Ge = (e) => {
-	let t = N(e) ? We(e.categories) : void 0;
+var Ge = (e) => Array.isArray(e) ? {} : N(e) ? Object.fromEntries(Object.entries(e).filter((e) => typeof e[1] == "number")) : void 0, Ke = (e) => {
+	let t = N(e) ? Ge(e.categories) : void 0;
 	return N(e) && typeof e.unread == "number" && typeof e.unseen == "number" && typeof e.revision == "number" && (e.latest === null || typeof e.latest == "string") && Array.isArray(e.latestIds) && t !== void 0 ? {
 		unread: e.unread,
 		unseen: e.unseen,
@@ -437,7 +446,7 @@ var We = (e) => Array.isArray(e) ? {} : N(e) ? Object.fromEntries(Object.entries
 		},
 		context: P(e.context)
 	} : void 0;
-}, Ke = (e) => N(e) ? Object.fromEntries(Object.entries(e).filter((e) => typeof e[1] == "string")) : {}, qe = (e) => Array.isArray(e) ? e.filter((e) => e === "tomorrow" || typeof e == "number" && Number.isInteger(e) && e > 0) : ut, Je = (e) => N(e) ? Object.fromEntries(Object.entries(e).filter((e) => N(e[1])).map(([e, t]) => [e, {
+}, qe = (e) => N(e) ? Object.fromEntries(Object.entries(e).filter((e) => typeof e[1] == "string")) : {}, Je = (e) => Array.isArray(e) ? e.filter((e) => e === "tomorrow" || typeof e == "number" && Number.isInteger(e) && e > 0) : dt, Ye = (e) => N(e) ? Object.fromEntries(Object.entries(e).filter((e) => N(e[1])).map(([e, t]) => [e, {
 	label: P(t.label) ?? e,
 	category: P(t.category),
 	data: N(t.data) ? Object.fromEntries(Object.entries(t.data).filter((e) => [
@@ -445,8 +454,8 @@ var We = (e) => Array.isArray(e) ? {} : N(e) ? Object.fromEntries(Object.entries
 		"number",
 		"boolean"
 	].includes(typeof e[1]))) : {}
-}])) : {}, Ye = (e, t) => t !== void 0 && (t.category === null || e.category === t.category) && Object.entries(t.data).every(([t, n]) => e.data[t] === n);
-function Xe(e) {
+}])) : {}, Xe = (e, t) => t !== void 0 && (t.category === null || e.category === t.category) && Object.entries(t.data).every(([t, n]) => e.data[t] === n);
+function Ze(e) {
 	if (!N(e)) return;
 	if (e.kind === "item") return typeof e.id == "string" ? {
 		kind: "item",
@@ -462,7 +471,7 @@ function Xe(e) {
 		ids: e.ids.filter((e) => typeof e == "string")
 	} : void 0;
 	if (e.kind === "update") {
-		let t = Ue(e.item);
+		let t = We(e.item);
 		return t === void 0 ? void 0 : {
 			kind: "update",
 			item: t
@@ -478,7 +487,7 @@ function Xe(e) {
 		until: e.until
 	} : void 0;
 	if (e.kind === "items") {
-		let t = Oe.find((t) => t === e.action);
+		let t = ke.find((t) => t === e.action);
 		if (t === void 0 || t === "delete" || !Array.isArray(e.ids) || typeof e.at != "string" || t === "snooze" && typeof e.until != "string") return;
 		let n = e.ids.filter((e) => typeof e == "string");
 		return t === "snooze" ? {
@@ -509,25 +518,25 @@ function Xe(e) {
 		category: n
 	} : void 0;
 }
-var Ze = (e, t) => t.split(".").reduce((e, t) => N(e) ? e[t] : void 0, e), Qe = () => ({
+var Qe = (e, t) => t.split(".").reduce((e, t) => N(e) ? e[t] : void 0, e), $e = () => ({
 	unread: 0,
 	unseen: 0,
 	categories: {}
-}), $e = 2147483647, et = (e, { before: t, ids: n, category: r }) => {
+}), et = 2147483647, tt = (e, { before: t, ids: n, category: r }) => {
 	if (r !== null && e.category !== r) return !1;
 	let i = Y(e.createdAt);
 	return i < Y(t) || i === Y(t) && (n === null || n.includes(e.id));
-}, tt = (e, t, n) => et(e, t) ? t.kind === "archive" ? e.archivedAt === null && (!t.onlyRead || e.readAt !== null) ? {
+}, nt = (e, t, n) => tt(e, t) ? t.kind === "archive" ? e.archivedAt === null && (!t.onlyRead || e.readAt !== null) ? {
 	...e,
 	archivedAt: n
 } : e : t.kind === "seen" ? e.seenAt === null ? {
 	...e,
 	seenAt: n
-} : e : e.readAt === null && e.archivedAt === null && !Le(e) ? {
+} : e : e.readAt === null && e.archivedAt === null && !Re(e) ? {
 	...e,
 	readAt: n,
 	seenAt: e.seenAt ?? n
-} : e : e, nt = (e, { action: t, ids: n, at: r, until: i }) => n.includes(e.id) ? t === "read" ? e.readAt === null ? {
+} : e : e, rt = (e, { action: t, ids: n, at: r, until: i }) => n.includes(e.id) ? t === "read" ? e.readAt === null ? {
 	...e,
 	readAt: r,
 	seenAt: e.seenAt ?? r
@@ -549,21 +558,21 @@ var Ze = (e, t) => t.split(".").reduce((e, t) => N(e) ? e[t] : void 0, e), Qe = 
 } : t === "unsnooze" ? e.snoozedUntil === null ? e : {
 	...e,
 	snoozedUntil: null
-} : e : e, rt = (e, t, n) => t.kind === "items" ? nt(e, t) : tt(e, t, n), it = ({ readAt: e, seenAt: t, archivedAt: n, snoozedUntil: r, result: i }) => ({
+} : e : e, it = (e, t, n) => t.kind === "items" ? rt(e, t) : nt(e, t, n), at = ({ readAt: e, seenAt: t, archivedAt: n, snoozedUntil: r, result: i }) => ({
 	readAt: e,
 	seenAt: t,
 	archivedAt: n,
 	snoozedUntil: r,
 	result: i
 });
-function at() {
-	let e, t = Pe, n, r = 0, i, a, o = null, s = null, c = Ae, l = !0, u = {}, d = ut, f = {}, p = null, m, h, g = {
+function ot() {
+	let e, t = Fe, n, r = 0, i, a, o = null, s = null, c = je, l = !0, u = {}, d = dt, f = {}, p = null, m, h, g = {
 		unread: 0,
 		unseen: 0
 	}, _ = {}, v = [], y = [], b = "all", x = null, S = "idle", C = !1, w = !1, T = null, E = 0, D, O = {}, k = 0, A = 0, j = /* @__PURE__ */ new Set(), M = /* @__PURE__ */ new Map(), F = [], I = [], R = /* @__PURE__ */ new Set(), z = /* @__PURE__ */ new Set(), B = /* @__PURE__ */ new Map(), ee = /* @__PURE__ */ new Map(), V = !1, te = {
 		until: null,
 		revision: -Infinity
-	}, re = null, ae, oe = null, W = /* @__PURE__ */ new Set(), le = /* @__PURE__ */ new Set(), G = /* @__PURE__ */ new Set(), K = /* @__PURE__ */ new Set(), ue, de = (e, t, n) => {
+	}, U = null, ie, oe = null, se = /* @__PURE__ */ new Set(), ce = /* @__PURE__ */ new Set(), ue = /* @__PURE__ */ new Set(), G = /* @__PURE__ */ new Set(), K, de = (e, t, n) => {
 		let r = M.get(e);
 		(!r || n > r.revision) && M.set(e, {
 			state: t,
@@ -582,8 +591,8 @@ function at() {
 			...r,
 			...a.state
 		}, n = a.revision);
-		for (let e of F) e.revision > n && (r = rt(r, e.change, e.at));
-		for (let t of I) t.kind === "bulk" ? r = rt(r, t.change, t.at) : t.kind === "mute" && t.group === r.group ? r = {
+		for (let e of F) e.revision > n && (r = it(r, e.change, e.at));
+		for (let t of I) t.kind === "bulk" ? r = it(r, t.change, t.at) : t.kind === "mute" && t.group === r.group ? r = {
 			...r,
 			muted: t.muted
 		} : t.kind === "item" && t.id === e.id && (t.createdAt === null || Y(e.createdAt) <= Y(t.createdAt)) && (r = {
@@ -591,13 +600,13 @@ function at() {
 			...t.state
 		});
 		return r;
-	}, fe = (e) => z.has(e) || I.some((t) => t.kind === "delete" && t.ids.includes(e)), pe = (e, t, n = null) => fe(e.id) || Ie(e) || n !== null && e.category !== n ? !1 : t === "archived" || e.archivedAt !== null ? t === "archived" && e.archivedAt !== null : Le(e) === (t === "snoozed") ? t === "unread" ? e.readAt === null || R.has(e.id) : t === "all" || t === "snoozed" || Ye(e, Object.hasOwn(f, t) ? f[t] : void 0) : !1, me = () => {
+	}, fe = (e) => z.has(e) || I.some((t) => t.kind === "delete" && t.ids.includes(e)), pe = (e, t, n = null) => fe(e.id) || Le(e) || n !== null && e.category !== n ? !1 : t === "archived" || e.archivedAt !== null ? t === "archived" && e.archivedAt !== null : Re(e) === (t === "snoozed") ? t === "unread" ? e.readAt === null || R.has(e.id) : t === "all" || t === "snoozed" || Xe(e, Object.hasOwn(f, t) ? f[t] : void 0) : !1, me = () => {
 		let e = I.reduce((e, t) => t.kind === "pause" ? t.until : e, void 0), t = e === void 0 ? te.until : e;
 		return V && t !== null && Y(t) > Date.now() ? t : null;
 	}, he = (e) => {
-		e !== oe && (clearTimeout(ae), ae = void 0, oe = e, e !== null && (ae = setTimeout(() => {
+		e !== oe && (clearTimeout(ie), ie = void 0, oe = e, e !== null && (ie = setTimeout(() => {
 			oe = null, me() === null ? J() : he(e);
-		}, Math.min(Y(e) - Date.now(), $e))));
+		}, Math.min(Y(e) - Date.now(), et))));
 	}, ge = (e, t) => {
 		t > te.revision && (te = {
 			until: e,
@@ -605,7 +614,7 @@ function at() {
 		});
 	}, J = () => {
 		let e = me();
-		he(e), ue = {
+		he(e), K = {
 			url: a,
 			user: i,
 			channel: o,
@@ -615,7 +624,7 @@ function at() {
 			categoryFilter: u,
 			tabs: f,
 			counts: g,
-			items: Be(y, v).map(q).filter((e) => pe(e, b, x)),
+			items: Ve(y, v).map(q).filter((e) => pe(e, b, x)),
 			arrived: y,
 			filter: b,
 			category: x,
@@ -628,18 +637,18 @@ function at() {
 			pausedUntil: e,
 			canPause: V,
 			pausePresets: d
-		}, W.forEach((e) => e());
+		}, se.forEach((e) => e());
 	};
 	J();
-	let _e = ue, ve = (e) => {
+	let _e = K, ve = (e) => {
 		for (let t of e) {
 			let e = Y(t.createdAt);
 			D === void 0 || e > Y(D.at) ? D = {
 				at: t.createdAt,
 				ids: /* @__PURE__ */ new Set([t.id])
-			} : e === Y(D.at) && D.ids.add(t.id), t.revision !== null && de(t.id, it(t), t.revision);
+			} : e === Y(D.at) && D.ids.add(t.id), t.revision !== null && de(t.id, at(t), t.revision);
 		}
-	}, ye = () => (/* @__PURE__ */ new Date()).toISOString(), be = () => h !== void 0 && h.counted.latest !== null && (D === void 0 || Y(h.counted.latest) > Y(D.at)), xe = (e) => e.archivedAt === null && !Le(e), Se = (e) => xe(e) ? {
+	}, ye = () => (/* @__PURE__ */ new Date()).toISOString(), be = () => h !== void 0 && h.counted.latest !== null && (D === void 0 || Y(h.counted.latest) > Y(D.at)), xe = (e) => e.archivedAt === null && !Re(e), Se = (e) => xe(e) ? {
 		unread: +(e.readAt === null),
 		unseen: +(e.seenAt === null)
 	} : {
@@ -650,8 +659,8 @@ function at() {
 		g = {
 			unread: g.unread + t,
 			unseen: g.unseen + n
-		}, _ = Re(_, e.category, t);
-	}, we = (e) => h === void 0 || !Ve(e, h.counted), Te = () => {
+		}, _ = ze(_, e.category, t);
+	}, we = (e) => h === void 0 || !He(e, h.counted), Te = () => {
 		if (!(h === void 0 || I.length > 0)) {
 			g = {
 				unread: h.unread,
@@ -660,24 +669,24 @@ function at() {
 			for (let e of y) we(e) && Ce(q(e));
 		}
 	}, Ee = (e) => {
-		let t = Ge(N(e) ? e.counts : void 0);
+		let t = Ke(N(e) ? e.counts : void 0);
 		!t || t.context !== p || h !== void 0 && t.revision < h.revision || (h = t, Te());
 	}, De = ({ unread: e, unseen: t, categories: n }, r) => {
 		g = {
 			unread: Math.max(0, g.unread + r * e),
 			unseen: Math.max(0, g.unseen + r * t)
-		}, _ = Object.entries(n).reduce((e, [t, n]) => Re(e, t, r * n), _);
+		}, _ = Object.entries(n).reduce((e, [t, n]) => ze(e, t, r * n), _);
 	}, Oe = (e, t) => {
 		if (e.kind === "item") {
 			let { kind: n, id: r, ...i } = e;
 			de(r, i, t);
-		} else if (e.kind === "delete") Fe(e.ids);
+		} else if (e.kind === "delete") ke(e.ids);
 		else if (e.kind === "update") {
 			let n = {
 				...e.item,
 				revision: e.item.revision ?? t
 			}, r = B.get(n.id);
-			(r === void 0 || (r.revision ?? 0) < n.revision) && B.set(n.id, n), de(n.id, it(n), n.revision);
+			(r === void 0 || (r.revision ?? 0) < n.revision) && B.set(n.id, n), de(n.id, at(n), n.revision);
 		} else if (e.kind === "mute") {
 			let n = ee.get(e.group);
 			(n === void 0 || n.revision < t) && ee.set(e.group, {
@@ -689,35 +698,35 @@ function at() {
 			at: ye(),
 			revision: t
 		}];
-	}, Fe = (e) => {
+	}, ke = (e) => {
 		e.forEach((e) => z.add(e)), y = y.filter((e) => !z.has(e.id)), v = v.filter((e) => !z.has(e.id));
-	}, He = () => {
-		r++, E++, i = void 0, a = void 0, o = null, s = null, c = Ae, l = !0, u = {}, d = ut, f = {}, p = null, m = void 0, h = void 0, g = {
+	}, Ie = () => {
+		r++, E++, i = void 0, a = void 0, o = null, s = null, c = je, l = !0, u = {}, d = dt, f = {}, p = null, m = void 0, h = void 0, g = {
 			unread: 0,
 			unseen: 0
 		}, _ = {}, v = [], y = [], b = "all", x = null, S = "idle", C = !1, w = !1, T = null, D = void 0, O = {}, M.clear(), F = [], I = [], R.clear(), z.clear(), B.clear(), ee.clear(), V = !1, te = {
 			until: null,
 			revision: -Infinity
-		}, re = null;
-	}, We = async (t) => {
+		}, U = null;
+	}, Ue = async (t) => {
 		let n = new URLSearchParams({ filter: b });
 		x !== null && n.set("category", x), t && n.set("cursor", t);
 		let r = await e.request("get", `${a}?${n.toString()}`);
 		return {
-			items: N(r) && Array.isArray(r.items) ? r.items.map(Ue).filter((e) => e !== void 0) : [],
+			items: N(r) && Array.isArray(r.items) ? r.items.map(We).filter((e) => e !== void 0) : [],
 			cursor: N(r) && typeof r.nextCursor == "string" ? r.nextCursor : null,
 			body: r
 		};
-	}, et = async (t, i, o) => {
+	}, Ge = async (t, i, o) => {
 		if (!e || a === void 0) return;
 		let s = r;
 		I = [...I, t], De(t.delta, 1), J();
 		try {
 			let n = await e.request("post", `${a}/${i}`, o);
 			if (s !== r) return;
-			let c = N(n) ? n : {}, l = Xe(c.change), u = Ge(c.counts)?.revision;
+			let c = N(n) ? n : {}, l = Ze(c.change), u = Ke(c.counts)?.revision;
 			if (!l || u === void 0) throw Error("The inbox endpoint answered without the change and the counts.");
-			I = I.filter((e) => e !== t), Oe(l, u), Ee(c), K.forEach((e) => e({
+			I = I.filter((e) => e !== t), Oe(l, u), Ee(c), G.forEach((e) => e({
 				change: l,
 				counts: c.counts
 			}));
@@ -734,11 +743,11 @@ function at() {
 		return {
 			unread: e.unread + a,
 			unseen: e.unseen + i.unseen - r.unseen,
-			categories: t.category === null || a === 0 ? e.categories : Re(e.categories, t.category, a)
+			categories: t.category === null || a === 0 ? e.categories : ze(e.categories, t.category, a)
 		};
-	}, Qe()), at = (e, t, n) => {
+	}, $e()), nt = (e, t, n) => {
 		let r = t.map((e) => e.id);
-		if (e === "delete") return et({
+		if (e === "delete") return Ge({
 			kind: "delete",
 			ids: r,
 			delta: tt(t.map((e) => ({
@@ -757,14 +766,14 @@ function at() {
 			...n === void 0 ? {} : { until: n }
 		}, a = tt(t.map((e) => ({
 			before: e,
-			after: nt(e, i)
+			after: rt(e, i)
 		})));
-		return e === "seen" ? et({
+		return e === "seen" ? Ge({
 			kind: "bulk",
 			change: i,
 			at: i.at,
 			delta: a
-		}, "seen/items", { ids: r }) : et({
+		}, "seen/items", { ids: r }) : Ge({
 			kind: "bulk",
 			change: i,
 			at: i.at,
@@ -779,7 +788,7 @@ function at() {
 			...e,
 			...t
 		}), o = a.unread - i.unread;
-		return et({
+		return Ge({
 			kind: "item",
 			id: e.id,
 			state: t,
@@ -790,11 +799,11 @@ function at() {
 				categories: e.category === null ? {} : { [e.category]: o }
 			}
 		}, `${encodeURIComponent(e.id)}/${n}`, r);
-	}, st = (e, t, n) => et({
+	}, st = (e, t, n) => Ge({
 		kind: "mute",
 		group: t,
 		muted: n,
-		delta: Qe()
+		delta: $e()
 	}, `${encodeURIComponent(e.id)}/${n ? "mute" : "unmute"}`), ct = (e, t, n, r, i) => {
 		let a = D ? {
 			before: D.at,
@@ -807,7 +816,7 @@ function at() {
 			...t === null ? {} : { category: t },
 			...i
 		};
-		return et({
+		return Ge({
 			kind: "bulk",
 			change: {
 				...e,
@@ -831,28 +840,28 @@ function at() {
 			unseen: -g.unseen,
 			categories: e ? Object.fromEntries(Object.entries(_).map(([e, t]) => [e, -t])) : {}
 		};
-	}, dt = (e) => {
+	}, ut = (e) => {
 		let t = y.find((t) => t.id === e) ?? v.find((t) => t.id === e);
 		return t && q(t);
 	}, ft = (e) => {
-		let t = typeof e == "string" ? e : e.id, n = typeof e == "string" ? dt(e) : q(e), r = ye();
-		return n === void 0 ? et({
+		let t = typeof e == "string" ? e : e.id, n = typeof e == "string" ? ut(e) : q(e), r = ye();
+		return n === void 0 ? Ge({
 			kind: "item",
 			id: t,
 			state: { readAt: r },
-			delta: Qe(),
+			delta: $e(),
 			createdAt: null
 		}, `${encodeURIComponent(t)}/read`) : n.readAt === null ? (R.add(t), ot(n, {
 			readAt: r,
 			seenAt: n.seenAt ?? r
 		}, "read")) : Promise.resolve();
 	}, pt = (e, t) => {
-		let n = typeof e == "string" ? e : e.id, r = typeof e == "string" ? dt(e) : q(e), i = `${encodeURIComponent(n)}/complete`;
-		if (r === void 0) return et({
+		let n = typeof e == "string" ? e : e.id, r = typeof e == "string" ? ut(e) : q(e), i = `${encodeURIComponent(n)}/complete`;
+		if (r === void 0) return Ge({
 			kind: "item",
 			id: n,
 			state: {},
-			delta: Qe(),
+			delta: $e(),
 			createdAt: null
 		}, i, { action: t });
 		let a = r.actions[t]?.result;
@@ -860,38 +869,38 @@ function at() {
 	}, mt = (e, t) => {
 		let n = r;
 		return () => n === r ? pt(e, t) : Promise.resolve();
-	}, X = (e) => c.includes(e), ht = {
+	}, ht = (e) => c.includes(e), X = {
 		subscribe(e) {
-			return W.add(e), () => W.delete(e);
+			return se.add(e), () => se.delete(e);
 		},
-		getSnapshot: () => ue,
+		getSnapshot: () => K,
 		getServerSnapshot: () => _e,
 		connect(r, i = {}) {
 			e = r, t = i.prop ?? t, n = i.onFailure ?? n;
 		},
 		sync(e, n) {
-			let r = Ze(e, t), h = n === "history" || n === "cached";
+			let r = Qe(e, t), h = n === "history" || n === "cached";
 			if (!N(r)) {
-				r === null && !h && a !== void 0 && (He(), J());
+				r === null && !h && a !== void 0 && (Ie(), J());
 				return;
 			}
 			let g = P(r.user) ?? void 0;
 			if (g !== i) {
 				if (h) return;
-				He(), i = g;
+				Ie(), i = g;
 			}
-			if (a = P(r.url) ?? a, o = P(r.channel), s = P(r.announcementsChannel), f = Je(r.tabs), p = P(r.context), V = N(r.pause), !h) {
+			if (a = P(r.url) ?? a, o = P(r.channel), s = P(r.announcementsChannel), f = Ye(r.tabs), p = P(r.context), V = N(r.pause), !h) {
 				let e = r.allowedActions;
-				c = Array.isArray(e) ? ke.filter((t) => e.includes(t)) : Ae, l = r.selectable !== !1, u = Ke(r.categoryFilter), d = qe(N(r.pause) ? r.pause.presets : void 0);
+				c = Array.isArray(e) ? Ae.filter((t) => e.includes(t)) : je, l = r.selectable !== !1, u = qe(r.categoryFilter), d = Je(N(r.pause) ? r.pause.presets : void 0);
 			}
-			Me(b, c) || (b = "all", S !== "idle" && ht.load()), !h && r !== m && (R.clear(), Ee({ counts: r }), re = r.push ?? null, N(r.pause) && ge(P(r.pause.until), typeof r.revision == "number" ? r.revision : 0)), m = r, J();
+			Ne(b, c) || (b = "all", S !== "idle" && X.load()), !h && r !== m && (R.clear(), Ee({ counts: r }), U = r.push ?? null, N(r.pause) && ge(P(r.pause.until), typeof r.revision == "number" ? r.revision : 0)), m = r, J();
 		},
 		async load(t, n) {
 			if (!e || a === void 0) return;
 			let i = r, o = ++E;
-			x = n === void 0 ? t === void 0 ? x : null : n, b = t ?? b, b = Me(b, c) ? b : "all", S = "loading", C = !1, w = !1, R.clear(), J();
+			x = n === void 0 ? t === void 0 ? x : null : n, b = t ?? b, b = Ne(b, c) ? b : "all", S = "loading", C = !1, w = !1, R.clear(), J();
 			try {
-				let e = await We(null);
+				let e = await Ue(null);
 				i === r && o === E && (v = e.items, T = e.cursor, S = "ready", ve(e.items), Ee(e.body));
 			} catch {
 				i === r && o === E && (S = "error");
@@ -902,7 +911,7 @@ function at() {
 			if (!e || a === void 0 || T === null || C || S !== "ready" || w && !t) return;
 			let n = r, i = E;
 			C = !0, w = !1, J();
-			let o = await We(T).catch(() => void 0);
+			let o = await Ue(T).catch(() => void 0);
 			if (n === r && i === E) {
 				if (o === void 0) w = !0;
 				else {
@@ -925,34 +934,34 @@ function at() {
 			let i = r;
 			try {
 				let n = await e.request("get", `${a}/${encodeURIComponent(t)}`);
-				return i === r && N(n) ? ht.receive(n.item, n.counts) : void 0;
+				return i === r && N(n) ? X.receive(n.item, n.counts) : void 0;
 			} catch {
 				return;
 			}
 		},
 		receive(e, t) {
-			let n = Ue(e);
-			if (!n || a === void 0 || z.has(n.id) || y.some((e) => e.id === n.id && !ze(n, e))) return;
+			let n = We(e);
+			if (!n || a === void 0 || z.has(n.id) || y.some((e) => e.id === n.id && !Be(n, e))) return;
 			let r = N(e) ? P(e.context) : null;
 			if (p !== null && r !== null && r !== p) return;
 			y = [n, ...y.filter((e) => e.id !== n.id)].sort((e, t) => Y(t.createdAt) - Y(e.createdAt)), ve([n]);
 			let i = q(n);
-			return Ee({ counts: t }), I.length > 0 || h === void 0 ? we(n) && Ce(i) : Te(), J(), k > 0 && S === "ready" && pe(i, b, x) && i.seenAt === null && ht.markAllAsSeen(), le.forEach((e) => e(n)), n;
+			return Ee({ counts: t }), I.length > 0 || h === void 0 ? we(n) && Ce(i) : Te(), J(), k > 0 && S === "ready" && pe(i, b, x) && i.seenAt === null && X.markAllAsSeen(), ce.forEach((e) => e(n)), n;
 		},
 		onArrival(e) {
-			return le.add(e), () => le.delete(e);
+			return ce.add(e), () => ce.delete(e);
 		},
 		receiveChange(e) {
-			let t = N(e) ? e.change : void 0, n = Xe(t), r = Ge(N(e) ? e.counts : void 0);
+			let t = N(e) ? e.change : void 0, n = Ze(t), r = Ke(N(e) ? e.counts : void 0);
 			if (!n || r === void 0 || a === void 0) return;
 			let { revision: i } = r;
-			(r.context === p || n.kind !== "read" && n.kind !== "seen" && n.kind !== "archive") && (n.kind === "item" && N(t) && N(t.item) && ht.receive({
+			(r.context === p || n.kind !== "read" && n.kind !== "seen" && n.kind !== "archive") && (n.kind === "item" && N(t) && N(t.item) && X.receive({
 				...t.item,
 				revision: t.item.revision ?? i
-			}), Oe(n, i), Ee(e), J(), G.forEach((e) => e(n)));
+			}), Oe(n, i), Ee(e), J(), ue.forEach((e) => e(n)));
 		},
 		onChange(e) {
-			return G.add(e), () => G.delete(e);
+			return ue.add(e), () => ue.delete(e);
 		},
 		apply: q,
 		belongs: pe,
@@ -960,10 +969,10 @@ function at() {
 		markAsRead: ft,
 		complete: pt,
 		completer: mt,
-		pushSettings: () => re,
+		pushSettings: () => U,
 		context: () => p,
 		onSaved(e) {
-			return K.add(e), () => K.delete(e);
+			return G.add(e), () => G.delete(e);
 		},
 		markAsUnread(e) {
 			let t = q(e);
@@ -971,56 +980,56 @@ function at() {
 		},
 		archive(e) {
 			let t = q(e);
-			return !X("archive") || t.archivedAt !== null ? Promise.resolve() : ot(t, { archivedAt: ye() }, "archive");
+			return !ht("archive") || t.archivedAt !== null ? Promise.resolve() : ot(t, { archivedAt: ye() }, "archive");
 		},
 		unarchive(e) {
 			let t = q(e);
-			return !X("archive") || t.archivedAt === null ? Promise.resolve() : ot(t, { archivedAt: null }, "unarchive");
+			return !ht("archive") || t.archivedAt === null ? Promise.resolve() : ot(t, { archivedAt: null }, "unarchive");
 		},
 		snooze(e, t) {
-			if (!X("snooze")) return Promise.resolve();
+			if (!ht("snooze")) return Promise.resolve();
 			let n = q(e), r = new Date(t).toISOString();
 			return ot(n, { snoozedUntil: r }, "snooze", { until: r });
 		},
 		unsnooze(e) {
 			let t = q(e);
-			return !X("snooze") || t.snoozedUntil === null ? Promise.resolve() : ot(t, { snoozedUntil: null }, "unsnooze");
+			return !ht("snooze") || t.snoozedUntil === null ? Promise.resolve() : ot(t, { snoozedUntil: null }, "unsnooze");
 		},
 		mute(e) {
 			let t = q(e);
-			return !X("mute") || t.group === null || t.muted ? Promise.resolve() : st(t, t.group, !0);
+			return !ht("mute") || t.group === null || t.muted ? Promise.resolve() : st(t, t.group, !0);
 		},
 		unmute(e) {
 			let t = q(e);
-			return !X("mute") || t.group === null || !t.muted ? Promise.resolve() : st(t, t.group, !1);
+			return !ht("mute") || t.group === null || !t.muted ? Promise.resolve() : st(t, t.group, !1);
 		},
 		pause(e) {
 			let t = new Date(e).toISOString();
-			return V ? et({
+			return V ? Ge({
 				kind: "pause",
 				until: t,
-				delta: Qe()
+				delta: $e()
 			}, "pause", { until: t }) : Promise.resolve();
 		},
 		resume() {
-			return me() === null ? Promise.resolve() : et({
+			return me() === null ? Promise.resolve() : Ge({
 				kind: "pause",
 				until: null,
-				delta: Qe()
+				delta: $e()
 			}, "resume");
 		},
 		batch(e, t, n) {
-			let r = je[e];
-			if (e !== "seen" && !l || r !== void 0 && !X(r)) return Promise.resolve();
+			let r = Me[e];
+			if (e !== "seen" && !l || r !== void 0 && !ht(r)) return Promise.resolve();
 			if (e === "snooze" && n === void 0) return Promise.reject(/* @__PURE__ */ TypeError("Snoozing notifications needs the time to snooze them until."));
 			let i = t.map(q), a = e === "snooze" && n !== void 0 ? new Date(n).toISOString() : void 0, o = [];
-			for (let t = 0; t < i.length; t += Ne) o.push(at(e, i.slice(t, t + Ne), a));
+			for (let t = 0; t < i.length; t += Pe) o.push(nt(e, i.slice(t, t + Pe), a));
 			return Promise.all(o).then(() => void 0);
 		},
 		delete(e) {
-			if (!X("delete")) return Promise.resolve();
+			if (!ht("delete")) return Promise.resolve();
 			let t = q(e), { unread: n, unseen: r } = Se(t);
-			return et({
+			return Ge({
 				kind: "delete",
 				ids: [t.id],
 				delta: {
@@ -1037,8 +1046,8 @@ function at() {
 			return g.unseen === 0 ? Promise.resolve() : ct({ kind: "seen" }, null, lt(!1), "seen");
 		},
 		archiveAll({ onlyRead: e = !1, category: t = x } = {}) {
-			if (!X("archive")) return Promise.resolve();
-			let n = e ? Qe() : lt(!0, t);
+			if (!ht("archive")) return Promise.resolve();
+			let n = e ? $e() : lt(!0, t);
 			return ct({
 				kind: "archive",
 				onlyRead: e
@@ -1047,7 +1056,7 @@ function at() {
 		async opened(e, { markAllAsSeen: t = !0, categories: n } = {}) {
 			t && k++, A++, j.forEach((e) => e());
 			let r = t ? g.unseen > 0 : be(), i = e !== void 0 && !e.includes(b) ? e[0] ?? b : b, a = n !== void 0 && x !== null && !n.includes(x) ? null : x;
-			i !== b || a !== x ? await ht.load(i, a) : (S !== "ready" || r) && await ht.load(), t && S === "ready" && await ht.markAllAsSeen();
+			i !== b || a !== x ? await X.load(i, a) : (S !== "ready" || r) && await X.load(), t && S === "ready" && await X.markAllAsSeen();
 		},
 		closed({ markAllAsSeen: e = !0 } = {}) {
 			e && (k = Math.max(0, k - 1)), A = Math.max(0, A - 1);
@@ -1060,20 +1069,20 @@ function at() {
 			if (n?.defaultPrevented) return;
 			ft(t);
 			let r = L(t.url);
-			r === void 0 || n && U(n) || (n?.preventDefault(), !ne(r) || !e ? window.location.assign(r) : e.visit(r, {}));
+			r === void 0 || n && re(n) || (n?.preventDefault(), !ne(r) || !e ? window.location.assign(r) : e.visit(r, {}));
 		},
 		runAction(t, n, i) {
 			let a = t.actions[n];
 			if (!a || i?.defaultPrevented) return;
 			let o = H(a);
-			if (i && o !== void 0 && ie(a, o, i)) {
-				a.event && !U(i) && window.dispatchEvent(new CustomEvent(a.event, { detail: a.payload })), se(o, a, i, () => void ft(t), a.result === void 0 ? void 0 : () => pt(t, n));
+			if (i && o !== void 0 && ae(a, o, i)) {
+				a.event && !re(i) && window.dispatchEvent(new CustomEvent(a.event, { detail: a.payload })), W(o, a, i, () => void ft(t), a.result === void 0 ? void 0 : () => pt(t, n));
 				return;
 			}
 			if (i?.preventDefault(), O[t.id] !== void 0) return;
 			ft(t);
 			let s = r, c = a.result === void 0 ? void 0 : mt(t, n);
-			ce(a, t, e, () => {
+			le(a, t, e, () => {
 				if (s !== r) return;
 				let { [t.id]: e, ...n } = O;
 				O = n, J();
@@ -1083,12 +1092,12 @@ function at() {
 			}, J());
 		}
 	};
-	return ht;
+	return X;
 }
-function ot(e, t, n, r = null) {
-	return Be(e.getSnapshot().arrived, t).map((t) => e.apply(t)).filter((t) => e.belongs(t, n, r));
+function st(e, t, n, r = null) {
+	return Ve(e.getSnapshot().arrived, t).map((t) => e.apply(t)).filter((t) => e.belongs(t, n, r));
 }
-function st(e, t = !0) {
+function ct(e, t = !0) {
 	let n = [], r = /* @__PURE__ */ new Map();
 	for (let i of e) {
 		let e = t ? i.group : null, a = e === null ? void 0 : r.get(e);
@@ -1104,8 +1113,8 @@ function st(e, t = !0) {
 	}
 	return n;
 }
-function ct(e = {}, t = /* @__PURE__ */ new Date()) {
-	let n = wt(e), r = (e) => {
+function lt(e = {}, t = /* @__PURE__ */ new Date()) {
+	let n = Tt(e), r = (e) => {
 		let n = new Date(t);
 		return n.setDate(t.getDate() + e), n.setHours(9, 0, 0, 0), n;
 	}, i = new Date(t.getTime() + 108e5), a = i.getDate() === t.getDate() ? [{
@@ -1124,7 +1133,7 @@ function ct(e = {}, t = /* @__PURE__ */ new Date()) {
 		}] : []
 	];
 }
-function lt(e, t, n) {
+function ut(e, t, n) {
 	let r = new Date(e), i = new Date(t).toDateString() === r.toDateString();
 	return r.toLocaleString(n, i ? {
 		hour: "numeric",
@@ -1135,18 +1144,18 @@ function lt(e, t, n) {
 		minute: "2-digit"
 	});
 }
-var ut = [
+var dt = [
 	30,
 	60,
 	120,
 	"tomorrow"
 ];
-function dt(e, t = /* @__PURE__ */ new Date()) {
+function ft(e, t = /* @__PURE__ */ new Date()) {
 	if (e !== "tomorrow") return new Date(t.getTime() + e * 6e4);
 	let n = new Date(t);
 	return n.setDate(t.getDate() + 1), n.setHours(8, 0, 0, 0), n;
 }
-function ft(e, t, n) {
+function pt(e, t, n) {
 	return e.filter((e) => e === "tomorrow" || Number.isFinite(e) && e > 0).map((e) => {
 		if (e === "tomorrow") return {
 			label: Z(t.pauseTomorrow),
@@ -1166,16 +1175,16 @@ function ft(e, t, n) {
 		};
 	});
 }
-function pt(e, t, n) {
+function mt(e, t, n) {
 	let r = new Date(e);
-	return r.getTime() - t < 5184e5 ? lt(r, t, n) : r.toLocaleString(n, {
+	return r.getTime() - t < 5184e5 ? ut(r, t, n) : r.toLocaleString(n, {
 		month: "short",
 		day: "numeric",
 		hour: "numeric",
 		minute: "2-digit"
 	});
 }
-var mt = at(), X = mt, ht = {
+var ht = ot(), X = ht, gt = {
 	load: X.load,
 	loadMore: X.loadMore,
 	refresh: X.refresh,
@@ -1202,11 +1211,11 @@ var mt = at(), X = mt, ht = {
 	open: X.open,
 	runAction: X.runAction
 };
-function gt(e) {
+function _t(e) {
 	X.getSnapshot().url === void 0 && X.sync(e, "initial");
 }
-var _t = mt;
-function vt(e = 6e4) {
+var vt = ht;
+function yt(e = 6e4) {
 	let t = /* @__PURE__ */ new Set(), n = Date.now(), r, i = () => {
 		n = Date.now(), t.forEach((e) => e());
 	};
@@ -1219,8 +1228,8 @@ function vt(e = 6e4) {
 		getSnapshot: () => n
 	};
 }
-var yt = vt();
-function bt(e, t, n) {
+var bt = yt();
+function xt(e, t, n) {
 	let r = (Y(e) - t) / 1e3, i = new Intl.RelativeTimeFormat(n, { numeric: "auto" });
 	for (let [e, t] of [
 		["year", 31536e3],
@@ -1232,12 +1241,12 @@ function bt(e, t, n) {
 	]) if (Math.abs(r) >= t) return i.format(Math.round(r / t), e);
 	return i.format(0, "second");
 }
-function xt(e, t, n) {
+function St(e, t, n) {
 	let r = new Intl.NumberFormat(n);
 	return e > t ? `${r.format(t)}+` : r.format(e);
 }
-var St = /* @__PURE__ */ "title.bell.bellNew.bellPaused.all.unread.archived.snoozed.markAllAsRead.archiveAll.moreActions.itemControl.markAsRead.markAsUnread.archive.unarchive.snooze.unsnooze.mute.unmute.muted.delete.select.selectAll.selected.selection.readSelected.unreadSelected.snoozeSelected.unsnoozeSelected.archiveSelected.unarchiveSelected.deleteSelected.clearSelection.showNew.snoozeUntil.snoozedUntil.snoozeLaterToday.snoozeTomorrow.snoozeNextWeek.pause.pauseFor.pauseTomorrow.pausedUntil.resume.showMore.showLess.unreadState.actorsAndOther.actorsAndOthers.empty.emptyUnread.emptyArchived.emptySnoozed.error.retry.categories.allCategories.loading.loadMore.viewAll.announcement".split("."), Ct = Ee("inbox_", St), wt = (e) => De("inbox_", St, e), Z = Ce, Tt = (e) => e.actors.slice(0, 3);
-function Et(e, t) {
+var Ct = /* @__PURE__ */ "title.bell.bellNew.bellPaused.all.unread.archived.snoozed.markAllAsRead.archiveAll.moreActions.itemControl.markAsRead.markAsUnread.archive.unarchive.snooze.unsnooze.mute.unmute.muted.delete.select.selectAll.selected.selection.readSelected.unreadSelected.snoozeSelected.unsnoozeSelected.archiveSelected.unarchiveSelected.deleteSelected.clearSelection.showNew.snoozeUntil.snoozedUntil.snoozeLaterToday.snoozeTomorrow.snoozeNextWeek.pause.pauseFor.pauseTomorrow.pausedUntil.resume.showMore.showLess.unreadState.actorsAndOther.actorsAndOthers.empty.emptyUnread.emptyArchived.emptySnoozed.error.retry.categories.allCategories.loading.loadMore.viewAll.announcement".split("."), wt = De("inbox_", Ct), Tt = (e) => Oe("inbox_", Ct, e), Z = we, Et = (e) => e.actors.slice(0, 3);
+function Dt(e, t) {
 	let [n, r] = t.actors;
 	if (!(t.actorCount < 2 || !n?.name)) return t.actorCount > 2 ? Z(e.actorsAndOthers, {
 		name: n.name,
@@ -1248,8 +1257,8 @@ function Et(e, t) {
 	}) : void 0;
 }
 // ../js/realtime.ts
-var Dt = ".inertiaui.inbox.arrived", Ot = ".inertiaui.inbox.changed", kt = ".inertiaui.announcement.published", At = 1e3, jt = "inertiaui-inbox";
-function Mt(e, t, n) {
+var Ot = ".inertiaui.inbox.arrived", kt = ".inertiaui.inbox.changed", At = ".inertiaui.announcement.published", jt = 1e3, Mt = "inertiaui-inbox";
+function Nt(e, t, n) {
 	let r, i = !1, a, o, s = /* @__PURE__ */ new Set(), c = !1, l, u = () => {
 		try {
 			return r?.();
@@ -1270,7 +1279,7 @@ function Mt(e, t, n) {
 		if (!N(t) || typeof t.id != "string") return;
 		let { id: r } = t, i = typeof t.context == "string" ? t.context : null, a = setTimeout(() => {
 			s.delete(a), e.loadArrival(r, i).then((e) => e && n(e));
-		}, Math.random() * At);
+		}, Math.random() * jt);
 		s.add(a);
 	}, m = () => {
 		let { announcementsChannel: t } = e.getSnapshot();
@@ -1279,10 +1288,10 @@ function Mt(e, t, n) {
 		let n = t === null ? void 0 : u();
 		if (!n || t === null || !r) return;
 		let i = n.private(t);
-		i.listen(kt, p), o = {
+		i.listen(At, p), o = {
 			channel: t,
 			resolve: r,
-			stop: () => i.stopListening(kt, p)
+			stop: () => i.stopListening(At, p)
 		};
 	}, h = () => {
 		g(), m();
@@ -1293,7 +1302,7 @@ function Mt(e, t, n) {
 		let n = t === null ? void 0 : u();
 		if (!n || t === null || !r) return;
 		let i = n.private(t);
-		i.listen(Dt, d), i.listen(Ot, f);
+		i.listen(Ot, d), i.listen(kt, f);
 		let o = !1, s = n.connector?.onConnectionChange?.((t) => {
 			t === "connected" && o && e.refresh(), o = t !== "connected";
 		});
@@ -1301,7 +1310,7 @@ function Mt(e, t, n) {
 			channel: t,
 			resolve: r,
 			stop() {
-				i.stopListening(Dt, d), i.stopListening(Ot, f), typeof s == "function" && s();
+				i.stopListening(Ot, d), i.stopListening(kt, f), typeof s == "function" && s();
 			}
 		};
 	}, _ = () => typeof document < "u" && document.visibilityState === "hidden", v = () => {
@@ -1310,7 +1319,7 @@ function Mt(e, t, n) {
 		c && !_() && e.refresh(), v();
 	};
 	typeof document < "u" && document.addEventListener("visibilitychange", y);
-	let b = typeof BroadcastChannel == "function" ? new BroadcastChannel(jt) : void 0;
+	let b = typeof BroadcastChannel == "function" ? new BroadcastChannel(Mt) : void 0;
 	b?.addEventListener("message", (t) => {
 		let { url: n, user: r, channel: i } = e.getSnapshot(), a = t.data;
 		N(a) && n !== void 0 && a.url === n && a.user === r && a.channel === i && e.receiveChange(a);
@@ -1338,21 +1347,21 @@ function Mt(e, t, n) {
 		}
 	};
 }
-var Nt = "inertiaui-inbox-", Pt = (e) => `${Nt}${e}`, Ft = (e) => e.startsWith(Nt) ? e.slice(16) : void 0;
-function It(e, t, n) {
+var Pt = "inertiaui-inbox-", Ft = (e) => `${Pt}${e}`, It = (e) => e.startsWith(Pt) ? e.slice(16) : void 0;
+function Lt(e, t, n) {
 	let r = t === "none" || e.announcement || e.quiet === !0 || e.readAt !== null || e.archivedAt !== null ? null : e.toast ?? (t === "all" ? "default" : null);
 	if (r === null) return;
-	let { title: i, ...a } = Lt(e, n);
+	let { title: i, ...a } = Rt(e, n);
 	return {
 		title: i,
 		options: {
-			id: Pt(e.id),
+			id: Ft(e.id),
 			type: r,
 			...a
 		}
 	};
 }
-function Lt(e, t) {
+function Rt(e, t) {
 	let n = e.actions.length > 0 || e.url === null ? e.actions.map(({ onClick: e, ...t }) => t) : [{
 		...t,
 		href: e.url
@@ -1366,8 +1375,8 @@ function Lt(e, t) {
 	};
 }
 // ../js/browserAlerts.ts
-var Rt = "inertiaui-notifications";
-function zt(e) {
+var zt = "inertiaui-notifications";
+function Bt(e) {
 	let t = document, n = navigator.locks;
 	if (!n) return {
 		elected: () => t.visibilityState === "visible",
@@ -1393,25 +1402,25 @@ function zt(e) {
 		}
 	};
 }
-async function Bt() {
+async function Vt() {
 	return typeof Notification == "function" ? Notification.requestPermission() : "denied";
 }
-var Vt;
-function Ht() {
+var Ht;
+function Ut() {
 	if (typeof AudioContext != "function") return;
-	Vt ??= new AudioContext();
-	let e = Vt;
+	Ht ??= new AudioContext();
+	let e = Ht;
 	for (let [t, n] of [880, 1320].entries()) {
 		let r = e.currentTime + t * .15, i = e.createOscillator(), a = e.createGain();
 		i.frequency.value = n, a.gain.setValueAtTime(.2, r), a.gain.exponentialRampToValueAtTime(.001, r + .4), i.connect(a).connect(e.destination), i.start(r), i.stop(r + .4);
 	}
 }
-function Ut(e) {
+function Wt(e) {
 	let t = !1, n = "", r, i, a, o = !1, s, c = !1, l = !1, u, d, f = () => {
 		let a = document.title !== i;
 		a && (n = document.title);
-		let { unread: o } = e.getSnapshot().counts, s = t && o > 0 ? we("inbox_title_count", {
-			count: xt(o, 99),
+		let { unread: o } = e.getSnapshot().counts, s = t && o > 0 ? Te("inbox_title_count", {
+			count: St(o, 99),
 			number: o,
 			title: n
 		}) : n;
@@ -1429,7 +1438,7 @@ function Ut(e) {
 		e !== o && (o = e, m());
 	}, g = () => {
 		let e = c || l !== !1;
-		e && !d && (d = zt(Rt)), !e && d && (d.stop(), d = void 0);
+		e && !d && (d = Bt(zt)), !e && d && (d.stop(), d = void 0);
 	}, _ = (t) => {
 		if (typeof Notification != "function" || Notification.permission !== "granted") return;
 		let n;
@@ -1437,7 +1446,7 @@ function Ut(e) {
 			n = new Notification(t.title, {
 				body: t.body ?? void 0,
 				icon: t.actor?.avatar,
-				tag: Pt(t.id)
+				tag: Ft(t.id)
 			});
 		} catch {
 			return;
@@ -1446,7 +1455,7 @@ function Ut(e) {
 			window.focus(), n.close(), e.open(t);
 		});
 	}, v = (e) => {
-		navigator.userActivation?.hasBeenActive !== !1 && (e === !0 ? Ht() : (u?.getAttribute("src") !== e && (u = new Audio(e)), u.currentTime = 0, u.play().catch(() => {})));
+		navigator.userActivation?.hasBeenActive !== !1 && (e === !0 ? Ut() : (u?.getAttribute("src") !== e && (u = new Audio(e)), u.currentTime = 0, u.play().catch(() => {})));
 	};
 	return e.onArrival((e) => {
 		d?.elected() && e.quiet !== !0 && e.readAt === null && e.archivedAt === null && (c && document.visibilityState === "hidden" && _(e), l !== !1 && v(l));
@@ -1457,12 +1466,12 @@ function Ut(e) {
 	} };
 }
 // ../js/preferences.ts
-var Wt = [
+var Gt = [
 	"instant",
 	"hourly",
 	"daily",
 	"weekly"
-], Gt = [
+], Kt = [
 	"monday",
 	"tuesday",
 	"wednesday",
@@ -1470,29 +1479,29 @@ var Wt = [
 	"friday",
 	"saturday",
 	"sunday"
-], Kt = {
+], qt = {
 	status: "idle",
 	channels: [],
 	groups: [],
 	categories: [],
 	notificationHours: null,
-	frequencies: Wt
-}, qt = (e, t) => typeof e == "string" ? e : t, Jt = (e) => Wt.includes(e), Yt = (e) => typeof e == "string" && /^([01]\d|2[0-3]):[0-5]\d-([01]\d|2[0-3]):[0-5]\d$/.test(e), Xt = (e) => [...e].sort(), Zt = (e) => {
+	frequencies: Gt
+}, Jt = (e, t) => typeof e == "string" ? e : t, Yt = (e) => Gt.includes(e), Xt = (e) => typeof e == "string" && /^([01]\d|2[0-3]):[0-5]\d-([01]\d|2[0-3]):[0-5]\d$/.test(e), Zt = (e) => [...e].sort(), Qt = (e) => {
 	if (!N(e) || !N(e.days)) return null;
 	let t = e.days;
 	return {
 		enabled: e.enabled === !0,
-		days: Object.fromEntries(Gt.map((e) => [e, Xt(Array.isArray(t[e]) ? t[e].filter(Yt) : [])]))
+		days: Object.fromEntries(Kt.map((e) => [e, Zt(Array.isArray(t[e]) ? t[e].filter(Xt) : [])]))
 	};
-}, Qt = (e) => {
-	let t = Array.isArray(e) ? Wt.filter((t) => e.includes(t)) : [];
-	return t.length > 0 ? t : Wt;
+}, $t = (e) => {
+	let t = Array.isArray(e) ? Gt.filter((t) => e.includes(t)) : [];
+	return t.length > 0 ? t : Gt;
 };
-function $t(e) {
+function en(e) {
 	if (N(e) && Array.isArray(e.channels) && Array.isArray(e.categories)) return {
 		channels: e.channels.filter(N).flatMap((e) => typeof e.key == "string" ? [{
 			key: e.key,
-			label: qt(e.label, e.key),
+			label: Jt(e.label, e.key),
 			globalSwitch: e.globalSwitch === !0,
 			enabled: e.enabled !== !1,
 			digest: e.digest === !0,
@@ -1501,23 +1510,23 @@ function $t(e) {
 		}] : []),
 		groups: (Array.isArray(e.groups) ? e.groups : []).filter(N).flatMap((e) => typeof e.key == "string" ? [{
 			key: e.key,
-			label: qt(e.label, e.key),
+			label: Jt(e.label, e.key),
 			description: P(e.description)
 		}] : []),
 		categories: e.categories.filter(N).flatMap((e) => typeof e.key == "string" ? [{
 			key: e.key,
-			label: qt(e.label, e.key),
+			label: Jt(e.label, e.key),
 			description: P(e.description),
 			group: P(e.group),
 			locked: e.locked === !0,
 			channels: Object.fromEntries(Object.entries(N(e.channels) ? e.channels : {}).filter((e) => typeof e[1] == "boolean")),
-			frequency: Jt(e.frequency) ? e.frequency : null
+			frequency: Yt(e.frequency) ? e.frequency : null
 		}] : []),
-		notificationHours: Zt(e.notificationHours),
-		frequencies: Qt(e.frequencies)
+		notificationHours: Qt(e.notificationHours),
+		frequencies: $t(e.frequencies)
 	};
 }
-function en(e) {
+function tn(e) {
 	let t = new Set(e.groups.map(({ key: e }) => e)), n = e.categories.filter(({ group: e }) => e === null || !t.has(e)), r = e.groups.map((t) => ({
 		group: t,
 		categories: e.categories.filter((e) => e.group === t.key)
@@ -1527,47 +1536,47 @@ function en(e) {
 		categories: n
 	}] : [], ...r.filter(({ categories: e }) => e.length > 0)];
 }
-var tn = (e, t) => e.locked || t.enabled && e.channels[t.key] === !0, nn = (e, t, n) => {
+var nn = (e, t) => e.locked || t.enabled && e.channels[t.key] === !0, rn = (e, t, n) => {
 	let r = n.find((e) => e.inbox);
-	return !t.push || r === void 0 || r.key === t.key || e.channels[r.key] === void 0 || tn(e, r);
-}, rn = (e, t, n) => tn(e, t) && nn(e, t, n), an = (e, t, n) => e.locked || !t.enabled || !nn(e, t, n), on = (e, t) => e.frequency !== null && t.some((n) => n.digest && e.channels[n.key] !== void 0 && rn(e, n, t)), sn = (e, t) => new Intl.DateTimeFormat(t, {
+	return !t.push || r === void 0 || r.key === t.key || e.channels[r.key] === void 0 || nn(e, r);
+}, an = (e, t, n) => nn(e, t) && rn(e, t, n), on = (e, t, n) => e.locked || !t.enabled || !rn(e, t, n), sn = (e, t) => e.frequency !== null && t.some((n) => n.digest && e.channels[n.key] !== void 0 && an(e, n, t)), cn = (e, t) => new Intl.DateTimeFormat(t, {
 	weekday: "long",
 	timeZone: "UTC"
-}).format(Date.UTC(2024, 0, 1 + Gt.indexOf(e))), cn = (e) => {
+}).format(Date.UTC(2024, 0, 1 + Kt.indexOf(e))), ln = (e) => {
 	let [t = "", n = ""] = e.split("-");
 	return [t, n];
-}, ln = (e, t) => e.days[t].length > 0 && Gt.every((n) => n === t || e.days[n].length === 0);
-function un(e, t) {
-	let n = Gt.indexOf(t);
-	for (let t = 1; t < Gt.length; t++) {
-		let [r] = e.days[Gt[(n + Gt.length - t) % Gt.length]];
+}, un = (e, t) => e.days[t].length > 0 && Kt.every((n) => n === t || e.days[n].length === 0);
+function dn(e, t) {
+	let n = Kt.indexOf(t);
+	for (let t = 1; t < Kt.length; t++) {
+		let [r] = e.days[Kt[(n + Kt.length - t) % Kt.length]];
 		if (r !== void 0) return r;
 	}
 	return "09:00-17:00";
 }
-var dn = 1440, fn = (e) => Number(e.slice(0, 2)) * 60 + Number(e.slice(3)), pn = (e) => [Math.floor(e / 60) % 24, e % 60].map((e) => String(e).padStart(2, "0")).join(":");
-function mn(e) {
-	let t = e.map((e) => cn(e).map(fn));
+var fn = 1440, pn = (e) => Number(e.slice(0, 2)) * 60 + Number(e.slice(3)), mn = (e) => [Math.floor(e / 60) % 24, e % 60].map((e) => String(e).padStart(2, "0")).join(":");
+function hn(e) {
+	let t = e.map((e) => ln(e).map(pn));
 	if (t.length === 0 || t.some(([e, t]) => t <= e)) return;
 	let n = Math.max(...t.map(([, e]) => e));
-	return n + 120 <= dn ? `${pn(n + 60)}-${pn(n + 120)}` : void 0;
+	return n + 120 <= fn ? `${mn(n + 60)}-${mn(n + 120)}` : void 0;
 }
-var hn = (e, t, n) => t?.day === n ? t.ranges : e?.days[n] ?? [], gn = (e, t, n) => e === null ? [] : Gt.map((r) => ({
+var gn = (e, t, n) => t?.day === n ? t.ranges : e?.days[n] ?? [], _n = (e, t, n) => e === null ? [] : Kt.map((r) => ({
 	day: r,
-	name: sn(r, n),
-	ranges: hn(e, t, r).map(cn),
-	locked: !e.enabled || ln(e, r),
-	canAdd: e.enabled && mn(e.days[r]) !== void 0
+	name: cn(r, n),
+	ranges: gn(e, t, r).map(ln),
+	locked: !e.enabled || un(e, r),
+	canAdd: e.enabled && hn(e.days[r]) !== void 0
 }));
-function _n(e, t, n) {
-	let { day: r } = n, i = hn(e, t, r), a;
+function vn(e, t, n) {
+	let { day: r } = n, i = gn(e, t, r), a;
 	switch (n.kind) {
 		case "toggle":
-			if (!e?.enabled || ln(e, r)) return;
-			a = e.days[r].length > 0 ? [] : [un(e, r)];
+			if (!e?.enabled || un(e, r)) return;
+			a = e.days[r].length > 0 ? [] : [dn(e, r)];
 			break;
 		case "time": {
-			let [e, t] = cn(i[n.index] ?? ""), o = n.field === "start" ? `${n.time}-${t}` : `${e}-${n.time}`;
+			let [e, t] = ln(i[n.index] ?? ""), o = n.field === "start" ? `${n.time}-${t}` : `${e}-${n.time}`;
 			return a = i.map((e, t) => t === n.index ? o : e), {
 				ranges: a,
 				editing: () => ({
@@ -1580,7 +1589,7 @@ function _n(e, t, n) {
 			a = i.filter((e, t) => t !== n.index);
 			break;
 		case "add": {
-			let t = mn(i);
+			let t = hn(i);
 			if (!e?.enabled || t === void 0) return;
 			a = [...i, t];
 		}
@@ -1593,23 +1602,23 @@ function _n(e, t, n) {
 		} : e
 	};
 }
-var vn = () => {
+var yn = () => {
 	try {
 		return Intl.DateTimeFormat().resolvedOptions().timeZone;
 	} catch {
 		return;
 	}
-}, yn = (e, t) => e.enabled === t.enabled && Gt.every((n) => e.days[n].join() === t.days[n].join()), bn = (e, t) => typeof e == "object" && typeof t == "object" ? yn(e, t) : e === t, xn = "*", Sn = "*";
-function Cn() {
+}, bn = (e, t) => e.enabled === t.enabled && Kt.every((n) => e.days[n].join() === t.days[n].join()), xn = (e, t) => typeof e == "object" && typeof t == "object" ? bn(e, t) : e === t, Sn = "*", Cn = "*";
+function wn() {
 	let e, t, n, r = 0, i = 0, a = 0, o = {
 		channels: [],
 		categories: [],
 		notificationHours: null
-	}, s = /* @__PURE__ */ new Map(), c = /* @__PURE__ */ new Map(), l = /* @__PURE__ */ new Map(), u = Kt, d = /* @__PURE__ */ new Set(), f = ({ category: e, channel: t }) => JSON.stringify([e, t]), p = (e, { category: t, channel: n }) => {
-		if (t === null) return n === Sn ? e.notificationHours ?? void 0 : e.channels.find(({ key: e }) => e === n)?.enabled;
+	}, s = /* @__PURE__ */ new Map(), c = /* @__PURE__ */ new Map(), l = /* @__PURE__ */ new Map(), u = qt, d = /* @__PURE__ */ new Set(), f = ({ category: e, channel: t }) => JSON.stringify([e, t]), p = (e, { category: t, channel: n }) => {
+		if (t === null) return n === Cn ? e.notificationHours ?? void 0 : e.channels.find(({ key: e }) => e === n)?.enabled;
 		let r = e.categories.find(({ key: e }) => e === t);
-		return n === xn ? r?.frequency ?? void 0 : r?.channels[n];
-	}, m = (e, t, n) => t === xn ? e.frequency !== null && Jt(n) ? {
+		return n === Sn ? r?.frequency ?? void 0 : r?.channels[n];
+	}, m = (e, t, n) => t === Sn ? e.frequency !== null && Yt(n) ? {
 		...e,
 		frequency: n
 	} : e : e.channels[t] !== void 0 && typeof n == "boolean" ? {
@@ -1618,7 +1627,7 @@ function Cn() {
 			...e.channels,
 			[t]: n
 		}
-	} : e, h = (e, { category: t, channel: n }, r) => t === null ? n === Sn ? e.notificationHours !== null && typeof r == "object" ? {
+	} : e, h = (e, { category: t, channel: n }, r) => t === null ? n === Cn ? e.notificationHours !== null && typeof r == "object" ? {
 		...e,
 		notificationHours: r
 	} : e : typeof r == "boolean" ? {
@@ -1630,12 +1639,12 @@ function Cn() {
 	} : e : {
 		...e,
 		categories: e.categories.map((e) => e.key === t ? m(e, n, r) : e)
-	}, g = ({ category: e, channel: t }, n) => e === null ? t === Sn ? {
+	}, g = ({ category: e, channel: t }, n) => e === null ? t === Cn ? {
 		notificationHours: n,
-		timezone: vn()
-	} : { channels: { [t]: n } } : t === xn ? {
+		timezone: yn()
+	} : { channels: { [t]: n } } : t === Sn ? {
 		frequencies: { [e]: n },
-		timezone: vn()
+		timezone: yn()
 	} : { preferences: { [e]: { [t]: n } } }, _ = (e) => {
 		u = {
 			...u,
@@ -1647,7 +1656,7 @@ function Cn() {
 	}), y = async (i, c) => {
 		let u = r, d = s.get(c).value;
 		try {
-			let t = $t(await e.request("post", `${n}/preferences`, g(i, d)));
+			let t = en(await e.request("post", `${n}/preferences`, g(i, d)));
 			if (u !== r) return;
 			o = h(o, i, (t && p(t, i)) ?? d), l.set(c, {
 				cell: i,
@@ -1657,7 +1666,7 @@ function Cn() {
 			if (u !== r) return;
 			t?.(e);
 		}
-		(bn(s.get(c)?.value, d) || bn(s.get(c)?.value, p(o, i))) && s.delete(c), v(), s.has(c) && await y(i, c);
+		(xn(s.get(c)?.value, d) || xn(s.get(c)?.value, p(o, i))) && s.delete(c), v(), s.has(c) && await y(i, c);
 	}, b = (e, t, n) => {
 		let i = {
 			category: e,
@@ -1687,7 +1696,7 @@ function Cn() {
 			else {
 				_({ status: "loading" });
 				try {
-					let t = $t(await e.request("get", `${n}/preferences`));
+					let t = en(await e.request("get", `${n}/preferences`));
 					if (s !== r || c !== i) return;
 					if (!t) {
 						_({ status: "error" });
@@ -1717,36 +1726,36 @@ function Cn() {
 		},
 		setFrequency(t, r) {
 			let i = u.categories.find(({ key: e }) => e === t);
-			return !e || n === void 0 || !i || i.frequency === null || i.frequency === r || !u.frequencies.includes(r) ? Promise.resolve() : b(t, xn, r);
+			return !e || n === void 0 || !i || i.frequency === null || i.frequency === r || !u.frequencies.includes(r) ? Promise.resolve() : b(t, Sn, r);
 		},
 		setNotificationHours(t) {
 			let r = u.notificationHours;
 			if (!e || n === void 0 || r === null) return Promise.resolve();
-			let i = Gt.map((e) => [e, t.days?.[e] ?? r.days[e]]);
-			if (!i.every(([, e]) => Array.isArray(e) && e.every(Yt)) || i.every(([, e]) => e.length === 0)) return Promise.resolve();
+			let i = Kt.map((e) => [e, t.days?.[e] ?? r.days[e]]);
+			if (!i.every(([, e]) => Array.isArray(e) && e.every(Xt)) || i.every(([, e]) => e.length === 0)) return Promise.resolve();
 			let a = {
 				enabled: t.enabled ?? r.enabled,
-				days: Object.fromEntries(i.map(([e, t]) => [e, Xt(t)]))
+				days: Object.fromEntries(i.map(([e, t]) => [e, Zt(t)]))
 			};
-			return bn(a, r) ? Promise.resolve() : b(null, Sn, a);
+			return xn(a, r) ? Promise.resolve() : b(null, Cn, a);
 		},
 		reset(e) {
 			r++, i++, o = {
 				channels: [],
 				categories: [],
 				notificationHours: null
-			}, s.clear(), c.clear(), l.clear(), n = e, _(Kt), d.size > 0 && e !== void 0 && x.load(e);
+			}, s.clear(), c.clear(), l.clear(), n = e, _(qt), d.size > 0 && e !== void 0 && x.load(e);
 		}
 	};
 	return x;
 }
-var wn = /* @__PURE__ */ "title.category.toggle.locked.global.globalDescription.frequency.frequencyLabel.frequencyInstant.frequencyHourly.frequencyDaily.frequencyWeekly.pushDevice.pushOff.pushOn.pushTurnOn.pushTurnOff.pushTurningOn.pushTurningOff.pushBlocked.pushHomeScreen.pushInsecure.pushBrave.pushFailed.pushFailedOff.pushRetry.pushDevices.pushDeviceName.pushDeviceUnknown.pushDeviceActive.pushDeviceRemove.pushDeviceRemoveLabel.notificationHours.notificationHoursDescription.notificationHoursStart.notificationHoursEnd.notificationHoursDay.notificationHoursOff.notificationHoursAdd.notificationHoursAddLabel.notificationHoursRemove.notificationHoursRemoveLabel.empty.loading.error.retry".split("."), Tn = Ee("preferences_", wn), En = {
+var Tn = /* @__PURE__ */ "title.category.toggle.locked.global.globalDescription.frequency.frequencyLabel.frequencyInstant.frequencyHourly.frequencyDaily.frequencyWeekly.pushDevice.pushOff.pushOn.pushTurnOn.pushTurnOff.pushTurningOn.pushTurningOff.pushBlocked.pushHomeScreen.pushInsecure.pushBrave.pushFailed.pushFailedOff.pushRetry.pushDevices.pushDeviceName.pushDeviceUnknown.pushDeviceActive.pushDeviceRemove.pushDeviceRemoveLabel.notificationHours.notificationHoursDescription.notificationHoursStart.notificationHoursEnd.notificationHoursDay.notificationHoursOff.notificationHoursAdd.notificationHoursAddLabel.notificationHoursRemove.notificationHoursRemoveLabel.empty.loading.error.retry".split("."), En = De("preferences_", Tn), Dn = {
 	instant: "frequencyInstant",
 	hourly: "frequencyHourly",
 	daily: "frequencyDaily",
 	weekly: "frequencyWeekly"
-}, Dn = (e) => De("preferences_", wn, e), On = Cn();
-function kn(e, t, n, r) {
+}, On = (e) => Oe("preferences_", Tn, e), kn = wn();
+function An(e, t, n, r) {
 	let i = t.some(({ frequency: e }) => e !== null);
 	return {
 		hasGlobalSwitches: e.some(({ globalSwitch: e }) => e),
@@ -1754,15 +1763,15 @@ function kn(e, t, n, r) {
 		columns: e.length + (i ? 2 : 1),
 		frequencyOptions: n.map((e) => ({
 			value: e,
-			label: Ce(r[En[e]])
+			label: we(r[Dn[e]])
 		}))
 	};
 }
-function An(e, t, n) {
-	an(e, t, n) || On.set(e.key, t.key, !e.channels[t.key]);
+function jn(e, t, n) {
+	on(e, t, n) || kn.set(e.key, t.key, !e.channels[t.key]);
 }
 // ../js/push.ts
-var jn = {
+var Mn = {
 	available: !1,
 	supported: !1,
 	permission: "default",
@@ -1772,11 +1781,11 @@ var jn = {
 	request: null,
 	devices: null
 };
-function Mn(e) {
+function Nn(e) {
 	return !e.available || e.reason === "unsupported" ? null : e.busy ? "busy" : e.reason ?? (e.subscribed ? "on" : "off");
 }
-function Nn(e) {
-	let t = Mn(e), n = e.request?.action ?? "subscribe", r = n === "unsubscribe";
+function Pn(e) {
+	let t = Nn(e), n = e.request?.action ?? "subscribe", r = n === "unsubscribe";
 	switch (t) {
 		case null: return null;
 		case "off": return {
@@ -1849,39 +1858,39 @@ function Nn(e) {
 		};
 	}
 }
-function Pn(e) {
+function Fn(e) {
 	return !N(e) || typeof e.publicKey != "string" || e.publicKey === "" || typeof e.worker != "string" || e.worker === "" ? null : {
 		publicKey: e.publicKey,
 		worker: e.worker,
 		subscribed: e.subscribed === !0
 	};
 }
-var Fn = (e) => typeof e == "string" && e !== "" ? e : null;
-function In(e) {
+var In = (e) => typeof e == "string" && e !== "" ? e : null;
+function Ln(e) {
 	if (N(e) && Array.isArray(e.devices)) return e.devices.flatMap((e) => N(e) && typeof e.id == "number" && typeof e.activeAt == "string" ? [{
 		id: e.id,
-		browser: Fn(e.browser),
-		platform: Fn(e.platform),
+		browser: In(e.browser),
+		platform: In(e.platform),
 		activeAt: e.activeAt,
 		current: e.current === !0
 	}] : []);
 }
-function Ln(e) {
+function Rn(e) {
 	let t = e.replaceAll("-", "+").replaceAll("_", "/"), n = atob(t.padEnd(t.length + (4 - t.length % 4) % 4, "="));
 	return Uint8Array.from(n, (e) => e.charCodeAt(0));
 }
-function Rn(e, t) {
+function zn(e, t) {
 	let n = e.options?.applicationServerKey;
 	if (!n) return !0;
 	let r = new Uint8Array(n);
 	return r.length === t.length && r.every((e, n) => e === t[n]);
 }
-var zn = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || navigator.userAgent.includes("Macintosh") && navigator.maxTouchPoints > 1, Bn = () => navigator.standalone === !0 || window.matchMedia?.("(display-mode: standalone)").matches === !0;
-function Vn() {
-	return window.isSecureContext ? navigator.serviceWorker !== void 0 && "PushManager" in window && typeof Notification == "function" ? null : zn() && !Bn() ? "home-screen" : "unsupported" : "insecure";
+var Bn = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || navigator.userAgent.includes("Macintosh") && navigator.maxTouchPoints > 1, Vn = () => navigator.standalone === !0 || window.matchMedia?.("(display-mode: standalone)").matches === !0;
+function Hn() {
+	return window.isSecureContext ? navigator.serviceWorker !== void 0 && "PushManager" in window && typeof Notification == "function" ? null : Bn() && !Vn() ? "home-screen" : "unsupported" : "insecure";
 }
-var Hn = () => "brave" in navigator, Un = () => typeof Notification == "function" ? Notification.permission : "default", Wn = (e) => new URL("./", new URL(e, window.location.href)).href;
-function Gn(e) {
+var Un = () => "brave" in navigator, Wn = () => typeof Notification == "function" ? Notification.permission : "default", Gn = (e) => new URL("./", new URL(e, window.location.href)).href;
+function Kn(e) {
 	let t = e.installing ?? e.waiting;
 	return e.active || !t ? e.active ? Promise.resolve(e) : Promise.reject(/* @__PURE__ */ Error("The service worker did not install.")) : new Promise((n, r) => {
 		let i = () => {
@@ -1890,8 +1899,8 @@ function Gn(e) {
 		t.addEventListener("statechange", i);
 	});
 }
-function Kn() {
-	let e, t, n, r, i, a = 0, o = null, s = null, c = "unsupported", l = "default", u = !1, d, f = null, p = !1, m = Promise.resolve(), h = null, g = /* @__PURE__ */ new Set(), _ = null, v = 0, y = jn, b = /* @__PURE__ */ new Set(), x = () => f?.status === "pending", S = () => {
+function qn() {
+	let e, t, n, r, i, a = 0, o = null, s = null, c = "unsupported", l = "default", u = !1, d, f = null, p = !1, m = Promise.resolve(), h = null, g = /* @__PURE__ */ new Set(), _ = null, v = 0, y = Mn, b = /* @__PURE__ */ new Set(), x = () => f?.status === "pending", S = () => {
 		let e = s !== null, t = c === null, n = {
 			available: e,
 			supported: t,
@@ -1907,11 +1916,11 @@ function Kn() {
 		let t = m.then(e);
 		return m = t.catch(() => {}), t;
 	}, w = () => t?.getSnapshot().url, T = async (e) => {
-		let t = Wn(e.worker), n = await navigator.serviceWorker.getRegistration(t);
+		let t = Gn(e.worker), n = await navigator.serviceWorker.getRegistration(t);
 		return n?.scope === t ? n : void 0;
 	}, E = async (e, t) => {
 		let n = new URL(e.worker, window.location.href).href;
-		return Gn(t?.active?.scriptURL === n ? t : await navigator.serviceWorker.register(n, { scope: Wn(e.worker) }));
+		return Kn(t?.active?.scriptURL === n ? t : await navigator.serviceWorker.register(n, { scope: Gn(e.worker) }));
 	}, D = (t, n, r) => t === a ? e.request("post", `${w()}/${n}`, r) : Promise.reject(/* @__PURE__ */ Error("Another user signed in.")), O = async (e, t, n = !1) => {
 		let r = await D(e, "push/subscribe", {
 			...t.toJSON(),
@@ -1921,14 +1930,14 @@ function Kn() {
 		if (!N(r) || r.subscribed !== !0) throw Error("The push endpoint did not save the subscription.");
 		return !0;
 	}, k = async (e, t, n, r = !1) => {
-		let i = Ln(n.publicKey), a, o;
+		let i = Rn(n.publicKey), a, o;
 		try {
-			a = await t.pushManager.getSubscription(), a && !Rn(a, i) && (await a.unsubscribe(), a = null), a ??= o = await t.pushManager.subscribe({
+			a = await t.pushManager.getSubscription(), a && !zn(a, i) && (await a.unsubscribe(), a = null), a ??= o = await t.pushManager.subscribe({
 				userVisibleOnly: !0,
 				applicationServerKey: i
 			});
 		} catch (e) {
-			throw Hn() ? Object.assign(/* @__PURE__ */ Error("Brave could not subscribe."), {
+			throw Un() ? Object.assign(/* @__PURE__ */ Error("Brave could not subscribe."), {
 				brave: !0,
 				cause: e
 			}) : e;
@@ -1952,7 +1961,7 @@ function Kn() {
 			};
 			try {
 				let i = await E(n, e), a = await i.pushManager.getSubscription();
-				if (a && Rn(a, Ln(n.publicKey))) {
+				if (a && zn(a, Rn(n.publicKey))) {
 					n.subscribed && !await O(t, a, !0).catch(() => !0) && (await a.unsubscribe().catch(() => {}), r());
 					return;
 				}
@@ -1970,7 +1979,7 @@ function Kn() {
 		if (s === null || !e) return;
 		let t = a, n = ++v;
 		try {
-			let r = In(await e.request("get", `${w()}/push/devices`));
+			let r = Ln(await e.request("get", `${w()}/push/devices`));
 			t === a && n === v && r && (h = r, M());
 		} catch {}
 	}, F = () => {
@@ -1981,14 +1990,14 @@ function Kn() {
 		let e = t.getSnapshot(), n = e.url === void 0 ? void 0 : e.user ?? "";
 		n !== i && (i = n, I());
 		let r = t.pushSettings();
-		r !== o && (o = r, s = Pn(r), s === null ? (u = !1, d = void 0, f = x() ? f : null) : s.subscribed !== d && (u = d = s.subscribed)), l = Un(), S(), j();
+		r !== o && (o = r, s = Fn(r), s === null ? (u = !1, d = void 0, f = x() ? f : null) : s.subscribed !== d && (u = d = s.subscribed)), l = Wn(), S(), j();
 	}, z = () => {
-		l = Un(), S(), j();
+		l = Wn(), S(), j();
 	}, B = (t) => {
 		let r = t.data;
 		if (N(r) && r.type === "inertiaui-notifications:shown") {
-			let e = typeof r.tag == "string" ? Ft(r.tag) : void 0;
-			e !== void 0 && n?.(e) && ee([Pt(e)]);
+			let e = typeof r.tag == "string" ? It(r.tag) : void 0;
+			e !== void 0 && n?.(e) && ee([Ft(e)]);
 			return;
 		}
 		if (!N(r) || r.type !== "inertiaui-notifications:visit") return;
@@ -2002,13 +2011,13 @@ function Kn() {
 				let t = N(e.data) ? e.data.context : void 0;
 				return n === null || t === void 0 || t === n;
 			};
-			(e === null ? (await r.getNotifications()).filter((e) => Ft(e.tag) !== void 0 && i(e) && a(e)) : (await Promise.all(e.map((e) => r.getNotifications({ tag: e })))).flat()).forEach((e) => e.close());
+			(e === null ? (await r.getNotifications()).filter((e) => It(e.tag) !== void 0 && i(e) && a(e)) : (await Promise.all(e.map((e) => r.getNotifications({ tag: e })))).flat()).forEach((e) => e.close());
 		} catch {}
 	}, V = (e) => {
 		switch (e.kind) {
-			case "item": return e.readAt !== null || e.archivedAt !== null ? ee([Pt(e.id)]) : Promise.resolve();
-			case "items": return e.action === "read" || e.action === "archive" ? ee(e.ids.map(Pt)) : Promise.resolve();
-			case "delete": return ee(e.ids.map(Pt));
+			case "item": return e.readAt !== null || e.archivedAt !== null ? ee([Ft(e.id)]) : Promise.resolve();
+			case "items": return e.action === "read" || e.action === "archive" ? ee(e.ids.map(Ft)) : Promise.resolve();
+			case "delete": return ee(e.ids.map(Ft));
 			case "read":
 			case "archive": return e.category === null && !(e.kind === "archive" && e.onlyRead) ? ee(null, Date.parse(e.before), t?.context() ?? null) : Promise.resolve();
 			default: return Promise.resolve();
@@ -2021,7 +2030,7 @@ function Kn() {
 		getSnapshot: () => y,
 		connect(i, a, o, s) {
 			if (e = i, t) return;
-			t = a, n = o, r = s, c = Vn(), c === null && (navigator.serviceWorker.addEventListener("message", B), navigator.serviceWorker.startMessages(), navigator.permissions?.query({ name: "notifications" }).then((e) => e.addEventListener("change", z)).catch(() => {}), document.addEventListener("visibilitychange", z));
+			t = a, n = o, r = s, c = Hn(), c === null && (navigator.serviceWorker.addEventListener("message", B), navigator.serviceWorker.startMessages(), navigator.permissions?.query({ name: "notifications" }).then((e) => e.addEventListener("change", z)).catch(() => {}), document.addEventListener("visibilitychange", z));
 			let l = (e) => void V(e);
 			a.onChange(l), a.onSaved(({ change: e }) => l(e)), a.subscribe(R), R();
 		},
@@ -2031,7 +2040,7 @@ function Kn() {
 			f = {
 				action: "subscribe",
 				status: "pending"
-			}, S(), l = Notification.permission === "default" ? await Notification.requestPermission().catch(Un) : Notification.permission, t === a && (l === "granted" && (p = !0, await C(async () => {
+			}, S(), l = Notification.permission === "default" ? await Notification.requestPermission().catch(Wn) : Notification.permission, t === a && (l === "granted" && (p = !0, await C(async () => {
 				if (t === a) try {
 					await k(t, await E(n, await T(n)), n), t === a && (u = !0, F());
 				} catch (e) {
@@ -2074,41 +2083,41 @@ function Kn() {
 			}
 			g.delete(e), M();
 		},
-		close: (e) => ee(e.map(Pt))
+		close: (e) => ee(e.map(Ft))
 	};
 }
-var qn = Kn();
-function Jn(e, t, n, r) {
+var Jn = qn();
+function Yn(e, t, n, r) {
 	return (e ?? []).filter((e) => !e.current).map((e) => {
-		let i = e.browser ?? Ce(t.pushDeviceUnknown), a = e.platform === null ? i : Ce(t.pushDeviceName, {
+		let i = e.browser ?? we(t.pushDeviceUnknown), a = e.platform === null ? i : we(t.pushDeviceName, {
 			browser: i,
 			platform: e.platform
 		});
 		return {
 			id: e.id,
 			name: a,
-			active: Ce(t.pushDeviceActive, { time: bt(e.activeAt, n, r) }),
-			removeLabel: Ce(t.pushDeviceRemoveLabel, { device: a })
+			active: we(t.pushDeviceActive, { time: xt(e.activeAt, n, r) }),
+			removeLabel: we(t.pushDeviceRemoveLabel, { device: a })
 		};
 	});
 }
-function Yn(e) {
+function Xn(e) {
 	let t = e?.button;
-	t && e?.state !== "busy" && (t.action === "subscribe" ? qn.enable() : qn.disable());
+	t && e?.state !== "busy" && (t.action === "subscribe" ? Jn.enable() : Jn.disable());
 }
 // ../js/toastStore.ts
-var Xn = 1e3;
-function Zn({ title: e, description: t }) {
+var Zn = 1e3;
+function Qn({ title: e, description: t }) {
 	let n = e.length + (t?.length ?? 0);
 	return Math.min(Math.max(2e3 + 60 * n, 5e3), 12e3);
 }
-function Qn(e, t = {}) {
-	return typeof t.duration == "function" ? t.duration(e) : e.type === "loading" || e.actions?.some((e) => !e.altText) || e.type === "error" && t.persistentErrors !== !1 ? null : typeof t.duration == "number" ? t.duration : e.type === "warning" ? Math.max(Zn(e), 8e3) : Zn(e);
+function $n(e, t = {}) {
+	return typeof t.duration == "function" ? t.duration(e) : e.type === "loading" || e.actions?.some((e) => !e.altText) || e.type === "error" && t.persistentErrors !== !1 ? null : typeof t.duration == "number" ? t.duration : e.type === "warning" ? Math.max(Qn(e), 8e3) : Qn(e);
 }
-function $n(e) {
+function er(e) {
 	return (e.type === "error" ? 0 : e.type === "warning" ? 2 : 4) + (e.actions.length > 0 ? 0 : 1);
 }
-var er = (e) => e === void 0 || Number.isNaN(e) ? void 0 : Math.min(Math.max(e, 0), 1), tr = (e) => [...e.action ? [e.action] : [], ...e.actions ?? []], nr = {
+var tr = (e) => e === void 0 || Number.isNaN(e) ? void 0 : Math.min(Math.max(e, 0), 1), nr = (e) => [...e.action ? [e.action] : [], ...e.actions ?? []], rr = {
 	duration: !0,
 	persistentErrors: !0,
 	durationScale: !0,
@@ -2118,7 +2127,7 @@ var er = (e) => e === void 0 || Number.isNaN(e) ? void 0 : Math.min(Math.max(e, 
 	dedupe: !0,
 	removeDelay: !0
 };
-function rr(e = {}) {
+function ir(e = {}) {
 	let t = {}, n = 0, r = 0, i = [], a = !1, o = /* @__PURE__ */ new Map(), s = /* @__PURE__ */ new Set(), c = /* @__PURE__ */ new Map(), l = /* @__PURE__ */ new Set(), u = [], d = () => {
 		a && (a = !1, i = Array.from(o.values(), (e) => e.toast));
 		for (let e of l) e();
@@ -2127,7 +2136,7 @@ function rr(e = {}) {
 	}, f = (e, t) => {
 		e.toast = t, a = !0;
 	}, p = (e, n) => {
-		let r = n === void 0 ? Qn(e, t) : n;
+		let r = n === void 0 ? $n(e, t) : n;
 		return r === null || t.autoDismiss === !1 ? null : Math.round(r * (t.durationScale ?? 1));
 	}, m = (e) => {
 		e.handle !== void 0 && (clearTimeout(e.handle), e.handle = void 0, e.remaining -= Date.now() - e.startedAt);
@@ -2135,7 +2144,7 @@ function rr(e = {}) {
 		let { timer: t } = e;
 		if (!t) return;
 		let n = (c.get(e.toast.toaster ?? "") ?? 0) > 0, r = e.toast.state === "visible" && s.size === 0 && e.holds.size === 0 && e.toast.pendingAction === void 0 && n;
-		r && t.handle === void 0 ? (t.remaining = Math.max(t.remaining, Math.min(Xn, t.duration)), t.startedAt = Date.now(), t.handle = setTimeout(() => E(e.toast.id, "timeout"), t.remaining)) : r || m(t);
+		r && t.handle === void 0 ? (t.remaining = Math.max(t.remaining, Math.min(Zn, t.duration)), t.startedAt = Date.now(), t.handle = setTimeout(() => E(e.toast.id, "timeout"), t.remaining)) : r || m(t);
 	}, g = (e) => {
 		e.timer && m(e.timer);
 		let { duration: t } = e.toast;
@@ -2163,7 +2172,7 @@ function rr(e = {}) {
 		let e = t.overflow === "hide" ? -1 : 1;
 		for (let t of o.values()) {
 			if (t.toast.state !== "queued") continue;
-			let n = _(t), r = n.filter((e) => e.toast.state === "visible").length, i = n.filter((e) => e.toast.state === "queued").sort((t, n) => $n(t.toast) - $n(n.toast) || e * (t.sequence - n.sequence));
+			let n = _(t), r = n.filter((e) => e.toast.state === "visible").length, i = n.filter((e) => e.toast.state === "queued").sort((t, n) => er(t.toast) - er(n.toast) || e * (t.sequence - n.sequence));
 			for (let e of i) {
 				if (r >= v()) break;
 				r++, f(e, {
@@ -2176,7 +2185,7 @@ function rr(e = {}) {
 		let n = _(e).filter((t) => t !== e && t.toast.state === "visible");
 		if (n.length < v()) return "visible";
 		if (t.overflow !== "drop-oldest" && t.overflow !== "hide") return "queued";
-		let r = n.reduce((e, t) => $n(t.toast) > $n(e.toast) ? t : e);
+		let r = n.reduce((e, t) => er(t.toast) > er(e.toast) ? t : e);
 		return t.overflow === "hide" ? (f(r, {
 			...r.toast,
 			state: "queued"
@@ -2186,7 +2195,7 @@ function rr(e = {}) {
 			type: n.type ?? "default",
 			title: t,
 			description: n.description,
-			actions: tr(n)
+			actions: nr(n)
 		};
 		return {
 			id: e,
@@ -2199,14 +2208,14 @@ function rr(e = {}) {
 			toaster: n.toaster,
 			politeness: n.politeness,
 			data: n.data,
-			progress: er(n.progress),
+			progress: tr(n.progress),
 			onClose: n.onClose,
 			onRemove: n.onRemove,
 			...i
 		};
 	}, w = (e, n) => {
 		let r = n.type ?? "default";
-		if (!(t.dedupe === !1 || n.id !== void 0 || r === "loading" || tr(n).length > 0 || n.data !== void 0)) return [...o.values()].find(({ toast: t }) => t.state !== "closing" && t.actions.length === 0 && t.data === void 0 && t.toaster === n.toaster && t.type === r && t.title === e && t.description === n.description);
+		if (!(t.dedupe === !1 || n.id !== void 0 || r === "loading" || nr(n).length > 0 || n.data !== void 0)) return [...o.values()].find(({ toast: t }) => t.state !== "closing" && t.actions.length === 0 && t.data === void 0 && t.toaster === n.toaster && t.type === r && t.title === e && t.description === n.description);
 	};
 	function T(e, t = {}) {
 		let i = t.id === void 0 ? void 0 : o.get(t.id);
@@ -2264,7 +2273,7 @@ function rr(e = {}) {
 			...c,
 			title: r ?? n.toast.title
 		};
-		"description" in t && (u.description = t.description), t.progress !== void 0 && (u.progress = er(t.progress)), (i !== void 0 || a !== void 0) && (u.actions = tr({
+		"description" in t && (u.description = t.description), t.progress !== void 0 && (u.progress = tr(t.progress)), (i !== void 0 || a !== void 0) && (u.actions = nr({
 			action: i,
 			actions: a
 		})), "duration" in t && (n.requested = t.duration), l && (u.duration = p(u, n.requested), u.revision++);
@@ -2323,7 +2332,7 @@ function rr(e = {}) {
 			};
 		},
 		configure(e) {
-			let n = Object.entries(e).filter(([e, t]) => t !== void 0 && e in nr);
+			let n = Object.entries(e).filter(([e, t]) => t !== void 0 && e in rr);
 			t = {
 				...t,
 				...Object.fromEntries(n)
@@ -2333,11 +2342,11 @@ function rr(e = {}) {
 	return O.configure(e), O;
 }
 // ../js/toast.ts
-var Q = rr(), ir = 0;
-Q.subscribe(() => ir++);
-var ar = () => ir, or = 0;
-function sr() {
-	let e = `scope-${++or}:`, t = /* @__PURE__ */ new Map();
+var Q = ir(), ar = 0;
+Q.subscribe(() => ar++);
+var or = () => ar, sr = 0;
+function cr() {
+	let e = `scope-${++sr}:`, t = /* @__PURE__ */ new Map();
 	return {
 		pause(n = "manual", r) {
 			t.set(JSON.stringify([n, r ?? null]), [n, r]), Q.pause(e + n, r);
@@ -2350,22 +2359,22 @@ function sr() {
 		}
 	};
 }
-var cr = j, lr, ur = "requested", dr, fr, pr, mr = B((e, t) => {
-	let n = t.id === void 0 ? void 0 : Ft(t.id);
-	n !== void 0 && _t.panelOpen() ? _t.loadArrival(n).then((e) => e && Tr(e)) : Q.add(e, t);
-}), hr = (e) => mr(ee(e, cr)), gr = typeof window < "u", _r, vr = [
+var lr = j, ur, dr = "requested", fr, pr, mr, hr = B((e, t) => {
+	let n = t.id === void 0 ? void 0 : It(t.id);
+	n !== void 0 && vt.panelOpen() ? vt.loadArrival(n).then((e) => e && Er(e)) : Q.add(e, t);
+}), gr = (e) => hr(ee(e, lr)), _r = typeof window < "u", vr, yr = [
 	403,
 	419,
 	429,
 	"5xx",
 	"network"
 ];
-function yr(e) {
+function br(e) {
 	let t = (t) => {
 		let n = e(t);
-		return n === void 0 ? "" : Ce(n);
+		return n === void 0 ? "" : we(n);
 	};
-	return Object.fromEntries(vr.map((e) => {
+	return Object.fromEntries(yr.map((e) => {
 		let n = t(`error_toast_${e}`), r = t(`error_toast_${e}_description`);
 		return [e, r === "" ? { title: n } : {
 			title: n,
@@ -2373,122 +2382,122 @@ function yr(e) {
 		}];
 	}));
 }
-var br = yr((e) => ye[e]), xr = () => lr && {
-	...yr(Se),
-	...lr
+var xr = br((e) => be[e]), Sr = () => ur && {
+	...br(Ce),
+	...ur
 };
-function Sr(e, t) {
+function Cr(e, t) {
 	return (t[e] ?? (e >= 500 ? t["5xx"] : void 0)) || void 0;
 }
-function Cr(e, t) {
+function wr(e, t) {
 	let { code: n, response: r } = e ?? {};
 	if (n === "ERR_NETWORK") return t.network || void 0;
 	if (n !== "ERR_HTTP_RESPONSE" || r?.status === void 0) return;
 	let { status: i, headers: a } = r;
-	if (!(a["x-inertia"] || a["x-inertia-location"] || i === 409 && a["x-inertia-redirect"] || a["x-inertiaui-toasts"])) return Sr(i, t);
+	if (!(a["x-inertia"] || a["x-inertia-location"] || i === 409 && a["x-inertia-redirect"] || a["x-inertiaui-toasts"])) return Cr(i, t);
 }
-var wr = () => ({
-	label: we("inbox_toast_view"),
-	altText: we("inbox_toast_view_alt")
-}), Tr = (e) => {
-	let t = It(e, ur, wr());
-	t && (typeof document < "u" && document.visibilityState === "visible" && qn.close([e.id]), _t.panelOpen() || Q.getSnapshot().some((e) => e.id === t.options.id && e.state !== "closing") || Q.add(t.title, t.options));
-}, Er = (e) => document.visibilityState === "visible" && Q.getSnapshot().some((t) => t.id === Pt(e) && t.state !== "closing"), Dr = () => Q.getSnapshot().filter((e) => Ft(e.id) !== void 0 && e.pendingAction === void 0).forEach((e) => Q.dismiss(e.id)), Or = (e) => {
-	e.kind === "delete" ? e.ids.forEach((e) => Q.dismiss(Pt(e))) : e.kind === "update" && Q.update(Pt(e.item.id), Lt(e.item, wr()));
-}, kr = (e) => {
-	let t = Ft(e);
+var Tr = () => ({
+	label: Te("inbox_toast_view"),
+	altText: Te("inbox_toast_view_alt")
+}), Er = (e) => {
+	let t = Lt(e, dr, Tr());
+	t && (typeof document < "u" && document.visibilityState === "visible" && Jn.close([e.id]), vt.panelOpen() || Q.getSnapshot().some((e) => e.id === t.options.id && e.state !== "closing") || Q.add(t.title, t.options));
+}, Dr = (e) => document.visibilityState === "visible" && Q.getSnapshot().some((t) => t.id === Ft(e) && t.state !== "closing"), Or = () => Q.getSnapshot().filter((e) => It(e.id) !== void 0 && e.pendingAction === void 0).forEach((e) => Q.dismiss(e.id)), kr = (e) => {
+	e.kind === "delete" ? e.ids.forEach((e) => Q.dismiss(Ft(e))) : e.kind === "update" && Q.update(Ft(e.item.id), Rt(e.item, Tr()));
+}, Ar = (e) => {
+	let t = It(e);
 	t !== void 0 && X.markAsRead(t);
-}, Ar = (e, t, n) => {
-	let r = Ft(e);
-	return r === void 0 || n.result === void 0 ? void 0 : _t.completer(r, t);
+}, jr = (e, t, n) => {
+	let r = It(e);
+	return r === void 0 || n.result === void 0 ? void 0 : vt.completer(r, t);
 };
-function jr(e, t = {}) {
-	if (cr = t.flashKey ?? cr, Q.configure(t), ur = t.inbox?.arrivalToasts ?? ur, dr = t.inbox?.onArrival ?? dr, t.errorToasts !== void 0 && (lr = t.errorToasts === !1 ? void 0 : t.errorToasts === !0 ? {} : t.errorToasts), gr) {
-		if (!_r) {
-			_r = e;
+function Mr(e, t = {}) {
+	if (lr = t.flashKey ?? lr, Q.configure(t), dr = t.inbox?.arrivalToasts ?? dr, fr = t.inbox?.onArrival ?? fr, t.errorToasts !== void 0 && (ur = t.errorToasts === !1 ? void 0 : t.errorToasts === !0 ? {} : t.errorToasts), _r) {
+		if (!vr) {
+			vr = e;
 			let t = (e) => (t) => {
-				let n = xr();
-				n && Cr(t, n) || Q.add(e(), { type: "error" });
+				let n = Sr();
+				n && wr(t, n) || Q.add(e(), { type: "error" });
 			};
-			X.connect(e, { onFailure: t(() => we("inbox_update_failed")) }), On.connect(e, { onFailure: t(() => we("preferences_save_failed")) });
+			X.connect(e, { onFailure: t(() => Te("inbox_update_failed")) }), kn.connect(e, { onFailure: t(() => Te("preferences_save_failed")) });
 			let n = ({ url: e, user: t }) => e === void 0 ? void 0 : t ?? "", r = n(X.getSnapshot()), i = r !== void 0;
 			X.subscribe(() => {
 				let e = n(X.getSnapshot());
-				e !== r && (i && On.reset(X.getSnapshot().url), i ||= e !== void 0, r = e);
-			}), Mr(e), X.onArrival((e) => dr?.(e)), X.onChange(Or), _t.onPanelOpened(Dr), fr = Mt(_t, e, Tr), pr = Ut(X), qn.connect(e, _t, Er, t(() => we("preferences_push_device_remove_failed")));
+				e !== r && (i && kn.reset(X.getSnapshot().url), i ||= e !== void 0, r = e);
+			}), Nr(e), X.onArrival((e) => fr?.(e)), X.onChange(kr), vt.onPanelOpened(Or), pr = Nt(vt, e, Er), mr = Wt(X), Jn.connect(e, vt, Dr, t(() => Te("preferences_push_device_remove_failed")));
 		}
-		X.connect(_r, { prop: t.inbox?.prop }), fr?.configure({
+		X.connect(vr, { prop: t.inbox?.prop }), pr?.configure({
 			echo: t.inbox?.echo,
 			poll: t.inbox?.poll
-		}), pr?.configure(t.inbox ?? {});
+		}), mr?.configure(t.inbox ?? {});
 	}
 }
-function Mr(e) {
-	e.onFlash(hr), e.onNavigate((e, t) => X.sync(e, t)), e.onRequest((e) => ne(e.url) ? {
+function Nr(e) {
+	e.onFlash(gr), e.onNavigate((e, t) => X.sync(e, t)), e.onRequest((e) => ne(e.url) ? {
 		...e.headers,
 		[M]: "1"
 	} : e.headers), e.onResponse((e) => {
-		hr(te(e)), mr(V(e.headers));
+		gr(te(e)), hr(V(e.headers));
 	}), e.onError((e) => {
 		let t = e?.response;
-		t?.headers && mr(V(t.headers));
-		let n = xr(), r = n && Cr(e, n);
+		t?.headers && hr(V(t.headers));
+		let n = Sr(), r = n && wr(e, n);
 		r && Q.add(r.title, {
 			type: "error",
 			description: r.description
 		});
 	}), e.onHttpException((e) => {
-		let t = xr();
-		return t && e.status !== void 0 && !e.headers["x-inertia"] && Sr(e.status, t) ? !1 : void 0;
+		let t = Sr();
+		return t && e.status !== void 0 && !e.headers["x-inertia"] && Cr(e.status, t) ? !1 : void 0;
 	});
 	let t = () => document.visibilityState === "hidden" ? Q.pause("hidden") : Q.resume("hidden");
 	document.addEventListener("visibilitychange", t), t(), window.addEventListener("blur", () => Q.pause("blur")), window.addEventListener("focus", () => Q.resume("blur"));
 }
-var Nr = /* @__PURE__ */ new Map();
-function Pr(e, t) {
+var Pr = /* @__PURE__ */ new Map();
+function Fr(e, t) {
 	let n = Q.getSnapshot().find((t) => t.id === e), r = n?.actions[t];
 	if (!n || !r || n.state === "closing" || n.pendingAction !== void 0) return;
-	kr(e);
-	let i = Ar(e, t, r), a = {}, o = () => {
+	Ar(e);
+	let i = jr(e, t, r), a = {}, o = () => {
 		r.keepOpen ? Q.setPendingAction(e, void 0) : Q.dismiss(e, "action");
-	}, s = ce(r, n, _r, (n) => {
-		Nr.get(e) === a && (Nr.delete(e), Q.getSnapshot().find((t) => t.id === e)?.pendingAction === t && (n ? o() : Q.setPendingAction(e, void 0)));
+	}, s = le(r, n, vr, (n) => {
+		Pr.get(e) === a && (Pr.delete(e), Q.getSnapshot().find((t) => t.id === e)?.pendingAction === t && (n ? o() : Q.setPendingAction(e, void 0)));
 	}, i);
-	s === "pending" ? (Nr.set(e, a), Q.setPendingAction(e, t)) : s === "done" && o();
+	s === "pending" ? (Pr.set(e, a), Q.setPendingAction(e, t)) : s === "done" && o();
 }
-function Fr(e, t, n) {
+function Ir(e, t, n) {
 	let r = Q.getSnapshot().find((t) => t.id === e)?.actions[t];
 	if (!r) return;
-	let i = H(r), a = Ar(e, t, r);
-	if (i !== void 0 && ie(r, i, n)) {
-		if (se(i, r, n, () => kr(e), a), U(n)) return;
+	let i = H(r), a = jr(e, t, r);
+	if (i !== void 0 && ae(r, i, n)) {
+		if (W(i, r, n, () => Ar(e), a), re(n)) return;
 		r.event && window.dispatchEvent(new CustomEvent(r.event, { detail: r.payload })), r.keepOpen || Q.dismiss(e, "action");
-	} else n.preventDefault(), Pr(e, t);
+	} else n.preventDefault(), Fr(e, t);
 }
-var Ir = (e, t) => gr ? Q.add(e, t) : t?.id ?? "", Lr = (e) => (t, n) => Ir(t, {
+var Lr = (e, t) => _r ? Q.add(e, t) : t?.id ?? "", Rr = (e) => (t, n) => Lr(t, {
 	...n,
 	type: e
-}), Rr = (e, t, n, r) => {
+}), zr = (e, t, n, r) => {
 	let { title: i, ...a } = typeof r == "string" ? { title: r } : r;
-	return Ir(i, {
+	return Lr(i, {
 		...n,
 		type: t,
 		...a,
 		id: e
 	});
-}, zr = (e, t, n, r, i) => {
-	r === void 0 ? Q.getSnapshot().some((t) => t.id === e && t.type === "loading") && Q.dismiss(e) : Rr(e, t, n, typeof r == "function" ? r(i) : r);
-}, Br = 0, Vr = Object.assign(Ir, {
-	success: Lr("success"),
-	info: Lr("info"),
-	warning: Lr("warning"),
-	error: Lr("error"),
-	loading: Lr("loading"),
+}, Br = (e, t, n, r, i) => {
+	r === void 0 ? Q.getSnapshot().some((t) => t.id === e && t.type === "loading") && Q.dismiss(e) : zr(e, t, n, typeof r == "function" ? r(i) : r);
+}, Vr = 0, Hr = Object.assign(Lr, {
+	success: Rr("success"),
+	info: Rr("info"),
+	warning: Rr("warning"),
+	error: Rr("error"),
+	loading: Rr("loading"),
 	update: (e, t) => Q.update(e, t),
 	dismiss: (e) => Q.dismiss(e),
 	promise(e, { loading: t, success: n, error: r, ...i }) {
-		let a = Rr(i.id ?? `iui-promise-${++Br}`, "loading", i, t), o = (typeof e == "function" ? e() : e).then((e) => (typeof Response < "u" && e instanceof Response && !e.ok ? zr(a, "error", i, r, e) : zr(a, "success", i, n, e), e), (e) => {
-			throw zr(a, "error", i, r, e), e;
+		let a = zr(i.id ?? `iui-promise-${++Vr}`, "loading", i, t), o = (typeof e == "function" ? e() : e).then((e) => (typeof Response < "u" && e instanceof Response && !e.ok ? Br(a, "error", i, r, e) : Br(a, "success", i, n, e), e), (e) => {
+			throw Br(a, "error", i, r, e), e;
 		});
 		return o.catch(() => {}), {
 			id: a,
@@ -2496,21 +2505,21 @@ var Ir = (e, t) => gr ? Q.add(e, t) : t?.id ?? "", Lr = (e) => (t, n) => Ir(t, {
 		};
 	},
 	track({ loading: e, success: t, error: n, ...r }, i) {
-		let a = i ?? {}, o = r.id ?? `iui-track-${++Br}`, s = !1;
+		let a = i ?? {}, o = r.id ?? `iui-track-${++Vr}`, s = !1;
 		return {
 			...i,
 			onStart(t) {
-				s = !1, e !== void 0 && Rr(o, "loading", r, e), a.onStart?.(t);
+				s = !1, e !== void 0 && zr(o, "loading", r, e), a.onStart?.(t);
 			},
 			onProgress(t) {
 				let n = t?.progress;
 				e !== void 0 && n !== void 0 && Q.update(o, { progress: n }), a.onProgress?.(t);
 			},
 			onSuccess(e) {
-				s = !0, zr(o, "success", r, t, e), a.onSuccess?.(e);
+				s = !0, Br(o, "success", r, t, e), a.onSuccess?.(e);
 			},
 			onError(e) {
-				s = !0, zr(o, "error", r, n, e), a.onError?.(e);
+				s = !0, Br(o, "error", r, n, e), a.onError?.(e);
 			},
 			onFinish(e) {
 				s || Q.dismiss(o), a.onFinish?.(e);
@@ -2519,19 +2528,19 @@ var Ir = (e, t) => gr ? Q.add(e, t) : t?.id ?? "", Lr = (e) => (t, n) => Ir(t, {
 	},
 	fromHeaders(e) {
 		let t = e instanceof Headers ? e.get(M) : e["x-inertiaui-toasts"] ?? e["X-InertiaUI-Toasts"];
-		gr && t && mr(V({ [M]: t }));
+		_r && t && hr(V({ [M]: t }));
 	}
-}), Hr = ["F8"], Ur = [
+}), Ur = ["F8"], Wr = [
 	"altKey",
 	"ctrlKey",
 	"metaKey",
 	"shiftKey"
-], Wr = {
+], Gr = {
 	altKey: "toaster_hotkey_alt",
 	ctrlKey: "toaster_hotkey_ctrl",
 	metaKey: "toaster_hotkey_meta",
 	shiftKey: "toaster_hotkey_shift"
-}, Gr = {
+}, Kr = {
 	width: "0",
 	height: "0",
 	margin: "0",
@@ -2541,31 +2550,31 @@ var Ir = (e, t) => gr ? Q.add(e, t) : t?.id ?? "", Lr = (e) => (t, n) => Ir(t, {
 	background: "none",
 	color: "inherit",
 	"pointer-events": "auto"
-}, Kr = 45, qr = .11;
-function Jr(e) {
-	return e.map((e) => Object.hasOwn(Wr, e) ? we(Wr[e]) : e.replace(/^(Key|Digit)/, "")).join(we("toaster_hotkey_separator"));
-}
-function Yr(e, t) {
-	let n = e ?? we("toaster_label");
-	return t.length > 0 ? we("toaster_label_with_hotkey", {
-		label: n,
-		hotkey: Jr(t)
-	}) : n;
+}, qr = 45, Jr = .11;
+function Yr(e) {
+	return e.map((e) => Object.hasOwn(Gr, e) ? Te(Gr[e]) : e.replace(/^(Key|Digit)/, "")).join(Te("toaster_hotkey_separator"));
 }
 function Xr(e, t) {
-	return e === void 0 ? we("toast_dismiss", { title: t.title }) : Ce(e, { title: t.title });
+	let n = e ?? Te("toaster_label");
+	return t.length > 0 ? Te("toaster_label_with_hotkey", {
+		label: n,
+		hotkey: Yr(t)
+	}) : n;
 }
-function Zr(e, t = {}) {
-	let n = K(t, e) ?? Se(`toast_type_${e}`);
-	return n === void 0 ? "" : Ce(n);
+function Zr(e, t) {
+	return e === void 0 ? Te("toast_dismiss", { title: t.title }) : we(e, { title: t.title });
 }
 function Qr(e, t = {}) {
-	let n = Zr(e.type, t), r = n ? `${n}: ${e.title}` : e.title, i = [/[.!?…]$/.test(r) ? r : `${r}.`];
+	let n = K(t, e) ?? Ce(`toast_type_${e}`);
+	return n === void 0 ? "" : we(n);
+}
+function $r(e, t = {}) {
+	let n = Qr(e.type, t), r = n ? `${n}: ${e.title}` : e.title, i = [/[.!?…]$/.test(r) ? r : `${r}.`];
 	e.description && i.push(e.description);
 	for (let t of e.actions) t.altText && i.push(t.altText);
 	return i.join(" ");
 }
-function $r(e, t) {
+function ei(e, t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let r of [...e].reverse()) if (r.state !== "queued") {
 		let e = r.position ?? t;
@@ -2573,12 +2582,12 @@ function $r(e, t) {
 	}
 	return k.filter((e) => n.has(e)).map((e) => [e, n.get(e)]);
 }
-var ei = 0;
-function ti(e, t, n) {
+var ti = 0;
+function ni(e, t, n) {
 	let { region: r, host: i } = t, a = y({
 		polite: t.polite,
 		assertive: t.assertive
-	}), o = /* @__PURE__ */ new Map(), s = /* @__PURE__ */ new Map(), c = /* @__PURE__ */ new Map(), l = ++ei, u = {
+	}), o = /* @__PURE__ */ new Map(), s = /* @__PURE__ */ new Map(), c = /* @__PURE__ */ new Map(), l = ++ti, u = {
 		hover: `hover-${l}`,
 		focus: `focus-${l}`,
 		swipe: `swipe-${l}`
@@ -2683,7 +2692,7 @@ function ti(e, t, n) {
 	}, ie = (e) => {
 		if (!g || e.pointerId !== g.pointerId) return;
 		let t = Math.abs(g.dx) / Math.max(1, Date.now() - g.time), n = (window.getSelection?.()?.toString() ?? "") !== "";
-		re(!n && H(g.item, g.dx) && (Math.abs(g.dx) >= Kr || t > qr));
+		re(!n && H(g.item, g.dx) && (Math.abs(g.dx) >= qr || t > Jr));
 	}, ae = (e) => {
 		e.pointerId === g?.pointerId && re(!1);
 	}, oe = (e) => {
@@ -2692,12 +2701,12 @@ function ti(e, t, n) {
 		};
 		ce && window.addEventListener("focusout", t, !0), e.focus(), window.removeEventListener("focusout", t, !0);
 	}, se = (e) => {
-		let { hotkey: t } = n(), i = t.length > 0 && t.every((t) => Ur.includes(t) ? e[t] : e.code === t), a = E()[0];
+		let { hotkey: t } = n(), i = t.length > 0 && t.every((t) => Wr.includes(t) ? e[t] : e.code === t), a = E()[0];
 		i && a && (e.preventDefault(), h = "keyboard", document.activeElement instanceof HTMLElement && document.activeElement !== document.body && !r.contains(document.activeElement) && (m = document.activeElement), oe(a));
-	}, W = [], ce = !1, le = (e) => e.isConnected && (e instanceof HTMLDialogElement ? e.open && e.matches(":modal") : ce && e.matches(":popover-open")), G = (e) => e instanceof HTMLElement && e !== i && e.hasAttribute("popover") && /^(alert)?dialog$/.test(e.getAttribute("role") ?? ""), K = (e) => {
+	}, W = [], ce = !1, le = (e) => e.isConnected && (e instanceof HTMLDialogElement ? e.open && e.matches(":modal") : ce && e.matches(":popover-open")), ue = (e) => e instanceof HTMLElement && e !== i && e.hasAttribute("popover") && /^(alert)?dialog$/.test(e.getAttribute("role") ?? ""), G = (e) => {
 		let t = W.indexOf(e);
 		t !== -1 && W.splice(t, 1);
-	}, ue = (e) => {
+	}, K = (e) => {
 		let t = Array.from(i?.querySelectorAll("[data-toast-id]") ?? []);
 		t.forEach((e) => e.style.transition = "none"), e(), i?.offsetWidth, t.forEach((e) => e.style.removeProperty("transition"));
 	}, de = () => !!i?.isConnected && ce && !i.matches(":popover-open"), q = () => {
@@ -2707,22 +2716,22 @@ function ti(e, t, n) {
 				i.showPopover();
 			} catch {
 				requestAnimationFrame(() => {
-					de() && ue(() => i.showPopover());
+					de() && K(() => i.showPopover());
 				});
 			}
 		}
 	}, fe = () => {
 		if (!i) return;
 		let e = [...W].reverse().find(le) ?? document.body;
-		i.parentElement === e ? de() && q() : ue(() => {
+		i.parentElement === e ? de() && q() : K(() => {
 			e.append(i), q();
 		});
 	}, pe = (e) => {
-		K(e), e.open && e.matches(":modal") && W.push(e);
+		G(e), e.open && e.matches(":modal") && W.push(e);
 	}, me = (e) => {
-		G(e.target) && e.newState === "closed" && (K(e.target), fe());
+		ue(e.target) && e.newState === "closed" && (G(e.target), fe());
 	}, he = (e) => {
-		G(e.target) && e.newState === "open" && (K(e.target), W.push(e.target), fe());
+		ue(e.target) && e.newState === "open" && (G(e.target), W.push(e.target), fe());
 	}, ge = (e) => e.stopPropagation(), J = (e) => {
 		e.relatedTarget instanceof Node && r.contains(e.relatedTarget) && e.stopPropagation();
 	}, _e = (e) => {
@@ -2736,9 +2745,9 @@ function ti(e, t, n) {
 		let t = e && typeof i?.showPopover == "function";
 		if (i && t !== ce) {
 			if (ce = t, t) {
-				ve(i), i.setAttribute("aria-live", "off"), i.setAttribute("popover", "manual"), Object.entries(Gr).forEach(([e, t]) => i.style.setProperty(e, t));
-				for (let e of document.querySelectorAll("[popover]")) G(e) && le(e) && W.push(e);
-			} else ye(i), i.matches(":popover-open") && i.hidePopover(), i.removeAttribute("popover"), i.removeAttribute("aria-live"), Object.keys(Gr).forEach((e) => i.style.removeProperty(e)), W.splice(0, W.length, ...W.filter((e) => e instanceof HTMLDialogElement));
+				ve(i), i.setAttribute("aria-live", "off"), i.setAttribute("popover", "manual"), Object.entries(Kr).forEach(([e, t]) => i.style.setProperty(e, t));
+				for (let e of document.querySelectorAll("[popover]")) ue(e) && le(e) && W.push(e);
+			} else ye(i), i.matches(":popover-open") && i.hidePopover(), i.removeAttribute("popover"), i.removeAttribute("aria-live"), Object.keys(Kr).forEach((e) => i.style.removeProperty(e)), W.splice(0, W.length, ...W.filter((e) => e instanceof HTMLDialogElement));
 			fe();
 		}
 	}, xe = i && typeof MutationObserver == "function" ? new MutationObserver((e) => {
@@ -2756,7 +2765,7 @@ function ti(e, t, n) {
 			let t = b(), { typeLabels: r } = n(), i = !w();
 			for (let e of t) {
 				if (e.state === "closing") continue;
-				o.get(e.id) !== e.revision && (o.set(e.id, e.revision), a.announce(Qr(e, r), e.politeness ?? (e.type === "error" ? "assertive" : "polite")));
+				o.get(e.id) !== e.revision && (o.set(e.id, e.revision), a.announce($r(e, r), e.politeness ?? (e.type === "error" ? "assertive" : "polite")));
 				let t = S(e.id);
 				t && i && e.count > (s.get(e.id) ?? e.count) && typeof t.animate == "function" && t.animate([
 					{ scale: "1" },
@@ -2778,20 +2787,20 @@ function ti(e, t, n) {
 	};
 }
 // src/classes.ts
-var ni = "iui-toast rounded-iui-toast border-iui-toast-border bg-iui-toast-surface text-iui-toast-foreground focus-visible:ring-iui-toast-ring border shadow-lg focus-visible:ring-2 focus-visible:outline-hidden", ri = "flex items-start gap-3 p-4", ii = {
+var ri = "iui-toast rounded-iui-toast border-iui-toast-border bg-iui-toast-surface text-iui-toast-foreground focus-visible:ring-iui-toast-ring border shadow-lg focus-visible:ring-2 focus-visible:outline-hidden", ii = "flex items-start gap-3 p-4", ai = {
 	default: "text-iui-toast-default",
 	info: "text-iui-toast-info",
 	success: "text-iui-toast-success",
 	warning: "text-iui-toast-warning",
 	error: "text-iui-toast-error",
 	loading: "text-iui-toast-loading"
-}, ai = "bg-iui-toast-default size-2 rounded-full", oi = "size-5 rounded-full object-cover", si = "size-5 motion-safe:animate-spin", ci = "text-sm font-medium wrap-break-word", li = "rounded-iui-toast focus-visible:ring-iui-toast-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60";
-`${li}`, `${li}`;
-var ui = "rounded-iui-inbox text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring aria-expanded:bg-iui-inbox-control-hover aria-expanded:text-iui-inbox-icon-hover relative inline-flex size-9 items-center justify-center focus-visible:ring-2 focus-visible:outline-hidden", di = "iui-inbox-panel border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground shadow-xl focus-visible:outline-hidden", fi = "iui-inbox-panel-body flex min-h-0 flex-1 flex-col", pi = "-me-1.5 flex items-center gap-1", mi = "inline-flex", hi = "text-iui-inbox-accent tabular-nums", gi = "min-h-0 flex-1 overflow-y-auto overscroll-contain", _i = "sticky top-0 z-20 flex h-0 justify-center", vi = "divide-iui-inbox-border divide-y", yi = "focus-visible:ring-iui-inbox-ring focus-visible:ring-2 focus-visible:ring-inset focus-visible:outline-hidden", bi = "group/item hover:bg-iui-inbox-control-hover/60 data-[selected=true]:bg-iui-inbox-control-hover/60 has-[[data-inbox-link]:focus-visible]:ring-iui-inbox-ring relative flex flex-wrap gap-3 px-4 py-3 has-[[data-inbox-link]:focus-visible]:ring-2 has-[[data-inbox-link]:focus-visible]:ring-inset", xi = "relative flex shrink-0 self-start", Si = "bg-iui-inbox-control-hover text-iui-inbox-icon-hover flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full text-sm font-medium", Ci = "text-iui-inbox-foreground text-sm wrap-break-word group-data-[read=false]/item:font-semibold", wi = "after:absolute after:inset-0 focus-visible:outline-hidden", Ti = "text-iui-inbox-muted-foreground mt-1 block text-xs", Ei = "text-iui-inbox-muted-foreground mt-1 flex items-center gap-1 text-xs", Di = "rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60";
-`${Di}`;
-var Oi = `${Di} border-iui-inbox-border bg-iui-inbox-surface hover:bg-iui-inbox-control-hover border`, ki = "iui-inbox-controls border-iui-inbox-border z-10 flex shrink-0 items-center gap-0.5 rounded-md opacity-0 group-focus-within/item:opacity-100 group-hover/item:opacity-100 [@media(hover:none)]:opacity-100", Ai = "border-iui-inbox-border flex shrink-0 items-center justify-between gap-3 border-t px-4 py-1.5", ji = "text-iui-inbox-foreground flex items-center gap-2 text-sm font-medium", Mi = "accent-iui-inbox-accent size-4 cursor-pointer", Ni = "text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", Pi = "text-iui-inbox-muted-foreground flex flex-col items-center gap-3 px-6 py-12 text-center text-sm", Fi = "text-iui-inbox-icon size-8", Ii = "text-iui-inbox-muted-foreground flex justify-center py-3", Li = "overflow-x-auto", Ri = "w-full border-collapse text-sm", zi = "text-iui-inbox-muted-foreground px-4 py-2.5 text-start text-xs font-medium", Bi = "text-iui-inbox-muted-foreground w-20 px-2 py-2.5 text-center text-xs font-medium sm:w-24", Vi = "border-iui-inbox-border border-t", Hi = "min-w-36 px-4 py-3 text-start align-top font-normal", Ui = "text-iui-inbox-foreground me-2 font-medium", Wi = "px-2 py-3 text-center align-middle";
+}, oi = "bg-iui-toast-default size-2 rounded-full", si = "size-5 rounded-full object-cover", ci = "size-5 motion-safe:animate-spin", li = "text-sm font-medium wrap-break-word", ui = "rounded-iui-toast focus-visible:ring-iui-toast-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60";
+`${ui}`, `${ui}`;
+var di = "rounded-iui-inbox text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring aria-expanded:bg-iui-inbox-control-hover aria-expanded:text-iui-inbox-icon-hover relative inline-flex size-9 items-center justify-center focus-visible:ring-2 focus-visible:outline-hidden", fi = "iui-inbox-panel border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground shadow-xl focus-visible:outline-hidden", pi = "iui-inbox-panel-body flex min-h-0 flex-1 flex-col", mi = "-me-1.5 flex items-center gap-1", hi = "inline-flex", gi = "text-iui-inbox-accent tabular-nums", _i = "min-h-0 flex-1 overflow-y-auto overscroll-contain", vi = "sticky top-0 z-20 flex h-0 justify-center", yi = "divide-iui-inbox-border divide-y", bi = "focus-visible:ring-iui-inbox-ring focus-visible:ring-2 focus-visible:ring-inset focus-visible:outline-hidden", xi = "group/item hover:bg-iui-inbox-control-hover/60 data-[selected=true]:bg-iui-inbox-control-hover/60 has-[[data-inbox-link]:focus-visible]:ring-iui-inbox-ring relative flex flex-wrap gap-3 px-4 py-3 has-[[data-inbox-link]:focus-visible]:ring-2 has-[[data-inbox-link]:focus-visible]:ring-inset", Si = "relative flex shrink-0 self-start", Ci = "bg-iui-inbox-control-hover text-iui-inbox-icon-hover flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full text-sm font-medium", wi = "text-iui-inbox-foreground text-sm wrap-break-word group-data-[read=false]/item:font-semibold", Ti = "after:absolute after:inset-0 focus-visible:outline-hidden", Ei = "text-iui-inbox-muted-foreground mt-1 block text-xs", Di = "text-iui-inbox-muted-foreground mt-1 flex items-center gap-1 text-xs", Oi = "rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60";
+`${Oi}`;
+var ki = `${Oi} border-iui-inbox-border bg-iui-inbox-surface hover:bg-iui-inbox-control-hover border`, Ai = "iui-inbox-controls border-iui-inbox-border z-10 flex shrink-0 items-center gap-0.5 rounded-md opacity-0 group-focus-within/item:opacity-100 group-hover/item:opacity-100 [@media(hover:none)]:opacity-100", ji = "border-iui-inbox-border flex shrink-0 items-center justify-between gap-3 border-t px-4 py-1.5", Mi = "text-iui-inbox-foreground flex items-center gap-2 text-sm font-medium", Ni = "accent-iui-inbox-accent size-4 cursor-pointer", Pi = "text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", Fi = "text-iui-inbox-muted-foreground flex flex-col items-center gap-3 px-6 py-12 text-center text-sm", Ii = "text-iui-inbox-icon size-8", Li = "text-iui-inbox-muted-foreground flex justify-center py-3", Ri = "overflow-x-auto", zi = "w-full border-collapse text-sm", Bi = "text-iui-inbox-muted-foreground px-4 py-2.5 text-start text-xs font-medium", Vi = "text-iui-inbox-muted-foreground w-20 px-2 py-2.5 text-center text-xs font-medium sm:w-24", Hi = "border-iui-inbox-border border-t", Ui = "min-w-36 px-4 py-3 text-start align-top font-normal", Wi = "text-iui-inbox-foreground me-2 font-medium", Gi = "px-2 py-3 text-center align-middle";
 // ../js/inertia.ts
-function Gi(e, t, n) {
+function Ki(e, t, n) {
 	return {
 		onFlash: (t) => void e.on("flash", (e) => t(e.detail.flash)),
 		onRequest: (e) => void t.onRequest((t) => ({
@@ -2827,11 +2836,11 @@ function Gi(e, t, n) {
 	};
 }
 // src/notifications.ts
-function Ki(e) {
-	jr(Gi(r, n, i), e);
+function qi(e) {
+	Mr(Ki(r, n, i), e);
 }
 // src/parts.tsx
-function qi({ className: e }) {
+function Ji({ className: e }) {
 	return /* @__PURE__ */ O("svg", {
 		viewBox: "0 0 20 20",
 		fill: "none",
@@ -2845,47 +2854,47 @@ function qi({ className: e }) {
 			r: "7",
 			opacity: "0.25"
 		}), /* @__PURE__ */ D("path", {
-			d: q,
+			d: fe,
 			strokeLinecap: "round"
 		})]
 	});
 }
-var Ji = (e) => typeof e == "function" || typeof e == "object" && !!e && "$$typeof" in e && !o(e);
-function Yi(e, t) {
-	return Ji(e) ? /* @__PURE__ */ D(e, {
+var Yi = (e) => typeof e == "function" || typeof e == "object" && !!e && "$$typeof" in e && !o(e);
+function Xi(e, t) {
+	return Yi(e) ? /* @__PURE__ */ D(e, {
 		className: t,
 		"aria-hidden": "true"
 	}) : e;
 }
 function $({ name: e, context: t, icons: n, resolver: r, className: i }) {
-	let a = ve(e, t, n, r);
-	return a === void 0 ? e === "spinner" ? /* @__PURE__ */ D(qi, { className: i }) : /* @__PURE__ */ D("svg", {
+	let a = ye(e, t, n, r);
+	return a === void 0 ? e === "spinner" ? /* @__PURE__ */ D(Ji, { className: i }) : /* @__PURE__ */ D("svg", {
 		viewBox: "0 0 20 20",
 		fill: "currentColor",
 		"aria-hidden": "true",
 		className: i,
-		children: K(he, e)?.map((e) => /* @__PURE__ */ D("path", {
+		children: K(ge, e)?.map((e) => /* @__PURE__ */ D("path", {
 			fillRule: "evenodd",
 			clipRule: "evenodd",
 			d: e
 		}, e))
-	}) : Yi(a, i);
+	}) : Xi(a, i);
 }
 // src/Toaster.tsx
-var Xi = [], Zi = () => () => {};
-function Qi({ toast: e, icons: t, resolver: n }) {
+var Zi = [], Qi = () => () => {};
+function $i({ toast: e, icons: t, resolver: n }) {
 	if (e.image !== void 0) return /* @__PURE__ */ D("img", {
 		src: e.image,
 		alt: "",
-		className: oi
+		className: si
 	});
 	if (o(e.icon)) return e.icon;
-	let r = (r, i) => ve(r, {
+	let r = (r, i) => ye(r, {
 		component: "Toaster",
 		part: i,
 		toast: e
 	}, t, n), i = (typeof e.icon == "string" ? r(e.icon, "icon") : void 0) ?? r(e.type, "type");
-	if (i !== void 0) return Yi(i, "size-5");
+	if (i !== void 0) return Xi(i, "size-5");
 	if (e.type === "loading") return /* @__PURE__ */ D($, {
 		name: "spinner",
 		context: {
@@ -2895,10 +2904,10 @@ function Qi({ toast: e, icons: t, resolver: n }) {
 		},
 		icons: t,
 		resolver: n,
-		className: si
+		className: ci
 	});
-	let a = K(ue, e.type);
-	return a === void 0 ? /* @__PURE__ */ D("span", { className: ai }) : /* @__PURE__ */ D("svg", {
+	let a = K(de, e.type);
+	return a === void 0 ? /* @__PURE__ */ D("span", { className: oi }) : /* @__PURE__ */ D("svg", {
 		viewBox: "0 0 20 20",
 		fill: "currentColor",
 		className: "size-5",
@@ -2909,8 +2918,8 @@ function Qi({ toast: e, icons: t, resolver: n }) {
 		})
 	});
 }
-function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, hotkey: i = Hr, typeLabels: o = {}, visibleToasts: s = 3, expand: c = !1, progress: u = !1, icons: h = {}, iconResolver: g, classes: _ = {}, renderToast: v, renderIcon: y, components: b = {}, aboveModals: x = !0 }) {
-	let { flash: S } = a(), C = p(Q.subscribe, Q.getSnapshot, () => Xi), w = p(Zi, () => !0, () => !1), [T] = f(() => typeof document > "u" ? null : Object.assign(document.createElement("div"), { className: "iui-toaster-host" })), k = d(null), A = d(null), j = d(null), M = d(null), N = d({
+function ea({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, hotkey: i = Ur, typeLabels: o = {}, visibleToasts: s = 3, expand: c = !1, progress: u = !1, icons: h = {}, iconResolver: g, classes: _ = {}, renderToast: v, renderIcon: y, components: b = {}, aboveModals: x = !0 }) {
+	let { flash: S } = a(), C = p(Q.subscribe, Q.getSnapshot, () => Zi), w = p(Qi, () => !0, () => !1), [T] = f(() => typeof document > "u" ? null : Object.assign(document.createElement("div"), { className: "iui-toaster-host" })), k = d(null), A = d(null), j = d(null), M = d(null), N = d({
 		name: t,
 		hotkey: i,
 		typeLabels: o,
@@ -2928,11 +2937,11 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 			aboveModals: x
 		};
 	}), l(() => {
-		Ki(), hr(S);
+		qi(), gr(S);
 	}, []), l(() => {
 		if (!T || !w) return;
 		document.body.append(T);
-		let e = ti(Q, {
+		let e = ni(Q, {
 			region: k.current,
 			host: T,
 			polite: A.current,
@@ -2942,8 +2951,8 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 			e.destroy(), M.current = null, T.remove();
 		};
 	}, [T, w]), l(() => M.current?.update()), !T || !w) return null;
-	let P = $r(C.filter((e) => e.toaster === t), e), F = (e) => {
-		let t = () => Q.dismiss(e.id, "user"), n = (t, n) => Fr(e.id, t, n.nativeEvent), i = K(b, e.type);
+	let P = ei(C.filter((e) => e.toaster === t), e), F = (e) => {
+		let t = () => Q.dismiss(e.id, "user"), n = (t, n) => Ir(e.id, t, n.nativeEvent), i = K(b, e.type);
 		if (i) return /* @__PURE__ */ D(i, {
 			toast: e,
 			dismiss: t,
@@ -2953,12 +2962,12 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 			dismiss: t,
 			runAction: n
 		});
-		let a = Zr(e.type, o);
+		let a = Qr(e.type, o);
 		return /* @__PURE__ */ O(E, { children: [
 			e.icon !== !1 && /* @__PURE__ */ D("span", {
 				"aria-hidden": "true",
-				className: G("flex size-5 shrink-0 items-center justify-center", K(ii, e.type) ?? ii.default, _.icon),
-				children: y ? y(e) : /* @__PURE__ */ D(Qi, {
+				className: G("flex size-5 shrink-0 items-center justify-center", K(ai, e.type) ?? ai.default, _.icon),
+				children: y ? y(e) : /* @__PURE__ */ D($i, {
 					toast: e,
 					icons: h,
 					resolver: g
@@ -2968,7 +2977,7 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 				className: "min-w-0 flex-1",
 				children: [
 					/* @__PURE__ */ O("p", {
-						className: G(ci, _.title),
+						className: G(li, _.title),
 						children: [
 							a && /* @__PURE__ */ O("span", {
 								className: "sr-only",
@@ -2979,7 +2988,7 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 								"data-toast-count": !0,
 								"aria-hidden": "true",
 								className: "bg-iui-toast-control-hover text-iui-toast-muted-foreground ms-1.5 inline-block rounded-full px-1.5 text-xs font-medium tabular-nums",
-								children: we("toast_count", { count: e.count })
+								children: Te("toast_count", { count: e.count })
 							})
 						]
 					}),
@@ -2996,7 +3005,7 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 						"data-toast-progressbar": "",
 						className: "bg-iui-toast-control-hover mt-2 h-1.5 overflow-hidden rounded-full",
 						children: /* @__PURE__ */ D("div", {
-							className: G("h-full rounded-full bg-current transition-[width] duration-300 motion-reduce:transition-none", K(ii, e.type) ?? ii.default),
+							className: G("h-full rounded-full bg-current transition-[width] duration-300 motion-reduce:transition-none", K(ai, e.type) ?? ai.default),
 							style: { width: `${e.progress * 100}%` }
 						})
 					}),
@@ -3038,7 +3047,7 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 			}),
 			e.dismissible && /* @__PURE__ */ D("button", {
 				type: "button",
-				"aria-label": Xr(r, e),
+				"aria-label": Zr(r, e),
 				className: G("rounded-iui-toast text-iui-toast-icon hover:bg-iui-toast-control-hover hover:text-iui-toast-icon-hover focus-visible:ring-iui-toast-ring -m-1 shrink-0 p-1 focus-visible:ring-2 focus-visible:outline-hidden", _.dismiss),
 				onClick: t,
 				children: /* @__PURE__ */ D($, {
@@ -3057,7 +3066,7 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 	};
 	return m(/* @__PURE__ */ O("section", {
 		ref: k,
-		"aria-label": Yr(n, i),
+		"aria-label": Xr(n, i),
 		tabIndex: -1,
 		className: "iui-toaster outline-none",
 		"data-toaster": t,
@@ -3074,15 +3083,15 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 					"data-dismissible": String(e.dismissible),
 					"aria-busy": e.type === "loading" || void 0,
 					tabIndex: 0,
-					className: G(ni, _.toast),
+					className: G(ri, _.toast),
 					children: [/* @__PURE__ */ D("div", {
 						"data-toast-body": "",
-						className: ri,
+						className: ii,
 						children: F(e)
 					}), u && e.duration !== null && /* @__PURE__ */ D("div", {
 						"data-toast-progress": "",
 						"aria-hidden": "true",
-						className: G("iui-toast-progress", K(ii, e.type) ?? ii.default, _.progress)
+						className: G("iui-toast-progress", K(ai, e.type) ?? ai.default, _.progress)
 					})]
 				}, e.id))
 			}, e)),
@@ -3103,52 +3112,52 @@ function $i({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 	}), T);
 }
 // ../js/notificationCenter.ts
-var ea = [
+var ta = [
 	"all",
 	"unread",
 	"snoozed",
 	"archived"
-], ta = {
+], na = {
 	all: "empty",
 	unread: "emptyUnread",
 	snoozed: "emptySnoozed",
 	archived: "emptyArchived"
-}, na = (e) => [...ea, ...Object.keys(e)], ra = (e) => na(e.tabs).filter((t) => Me(t, e.allowedActions));
-function ia(e, t, n) {
-	return Object.hasOwn(ta, e) ? Z(t[e]) : Object.hasOwn(n, e) ? n[e].label : e;
+}, ra = (e) => [...ta, ...Object.keys(e)], ia = (e) => ra(e.tabs).filter((t) => Ne(t, e.allowedActions));
+function aa(e, t, n) {
+	return Object.hasOwn(na, e) ? Z(t[e]) : Object.hasOwn(n, e) ? n[e].label : e;
 }
-var aa = (e, t) => Z(t[Object.hasOwn(ta, e) ? ta[e] : "empty"]), oa = (e, t, n) => e.map((e) => ({
+var oa = (e, t) => Z(t[Object.hasOwn(na, e) ? na[e] : "empty"]), sa = (e, t, n) => e.map((e) => ({
 	filter: e,
-	label: ia(e, n, t.tabs),
+	label: aa(e, n, t.tabs),
 	selected: t.filter === e,
 	count: e === "unread" ? t.counts.unread : null
-})), sa = (e, t) => t.length > 0 ? e.filter((e) => !t.includes(e.id)) : e;
-function ca(e, t) {
+})), ca = (e, t) => t.length > 0 ? e.filter((e) => !t.includes(e.id)) : e;
+function la(e, t) {
 	return e.status === "idle" || e.status === "loading" && t === 0 ? "loading" : e.status === "error" ? "error" : t === 0 ? "empty" : "items";
 }
-function la(e, t = e.category) {
-	Fe({
+function ua(e, t = e.category) {
+	Ie({
 		...e,
 		category: t
 	}) > 0 && X.markAllAsRead({ category: t });
 }
-var ua = (e) => e.filter === "all" && e.allowedActions.includes("archive");
-function da(e, t) {
+var da = (e) => e.filter === "all" && e.allowedActions.includes("archive");
+function fa(e, t) {
 	e.length > 0 && X.archiveAll({ category: t });
 }
-function fa(e, t, n, r) {
+function pa(e, t, n, r) {
 	let i = new URL(e, "http://localhost"), a = i.searchParams;
 	return a.delete("filter"), a.delete("category"), r !== void 0 && a.delete(r), t !== "all" && a.set("filter", t), n !== null && a.set("category", n), `${i.pathname}${i.search}`;
 }
-function pa(e, t, n, r) {
+function ma(e, t, n, r) {
 	let i = new URL(e, "http://localhost").searchParams, a = i.get("filter");
 	return {
-		filter: n ?? (a !== null && ra(t).includes(a) ? a : "all"),
+		filter: n ?? (a !== null && ia(t).includes(a) ? a : "all"),
 		category: r === void 0 ? i.get("category") || null : r
 	};
 }
-var ma = (e, t, n, r) => Z(e.pausedUntil, { time: pt(t, n, r) }), ha = (e, t, n) => pt(dt(e.preset, new Date(t)), t, n);
-function ga(e, t) {
+var ha = (e, t, n, r) => Z(e.pausedUntil, { time: mt(t, n, r) }), ga = (e, t, n) => mt(ft(e.preset, new Date(t)), t, n);
+function _a(e, t) {
 	let n = !t.includes("snooze") || e === "archived" ? [] : [e === "snoozed" ? {
 		action: "unsnooze",
 		icon: "unsnooze",
@@ -3186,12 +3195,12 @@ function ga(e, t) {
 		...i
 	];
 }
-var _a = (e, t, n = /* @__PURE__ */ new Date()) => e ? e(n) : ct(t, n);
-function va(e, t, n) {
+var va = (e, t, n = /* @__PURE__ */ new Date()) => e ? e(n) : lt(t, n);
+function ya(e, t, n) {
 	let r = e.filter((e) => e !== t);
 	return n ? [...r, t] : r;
 }
-function ya(e, t, { scroller: n, listed: r }) {
+function ba(e, t, { scroller: n, listed: r }) {
 	let i = [], a = (e) => {
 		i = e, t(e);
 	}, o = n ?? window, s = () => n ? n.scrollTop > 0 : e.getBoundingClientRect().top < 0, c = X.onArrival((t) => {
@@ -3215,8 +3224,8 @@ function ya(e, t, { scroller: n, listed: r }) {
 		}
 	};
 }
-var ba = 1e3, xa = 250;
-function Sa(e, t, n = e) {
+var xa = 1e3, Sa = 250;
+function Ca(e, t, n = e) {
 	let r = /* @__PURE__ */ new Map(), i = /* @__PURE__ */ new Set(), a = [], o, s = () => {
 		o = void 0;
 		let e = a, n = t().filter((t) => e.includes(t.id));
@@ -3226,11 +3235,11 @@ function Sa(e, t, n = e) {
 	}, l = (e) => {
 		r.delete(e);
 		let t = e.dataset.inboxId;
-		t !== void 0 && e.dataset.seen === "false" && e.isConnected && (u.unobserve(e), i.delete(e), a.push(t), o ??= setTimeout(s, xa));
+		t !== void 0 && e.dataset.seen === "false" && e.isConnected && (u.unobserve(e), i.delete(e), a.push(t), o ??= setTimeout(s, Sa));
 	}, u = new IntersectionObserver((e) => {
 		for (let t of e) {
 			let e = t.target, n = t.rootBounds !== null && t.intersectionRect.height >= t.rootBounds.height / 2;
-			t.isIntersecting && (t.intersectionRatio >= .5 || n) ? r.set(e, r.get(e) ?? setTimeout(() => l(e), ba)) : c(e);
+			t.isIntersecting && (t.intersectionRatio >= .5 || n) ? r.set(e, r.get(e) ?? setTimeout(() => l(e), xa)) : c(e);
 		}
 	}, {
 		root: n,
@@ -3252,7 +3261,7 @@ function Sa(e, t, n = e) {
 		f.disconnect(), u.disconnect(), r.forEach((e) => clearTimeout(e)), o !== void 0 && (clearTimeout(o), s());
 	} };
 }
-function Ca(e, t) {
+function wa(e, t) {
 	let n = (e.target instanceof Element ? e.target : null)?.closest("[data-inbox-link], [data-inbox-action]"), r = n?.closest("[data-inbox-item]")?.dataset.inboxId, i = r === void 0 ? void 0 : t.find((e) => e.id === r);
 	if (!n || !i) return;
 	if (!n.hasAttribute("data-inbox-action")) return { item: i };
@@ -3262,7 +3271,7 @@ function Ca(e, t) {
 		action: o
 	} : void 0;
 }
-var wa = 160, Ta = [
+var Ta = 160, Ea = [
 	"position",
 	"box-sizing",
 	"inset",
@@ -3278,7 +3287,7 @@ var wa = 160, Ta = [
 	"overflow-y",
 	"overscroll-behavior"
 ];
-function Ea(e, t, n) {
+function Da(e, t, n) {
 	let r, i = null, a, o = t.querySelector("[data-inbox-scroller]"), s = o !== null && typeof ResizeObserver == "function" ? new ResizeObserver(() => {
 		o.offsetHeight > 0 && o.querySelector(":scope > [role=\"status\"]") === null && t.style.setProperty("--inbox-list-height", `${o.offsetHeight}px`);
 	}) : void 0;
@@ -3289,7 +3298,7 @@ function Ea(e, t, n) {
 	}, l = () => {
 		if (!t.matches(":popover-open")) return;
 		if (getComputedStyle(t).getPropertyValue("--inbox-layout").trim() === "sheet") {
-			a?.(), a = void 0, Ta.forEach((e) => t.style.removeProperty(e)), delete t.dataset.side;
+			a?.(), a = void 0, Ea.forEach((e) => t.style.removeProperty(e)), delete t.dataset.side;
 			return;
 		}
 		let { placement: r } = C(e, t, {
@@ -3315,7 +3324,7 @@ function Ea(e, t, n) {
 				e.some((e) => e.isIntersecting) && n.onEndReached();
 			}, {
 				root: t,
-				rootMargin: `0px 0px ${wa}px 0px`
+				rootMargin: `0px 0px ${Ta}px 0px`
 			}) : void 0), r?.disconnect(), e && r?.observe(e);
 		},
 		place: l,
@@ -3327,7 +3336,7 @@ function Ea(e, t, n) {
 		}
 	};
 }
-var Da = {
+var Oa = {
 	j: "next",
 	arrowdown: "next",
 	k: "previous",
@@ -3337,15 +3346,15 @@ var Da = {
 	h: "snooze",
 	x: "select",
 	enter: "open"
-}, Oa = {
+}, ka = {
 	read: "[data-inbox-toggle-read]",
 	archive: "[data-inbox-toggle-archive]",
 	snooze: "[data-inbox-snooze]",
 	select: "[data-inbox-select]",
 	open: "[data-inbox-link]"
 };
-function ka(e, t) {
-	let n = Da[e.key.toLowerCase()], r = e.target instanceof HTMLElement ? e.target : null;
+function Aa(e, t) {
+	let n = Oa[e.key.toLowerCase()], r = e.target instanceof HTMLElement ? e.target : null;
 	if (!n || !r || e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || r.closest("input:not([type=\"checkbox\"]), textarea, select, [contenteditable]:not([contenteditable=\"false\"]), [role=\"tab\"]")) return;
 	let i = [...t.querySelectorAll("[data-inbox-item]")], a = r.closest("[data-inbox-item]"), o = a ? i.indexOf(a) : -1;
 	if ((n === "open" || e.key.startsWith("Arrow")) && r !== a && r !== t) return;
@@ -3354,10 +3363,10 @@ function ka(e, t) {
 		t && (e.preventDefault(), t.focus());
 		return;
 	}
-	let s = a?.querySelector(Oa[n]);
+	let s = a?.querySelector(ka[n]);
 	a && s && (e.preventDefault(), s.click());
 }
-function Aa(e, t = () => e) {
+function ja(e, t = () => e) {
 	let n, r = (t) => e.querySelector(`[data-inbox-item][data-inbox-id="${CSS.escape(t)}"]`), i = () => Array.from(e.querySelectorAll("[data-inbox-item]"), (e) => e.dataset.inboxId ?? ""), a = () => {
 		let t = document.activeElement, r = t instanceof HTMLElement && e.contains(t) ? t.closest("[data-inbox-item]")?.dataset.inboxId : void 0;
 		n = r === void 0 ? void 0 : {
@@ -3388,17 +3397,17 @@ function Aa(e, t = () => e) {
 		e.removeEventListener("focusin", a), e.removeEventListener("focusout", o), s?.disconnect();
 	};
 }
-function ja(e, t, n, r, i = !1) {
+function Ma(e, t, n, r, i = !1) {
 	let a = t > 0 ? Z(e.bellNew, {
-		count: xt(t, n, r),
+		count: St(t, n, r),
 		number: t
 	}) : Z(e.bell);
 	return i ? Z(e.bellPaused, { label: a }) : a;
 }
-function Ma(e) {
+function Na(e) {
 	return e.trim().split(/\s+/).slice(0, 2).map((e) => Array.from(e)[0]?.toLocaleUpperCase() ?? "").join("");
 }
-function Na(e, t, n, r = !1) {
+function Pa(e, t, n, r = !1) {
 	let i = n.indexOf(t), a = {
 		ArrowRight: r ? -1 : 1,
 		ArrowLeft: r ? 1 : -1
@@ -3406,10 +3415,10 @@ function Na(e, t, n, r = !1) {
 	return a === void 0 ? e === "Home" ? n[0] : e === "End" ? n.at(-1) : void 0 : n[(i + a + n.length) % n.length];
 }
 // ../js/overlay.ts
-var Pa = () => typeof HTMLElement < "u" && "showPopover" in HTMLElement.prototype, Fa = null;
-function Ia(e) {
+var Fa = () => typeof HTMLElement < "u" && "showPopover" in HTMLElement.prototype, Ia = null;
+function La(e) {
 	let t = null, n = (n) => {
-		n && Fa !== t ? (Fa?.hide(), Fa = t) : !n && Fa === t && (Fa = null), e.onOpenChange(n);
+		n && Ia !== t ? (Ia?.hide(), Ia = t) : !n && Ia === t && (Ia = null), e.onOpenChange(n);
 	}, r = (t) => {
 		let n = e.tooltip();
 		if (n) return v(n), w() ? void 0 : g(n, t ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 1 }, { opacity: 0 }], {
@@ -3423,7 +3432,7 @@ function Ia(e) {
 		transition: r
 	});
 	return {
-		native: Pa(),
+		native: Fa(),
 		onPointerEnter: (e) => {
 			e.pointerType !== "touch" && i().onMouseEnter();
 		},
@@ -3435,13 +3444,13 @@ function Ia(e) {
 		onFocusOut: (e) => t?.onFocusOut(e),
 		mount: () => t?.mount(),
 		cleanup: () => {
-			t?.cleanup(), Fa === t && (Fa = null);
+			t?.cleanup(), Ia === t && (Ia = null);
 		}
 	};
 }
 // src/Tooltip.tsx
-function La({ text: e, shortcut: t, children: n }) {
-	let [r, i] = f(!1), a = d(null), o = d(null), s = d(null), c = () => s.current ??= Ia({
+function Ra({ text: e, shortcut: t, children: n }) {
+	let [r, i] = f(!1), a = d(null), o = d(null), s = d(null), c = () => s.current ??= La({
 		reference: () => a.current,
 		tooltip: () => o.current,
 		onOpenChange: i
@@ -3450,7 +3459,7 @@ function La({ text: e, shortcut: t, children: n }) {
 		r && s.current?.mount();
 	}, [r]), /* @__PURE__ */ O("span", {
 		ref: a,
-		className: mi,
+		className: hi,
 		onPointerEnter: (e) => c().onPointerEnter(e.nativeEvent),
 		onPointerLeave: () => c().onPointerLeave(),
 		onPointerDown: () => c().onPointerDown(),
@@ -3459,7 +3468,7 @@ function La({ text: e, shortcut: t, children: n }) {
 		children: [n, r && /* @__PURE__ */ O("span", {
 			ref: o,
 			role: "tooltip",
-			popover: Pa() ? "manual" : void 0,
+			popover: Fa() ? "manual" : void 0,
 			"data-inbox-tooltip": "",
 			className: "bg-iui-inbox-tooltip text-iui-inbox-tooltip-foreground pointer-events-none m-0 flex w-max max-w-xs items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium shadow-md",
 			children: [e, t && /* @__PURE__ */ D("kbd", {
@@ -3470,17 +3479,17 @@ function La({ text: e, shortcut: t, children: n }) {
 	});
 }
 // src/InboxHeader.tsx
-function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: o, icons: u, iconResolver: p, classes: m, locale: h, maxCount: g = 99, now: _, panel: v, href: y, open: x = !0, renderHeader: C, renderTab: w }) {
-	let T = c(), k = c(), A = (e) => Z(o[e]), j = ra(n), M = [[null, A("allCategories")], ...Object.entries(n.categoryFilter)], N = M.length > 1, P = Fe({
+function za({ component: e, state: n, filter: r, category: i, items: a, labels: o, icons: u, iconResolver: p, classes: m, locale: h, maxCount: g = 99, now: _, panel: v, href: y, open: x = !0, renderHeader: C, renderTab: w }) {
+	let T = c(), k = c(), A = (e) => Z(o[e]), j = ia(n), M = [[null, A("allCategories")], ...Object.entries(n.categoryFilter)], N = M.length > 1, P = Ie({
 		...n,
 		category: i
-	}), F = ua({
+	}), F = da({
 		filter: r,
 		allowedActions: n.allowedActions
 	}), I = r === "all" || r === "unread", L = F || n.canPause, R = I || L, z = (t) => ({
 		component: e,
 		part: t
-	}), B = d(null), ee = d(null), [V, te] = f(!1), H = ft(n.pausePresets, o, h), ne = d(null), U = () => ne.current ??= b({
+	}), B = d(null), ee = d(null), [V, te] = f(!1), H = pt(n.pausePresets, o, h), ne = d(null), U = () => ne.current ??= b({
 		reference: () => B.current,
 		popover: () => ee.current,
 		position: {
@@ -3494,22 +3503,22 @@ function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: 
 		let e = ne.current;
 		if (V && e) return e.mount(), () => e.cleanup();
 	}, [V]), s(() => ne.current?.close(!1), [x]);
-	let re = (e) => void X.pause(dt(e.preset)), ie = (e) => {
+	let re = (e) => void X.pause(ft(e.preset)), ie = (e) => {
 		let t = e.currentTarget.closest("[data-inbox-panel], [data-inbox-list]");
 		X.resume(), (B.current ?? t)?.focus();
-	}, ae = () => la(n, i), oe = () => da(a, i), se = (e, t) => void X.load(e, t), W = (e) => {
-		let t = S(e.currentTarget), n = Na(e.key, r, j, t);
+	}, ae = () => ua(n, i), oe = () => fa(a, i), se = (e, t) => void X.load(e, t), W = (e) => {
+		let t = S(e.currentTarget), n = Pa(e.key, r, j, t);
 		n !== void 0 && v && (e.preventDefault(), se(n, i), document.getElementById(v.tabId(n))?.focus());
 	}, ce = (e) => w ? w(e) : /* @__PURE__ */ O(E, { children: [
 		e.label,
 		" ",
 		e.count !== null && e.count > 0 && /* @__PURE__ */ D("span", {
 			className: "bg-iui-inbox-accent-subtle text-iui-inbox-accent rounded-full px-1.5 text-xs/5 tabular-nums",
-			children: xt(e.count, g, h)
+			children: St(e.count, g, h)
 		})
 	] }), le = (e) => j.length > 1 && y && /* @__PURE__ */ D("div", {
 		className: e,
-		children: oa(j, {
+		children: sa(j, {
 			...n,
 			filter: r
 		}, o).map((e) => /* @__PURE__ */ D(t, {
@@ -3519,12 +3528,12 @@ function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: 
 			className: "text-iui-inbox-muted-foreground hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring aria-selected:border-iui-inbox-accent aria-selected:text-iui-inbox-accent aria-[current=page]:border-iui-inbox-accent aria-[current=page]:text-iui-inbox-accent -mb-px inline-flex items-center gap-1.5 rounded-t-md border-b-2 border-transparent px-1.5 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset",
 			children: ce(e)
 		}, e.filter))
-	}), K = (e, t) => /* @__PURE__ */ O(E, { children: [
+	}), ue = (e, t) => /* @__PURE__ */ O(E, { children: [
 		t,
 		" ",
 		e !== null && n.categoryCounts[e] ? /* @__PURE__ */ D("span", {
-			className: hi,
-			children: xt(n.categoryCounts[e], g, h)
+			className: gi,
+			children: St(n.categoryCounts[e], g, h)
 		}) : null
 	] });
 	return /* @__PURE__ */ O(E, { children: [
@@ -3564,7 +3573,7 @@ function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: 
 						className: "text-iui-inbox-muted-foreground hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring rounded-md px-1.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:pointer-events-none aria-disabled:opacity-50",
 						onClick: ae,
 						children: A("markAllAsRead")
-					}), L && /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D(La, {
+					}), L && /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D(Ra, {
 						text: A("moreActions"),
 						children: /* @__PURE__ */ D("button", {
 							ref: B,
@@ -3592,7 +3601,7 @@ function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: 
 						ref: ee,
 						role: "menu",
 						"aria-label": A("moreActions"),
-						popover: Pa() ? "auto" : void 0,
+						popover: Fa() ? "auto" : void 0,
 						"data-inbox-menu": "",
 						className: "border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground rounded-iui-inbox m-0 w-max min-w-48 border p-1 shadow-lg",
 						children: [
@@ -3639,7 +3648,7 @@ function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: 
 										" ",
 										/* @__PURE__ */ D("span", {
 											className: "text-iui-inbox-muted-foreground ms-auto ps-6 tabular-nums",
-											children: ha(e, _, h)
+											children: ga(e, _, h)
 										})
 									]
 								}, e.label))]
@@ -3664,7 +3673,7 @@ function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: 
 					}),
 					/* @__PURE__ */ D("span", {
 						className: "min-w-0 flex-1",
-						children: ma(o, n.pausedUntil, _, h)
+						children: ha(o, n.pausedUntil, _, h)
 					}),
 					/* @__PURE__ */ D("button", {
 						type: "button",
@@ -3682,7 +3691,7 @@ function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: 
 			"aria-labelledby": v.titleId,
 			className: "iui-inbox-fade border-iui-inbox-border flex shrink-0 gap-1 overflow-x-auto border-b ps-2.5 pe-8 scrollbar-none",
 			onKeyDown: W,
-			children: oa(j, {
+			children: sa(j, {
 				...n,
 				filter: r
 			}, o).map((e) => /* @__PURE__ */ D("button", {
@@ -3707,26 +3716,26 @@ function Ra({ component: e, state: n, filter: r, category: i, items: a, labels: 
 				"data-inbox-category": e ?? "",
 				"aria-current": i === e ? "page" : void 0,
 				className: "border-iui-inbox-border text-iui-inbox-muted-foreground hover:bg-iui-inbox-control-hover hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring aria-pressed:border-iui-inbox-accent aria-pressed:bg-iui-inbox-accent-subtle aria-pressed:text-iui-inbox-accent aria-[current=page]:border-iui-inbox-accent aria-[current=page]:bg-iui-inbox-accent-subtle aria-[current=page]:text-iui-inbox-accent inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden",
-				children: K(e, n)
+				children: ue(e, n)
 			}, e ?? "") : /* @__PURE__ */ D("button", {
 				type: "button",
 				"data-inbox-category": e ?? "",
 				"aria-pressed": i === e,
 				className: "border-iui-inbox-border text-iui-inbox-muted-foreground hover:bg-iui-inbox-control-hover hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring aria-pressed:border-iui-inbox-accent aria-pressed:bg-iui-inbox-accent-subtle aria-pressed:text-iui-inbox-accent aria-[current=page]:border-iui-inbox-accent aria-[current=page]:bg-iui-inbox-accent-subtle aria-[current=page]:text-iui-inbox-accent inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden",
 				onClick: () => se(r, e),
-				children: K(e, n)
+				children: ue(e, n)
 			}, e ?? ""))
 		})
 	] });
 }
 // src/NotificationItem.tsx
-var za = [
+var Ba = [
 	"snooze",
 	"archive",
 	"mute"
 ];
-function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i, classes: a = {}, locale: o, pendingAction: l, snooze: u, allowedActions: p = za, selected: m = !1, onSelectedChange: h }) {
-	let g = e.readAt === null, _ = e.archivedAt !== null, v = Le(e, t), y = Et(n, e), b = Tt(e), x = (e) => p.includes(e), S = (t) => Z(n.itemControl, {
+function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i, classes: a = {}, locale: o, pendingAction: l, snooze: u, allowedActions: p = Ba, selected: m = !1, onSelectedChange: h }) {
+	let g = e.readAt === null, _ = e.archivedAt !== null, v = Re(e, t), y = Dt(n, e), b = Et(e), x = (e) => p.includes(e), S = (t) => Z(n.itemControl, {
 		action: Z(t),
 		title: e.title
 	}), C = x("snooze"), w = c(), [T, k] = f(null), A = d(null);
@@ -3738,13 +3747,13 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 		else if (T) k(null);
 		else {
 			let e = /* @__PURE__ */ new Date();
-			k(u ? u(e) : ct(n, e));
+			k(u ? u(e) : lt(n, e));
 		}
 	}, M = (t) => ({
 		component: "NotificationItem",
 		part: t,
 		item: e
-	}), N = e.icon ? ve(e.icon, M("media"), r, i) : void 0, P = new Date(e.createdAt).toLocaleString(o, {
+	}), N = e.icon ? ye(e.icon, M("media"), r, i) : void 0, P = new Date(e.createdAt).toLocaleString(o, {
 		dateStyle: "medium",
 		timeStyle: "short"
 	}), F = /* @__PURE__ */ D($, {
@@ -3758,20 +3767,20 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 		src: e.actor.avatar,
 		alt: "",
 		className: "size-full object-cover"
-	}) : N === void 0 ? e.actor?.name && (F = Ma(e.actor.name)) : F = Yi(N, "size-5");
+	}) : N === void 0 ? e.actor?.name && (F = Na(e.actor.name)) : F = Xi(N, "size-5");
 	let I = h ? "label" : "span";
 	return /* @__PURE__ */ O("div", {
 		"data-read": String(!g),
 		"data-archived": String(_),
 		"data-selected": h ? String(m) : void 0,
-		className: G(bi, a.item),
+		className: G(xi, a.item),
 		children: [
 			/* @__PURE__ */ O(I, {
-				className: G(xi, h && "z-10 cursor-pointer"),
+				className: G(Si, h && "z-10 cursor-pointer"),
 				children: [
 					/* @__PURE__ */ D("span", {
 						"aria-hidden": "true",
-						className: G(Si, a.media),
+						className: G(Ci, a.media),
 						children: F
 					}),
 					h && /* @__PURE__ */ D("span", {
@@ -3796,7 +3805,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 				className: "min-w-0 flex-1",
 				children: [
 					/* @__PURE__ */ O("p", {
-						className: G(Ci, a.title),
+						className: G(wi, a.title),
 						children: [
 							g && /* @__PURE__ */ O("span", {
 								className: "sr-only",
@@ -3809,7 +3818,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 							e.url ? /* @__PURE__ */ D("a", {
 								"data-inbox-link": "",
 								href: e.url,
-								className: wi,
+								className: Ti,
 								onClick: (t) => X.open(e, t.nativeEvent),
 								children: e.title
 							}) : e.title
@@ -3837,27 +3846,27 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 									src: e.avatar,
 									alt: "",
 									className: "size-full object-cover"
-								}) : e.name && Ma(e.name)
+								}) : e.name && Na(e.name)
 							}, t))
 						}), y]
 					}),
 					v && e.snoozedUntil ? /* @__PURE__ */ O("p", {
 						"data-inbox-snoozed-until": "",
 						suppressHydrationWarning: !0,
-						className: G(Ei, a.time),
+						className: G(Di, a.time),
 						children: [/* @__PURE__ */ D($, {
 							name: "snooze",
 							context: M("snoozed-until"),
 							icons: r,
 							resolver: i,
 							className: "size-3.5"
-						}), Z(n.snoozedUntil, { time: lt(e.snoozedUntil, t, o) })]
+						}), Z(n.snoozedUntil, { time: ut(e.snoozedUntil, t, o) })]
 					}) : /* @__PURE__ */ D("time", {
 						dateTime: e.createdAt,
 						title: P,
 						suppressHydrationWarning: !0,
-						className: G(Ti, a.time),
-						children: bt(e.createdAt, t, o)
+						className: G(Ei, a.time),
+						children: xt(e.createdAt, t, o)
 					}),
 					e.muted && /* @__PURE__ */ O("p", {
 						"data-inbox-muted": "",
@@ -3932,7 +3941,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 								" ",
 								/* @__PURE__ */ D("span", {
 									className: "text-iui-inbox-muted-foreground font-normal",
-									children: lt(n.until, t, o)
+									children: ut(n.until, t, o)
 								})
 							]
 						}, n.label))
@@ -3940,9 +3949,9 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 				]
 			}),
 			/* @__PURE__ */ O("div", {
-				className: ki,
+				className: Ai,
 				children: [
-					/* @__PURE__ */ D(La, {
+					/* @__PURE__ */ D(Ra, {
 						text: Z(g ? n.markAsRead : n.markAsUnread),
 						shortcut: "U",
 						children: /* @__PURE__ */ D("button", {
@@ -3950,7 +3959,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 							"data-inbox-toggle-read": "",
 							"aria-keyshortcuts": "U",
 							"aria-label": S(g ? n.markAsRead : n.markAsUnread),
-							className: G(Ni, a.control),
+							className: G(Pi, a.control),
 							onClick: () => void (g ? X.markAsRead(e) : X.markAsUnread(e)),
 							children: /* @__PURE__ */ D($, {
 								name: g ? "read" : "unread",
@@ -3961,7 +3970,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 							})
 						})
 					}),
-					C && !_ && /* @__PURE__ */ D(La, {
+					C && !_ && /* @__PURE__ */ D(Ra, {
 						text: Z(v ? n.unsnooze : n.snooze),
 						shortcut: "H",
 						children: /* @__PURE__ */ D("button", {
@@ -3982,7 +3991,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 							})
 						})
 					}),
-					e.group !== null && x("mute") && /* @__PURE__ */ D(La, {
+					e.group !== null && x("mute") && /* @__PURE__ */ D(Ra, {
 						text: Z(e.muted ? n.unmute : n.mute),
 						children: /* @__PURE__ */ D("button", {
 							type: "button",
@@ -3999,7 +4008,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 							})
 						})
 					}),
-					x("archive") && /* @__PURE__ */ D(La, {
+					x("archive") && /* @__PURE__ */ D(Ra, {
 						text: Z(_ ? n.unarchive : n.archive),
 						shortcut: "E",
 						children: /* @__PURE__ */ D("button", {
@@ -4018,7 +4027,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 							})
 						})
 					}),
-					x("delete") && /* @__PURE__ */ D(La, {
+					x("delete") && /* @__PURE__ */ D(Ra, {
 						text: Z(n.delete),
 						children: /* @__PURE__ */ D("button", {
 							type: "button",
@@ -4041,7 +4050,7 @@ function Ba({ item: e, now: t, labels: n = wt(), icons: r = {}, iconResolver: i,
 	});
 }
 // src/ItemGroup.tsx
-function Va({ group: e, now: t, labels: n, icons: r, iconResolver: i, classes: a, locale: o, pendingActions: s, snooze: l, allowedActions: u, selected: d, select: p, renderItem: m }) {
+function Ha({ group: e, now: t, labels: n, icons: r, iconResolver: i, classes: a, locale: o, pendingActions: s, snooze: l, allowedActions: u, selected: d, select: p, renderItem: m }) {
 	let [h, g] = f(!1), _ = c();
 	h && e.others.length === 0 && g(!1);
 	let v = (e, c) => {
@@ -4067,8 +4076,8 @@ function Va({ group: e, now: t, labels: n, icons: r, iconResolver: i, classes: a
 			"data-seen": String(e.seenAt !== null),
 			"data-archived": String(e.archivedAt !== null),
 			"data-announcement": e.announcement ? "true" : void 0,
-			className: yi,
-			children: [m ? m(e, t, f) : /* @__PURE__ */ D(Ba, { ...f }), c]
+			className: bi,
+			children: [m ? m(e, t, f) : /* @__PURE__ */ D(Va, { ...f }), c]
 		}, e.id);
 	};
 	return v(e.item, e.others.length > 0 && /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D("button", {
@@ -4087,7 +4096,7 @@ function Va({ group: e, now: t, labels: n, icons: r, iconResolver: i, classes: a
 	})] }));
 }
 // src/SelectionBar.tsx
-function Ha({ component: e, items: t, selected: n, onSelectedChange: r, filter: i, allowedActions: a, now: o, labels: l, icons: u, iconResolver: p, classes: m, locale: h, snooze: g }) {
+function Ua({ component: e, items: t, selected: n, onSelectedChange: r, filter: i, allowedActions: a, now: o, labels: l, icons: u, iconResolver: p, classes: m, locale: h, snooze: g }) {
 	let _ = c(), v = (e) => Z(l[e]), y = t.filter((e) => n.includes(e.id)), b = y.length === t.length, x = d(null), [S, C] = f(null);
 	S !== null && y.length === 0 && C(null), s(() => {
 		S && x.current?.querySelector("button")?.focus();
@@ -4099,9 +4108,9 @@ function Ha({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 		role: "group",
 		"aria-label": v("selection"),
 		"data-inbox-selection": "",
-		className: Ai,
+		className: ji,
 		children: [/* @__PURE__ */ O("div", {
-			className: ji,
+			className: Mi,
 			children: [/* @__PURE__ */ D("input", {
 				type: "checkbox",
 				"data-inbox-select-all": "",
@@ -4110,23 +4119,23 @@ function Ha({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 				},
 				checked: b,
 				"aria-label": v("selectAll"),
-				className: Mi,
+				className: Ni,
 				onChange: () => r(b ? [] : t.map((e) => e.id))
 			}), /* @__PURE__ */ D("span", {
 				"aria-live": "polite",
 				children: Z(l.selected, { count: y.length })
 			})]
 		}), /* @__PURE__ */ O("div", {
-			className: pi,
-			children: [ga(i, a).map((t) => /* @__PURE__ */ D("button", {
+			className: mi,
+			children: [_a(i, a).map((t) => /* @__PURE__ */ D("button", {
 				type: "button",
 				"data-inbox-batch": t.action,
 				"aria-label": v(t.label),
 				title: v(t.label),
 				"aria-expanded": t.action === "snooze" ? S !== null : void 0,
 				"aria-controls": t.action === "snooze" && S ? _ : void 0,
-				className: G(Ni, m.control),
-				onClick: () => t.action === "snooze" ? C(S ? null : _a(g, l)) : w(t.action),
+				className: G(Pi, m.control),
+				onClick: () => t.action === "snooze" ? C(S ? null : va(g, l)) : w(t.action),
 				children: /* @__PURE__ */ D($, {
 					name: t.icon,
 					context: {
@@ -4143,7 +4152,7 @@ function Ha({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 				"data-inbox-clear-selection": "",
 				"aria-label": v("clearSelection"),
 				title: v("clearSelection"),
-				className: G(Ni, m.control),
+				className: G(Pi, m.control),
 				onClick: () => r([]),
 				children: /* @__PURE__ */ D($, {
 					name: "dismiss",
@@ -4176,29 +4185,29 @@ function Ha({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 				" ",
 				/* @__PURE__ */ D("span", {
 					className: "text-iui-inbox-muted-foreground font-normal",
-					children: lt(e.until, o, h)
+					children: ut(e.until, o, h)
 				})
 			]
 		}, e.label))
 	})] });
 }
 // src/NotificationCenter.tsx
-var Ua = () => () => {};
-function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 99, href: s, icons: u = {}, iconResolver: m, classes: h = {}, locale: g, renderItem: _, renderEmpty: v, group: y = !0, snooze: b, placement: x = "bottom-end", open: S, onOpenChange: C, onItemClick: w, onAction: T, renderTrigger: k, renderBadge: A, renderHeader: j, renderTab: M, renderLoading: N, renderError: P, renderFooter: F }) {
+var Wa = () => () => {};
+function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 99, href: s, icons: u = {}, iconResolver: m, classes: h = {}, locale: g, renderItem: _, renderEmpty: v, group: y = !0, snooze: b, placement: x = "bottom-end", open: S, onOpenChange: C, onItemClick: w, onAction: T, renderTrigger: k, renderBadge: A, renderHeader: j, renderTab: M, renderLoading: N, renderError: P, renderFooter: F }) {
 	let { props: I } = a(), L = c(), R = {
 		panel: `${L}-panel`,
 		title: `${L}-title`,
 		list: `${L}-list`,
 		tab: (e) => `${L}-tab-${e}`
-	}, z = p(X.subscribe, X.getSnapshot, X.getServerSnapshot), [B, ee] = f(!1), [V] = f(Date.now), te = p(B ? yt.subscribe : Ua, yt.getSnapshot, () => V), H = wt(e), ne = (e) => Z(H[e]), U = z.counts[i], re = aa(z.filter, H), ie = ra(z), ae = z.categoryFilter, [oe, se] = f([]), W = sa(z.items, oe), ce = st(W, y), le = ie.length > 1, K = d(null), ue = d(null), de = d(null), q = d(null), fe = d(null), pe = d(null), me = d(ie), he = d(ae), ge = d(x), J = d(C);
+	}, z = p(X.subscribe, X.getSnapshot, X.getServerSnapshot), [B, ee] = f(!1), [V] = f(Date.now), te = p(B ? bt.subscribe : Wa, bt.getSnapshot, () => V), H = Tt(e), ne = (e) => Z(H[e]), U = z.counts[i], re = oa(z.filter, H), ie = ia(z), ae = z.categoryFilter, [oe, se] = f([]), W = ca(z.items, oe), ce = ct(W, y), le = ie.length > 1, ue = d(null), K = d(null), de = d(null), q = d(null), fe = d(null), pe = d(null), me = d(ie), he = d(ae), ge = d(x), J = d(C);
 	l(() => {
-		Ki(), gt(I);
-		let e, t = !1, n = Aa(ue.current), i = ya(q.current, se, {
+		qi(), _t(I);
+		let e, t = !1, n = ja(K.current), i = ba(q.current, se, {
 			scroller: q.current,
 			listed: (e) => X.getSnapshot().items.some((t) => t.id === e)
 		});
 		fe.current = i;
-		let a = Sa(q.current, () => X.getSnapshot().items), o = Ea(K.current, ue.current, {
+		let a = Ca(q.current, () => X.getSnapshot().items), o = Da(ue.current, K.current, {
 			onToggle(n) {
 				ee(n), t = n, J.current?.(n), n ? (e = window.location.href, X.opened(me.current, {
 					markAllAsSeen: !1,
@@ -4222,8 +4231,8 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 	]), l(() => {
 		J.current = C, me.current = ie, he.current = ae;
 	}), l(() => {
-		let e = ue.current?.matches(":popover-open") ?? !1;
-		S === !0 && !e ? ue.current?.showPopover() : S === !1 && e && pe.current?.close();
+		let e = K.current?.matches(":popover-open") ?? !1;
+		S === !0 && !e ? K.current?.showPopover() : S === !1 && e && pe.current?.close();
 	}, [S]), l(() => {
 		ge.current = x, pe.current?.place();
 	}, [x]), l(() => {
@@ -4236,8 +4245,8 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 	xe !== ve && (Se(ve), be([]));
 	let Ce = W.some((e) => ye.includes(e.id));
 	l(() => fe.current?.release(), [ve]);
-	let we = (e, t) => be((n) => va(n, e, t)), Te = (e) => {
-		let t = Ca(e.nativeEvent, z.items);
+	let we = (e, t) => be((n) => ya(n, e, t)), Te = (e) => {
+		let t = wa(e.nativeEvent, z.items);
 		t?.action ? T?.(t.item, t.action, e) : t && w?.(t.item, e);
 	}, Ee = (e) => /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D("p", {
 		role: "alert",
@@ -4245,13 +4254,13 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 	}), /* @__PURE__ */ D("button", {
 		type: "button",
 		"data-inbox-retry": "",
-		className: Oi,
+		className: ki,
 		onClick: e,
 		children: ne("retry")
-	})] }), De = ca(z, W.length), Oe;
+	})] }), De = la(z, W.length), Oe;
 	return Oe = De === "loading" ? /* @__PURE__ */ D("div", {
 		role: "status",
-		className: Pi,
+		className: Fi,
 		children: N ? N() : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D($, {
 			name: "spinner",
 			context: {
@@ -4260,21 +4269,21 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 			},
 			icons: u,
 			resolver: m,
-			className: G(Fi, "motion-safe:animate-spin")
+			className: G(Ii, "motion-safe:animate-spin")
 		}), /* @__PURE__ */ D("span", {
 			className: "sr-only",
 			children: ne("loading")
 		})] })
 	}) : De === "error" ? /* @__PURE__ */ D("div", {
 		"data-inbox-error": "",
-		className: Pi,
+		className: Fi,
 		children: (P ?? (({ retry: e }) => Ee(e)))({
 			more: !1,
 			retry: () => void X.load()
 		})
 	}) : De === "empty" ? /* @__PURE__ */ D("div", {
 		"data-inbox-empty": "",
-		className: Pi,
+		className: Fi,
 		children: v ? v(z.filter) : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D($, {
 			name: "empty",
 			context: {
@@ -4284,14 +4293,14 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 			},
 			icons: u,
 			resolver: m,
-			className: Fi
+			className: Ii
 		}), /* @__PURE__ */ D("p", { children: re })] })
 	}) : /* @__PURE__ */ O(E, { children: [
 		/* @__PURE__ */ D("ul", {
 			role: "list",
 			"data-inbox-selecting": Ce || void 0,
-			className: G(vi, h.list),
-			children: ce.map((e) => /* @__PURE__ */ D(Va, {
+			className: G(yi, h.list),
+			children: ce.map((e) => /* @__PURE__ */ D(Ha, {
 				group: e,
 				now: te,
 				labels: H,
@@ -4334,16 +4343,16 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 		"data-inbox": "",
 		className: "inline-flex",
 		children: [/* @__PURE__ */ D("button", {
-			ref: K,
+			ref: ue,
 			type: "button",
 			popoverTarget: R.panel,
 			"aria-haspopup": "dialog",
 			"aria-expanded": B,
 			"aria-controls": R.panel,
-			"aria-label": ja(H, U, o, g, z.pausedUntil !== null),
+			"aria-label": Ma(H, U, o, g, z.pausedUntil !== null),
 			"data-inbox-bell": "",
 			"data-paused": z.pausedUntil === null ? void 0 : "true",
-			className: G(ui, h.bell),
+			className: G(di, h.bell),
 			children: k ? k({
 				open: B,
 				count: U,
@@ -4361,13 +4370,13 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 				}),
 				n !== "none" && U > 0 && A && A({
 					count: U,
-					text: xt(U, o, g)
+					text: St(U, o, g)
 				}),
 				n === "count" && U > 0 && !A && /* @__PURE__ */ D("span", {
 					"data-inbox-badge": "",
 					"aria-hidden": "true",
 					className: G("bg-iui-inbox-badge text-iui-inbox-badge-foreground absolute -inset-e-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full px-1 text-[0.6875rem] leading-none font-semibold tabular-nums", h.badge),
-					children: xt(U, o, g)
+					children: St(U, o, g)
 				}),
 				n === "dot" && U > 0 && !A && /* @__PURE__ */ D("span", {
 					"data-inbox-badge": "",
@@ -4377,19 +4386,19 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 			] })
 		}), /* @__PURE__ */ D("div", {
 			id: R.panel,
-			ref: ue,
+			ref: K,
 			popover: "auto",
 			role: "dialog",
 			"aria-labelledby": R.title,
 			tabIndex: -1,
 			"data-inbox-panel": "",
-			className: G(di, h.panel),
-			onKeyDown: (e) => ka(e.nativeEvent, ue.current),
+			className: G(fi, h.panel),
+			onKeyDown: (e) => Aa(e.nativeEvent, K.current),
 			onClickCapture: Te,
 			children: /* @__PURE__ */ O("div", {
-				className: fi,
+				className: pi,
 				children: [
-					/* @__PURE__ */ D(Ra, {
+					/* @__PURE__ */ D(za, {
 						component: "NotificationCenter",
 						state: z,
 						filter: z.filter,
@@ -4420,10 +4429,10 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 						role: le ? "tabpanel" : void 0,
 						"aria-labelledby": le ? R.tab(z.filter) : void 0,
 						"aria-busy": z.status === "loading" || z.loadingMore || void 0,
-						className: gi,
+						className: _i,
 						children: [/* @__PURE__ */ D("div", {
 							"aria-live": "polite",
-							className: _i,
+							className: vi,
 							children: oe.length > 0 && /* @__PURE__ */ D("button", {
 								type: "button",
 								"data-inbox-show-new": "",
@@ -4433,7 +4442,7 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 							})
 						}), Oe]
 					}),
-					/* @__PURE__ */ D(Ha, {
+					/* @__PURE__ */ D(Ua, {
 						component: "NotificationCenter",
 						items: W,
 						selected: ye,
@@ -4463,13 +4472,13 @@ function Wa({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 	});
 }
 // src/NotificationList.tsx
-function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, classes: s = {}, locale: c, buffer: m = 250, manual: h = !1, preserveUrl: g = !1, renderItem: _, renderEmpty: v, category: y, group: b = !0, snooze: x, maxCount: S = 99, renderHeader: C, renderTab: w, onItemClick: T, onAction: k }) {
-	let A = a(), j = p(X.subscribe, X.getSnapshot, X.getServerSnapshot), [M] = f(Date.now), N = p(yt.subscribe, yt.getSnapshot, () => M), { filter: P, category: F } = pa(A.url, j, n, y), I = wt(r), L = aa(P, I), R = d(null), z = A.props[t]?.data, B = u(() => Array.isArray(z) ? z.map(Ue).filter((e) => e !== void 0) : [], [z]), ee = u(() => ot(X, B, P, F), [
+function Ka({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, classes: s = {}, locale: c, buffer: m = 250, manual: h = !1, preserveUrl: g = !1, renderItem: _, renderEmpty: v, category: y, group: b = !0, snooze: x, maxCount: S = 99, renderHeader: C, renderTab: w, onItemClick: T, onAction: k }) {
+	let A = a(), j = p(X.subscribe, X.getSnapshot, X.getServerSnapshot), [M] = f(Date.now), N = p(bt.subscribe, bt.getSnapshot, () => M), { filter: P, category: F } = ma(A.url, j, n, y), I = Tt(r), L = oa(P, I), R = d(null), z = A.props[t]?.data, B = u(() => Array.isArray(z) ? z.map(We).filter((e) => e !== void 0) : [], [z]), ee = u(() => st(X, B, P, F), [
 		B,
 		P,
 		F,
 		j
-	]), [V, te] = f([]), H = sa(ee, V), ne = st(H, b), U = !!A.scrollProps?.[t]?.nextPage, re = d(null), ie = d(H), ae = d({
+	]), [V, te] = f([]), H = ca(ee, V), ne = ct(H, b), U = !!A.scrollProps?.[t]?.nextPage, re = d(null), ie = d(H), ae = d({
 		loaded: B,
 		filter: P,
 		category: F
@@ -4481,17 +4490,17 @@ function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 			category: F
 		};
 	});
-	let oe = (e, n) => fa(A.url, e, n, A.scrollProps?.[t]?.pageName), se = `${P}|${F}|${j.selectable}`, [W, ce] = f([]), [le, K] = f(se);
-	le !== se && (K(se), ce([]));
-	let ue = H.some((e) => W.includes(e.id));
+	let oe = (e, n) => pa(A.url, e, n, A.scrollProps?.[t]?.pageName), se = `${P}|${F}|${j.selectable}`, [W, ce] = f([]), [le, ue] = f(se);
+	le !== se && (ue(se), ce([]));
+	let K = H.some((e) => W.includes(e.id));
 	l(() => re.current?.release(), [se]);
-	let de = (e, t) => ce((n) => va(n, e, t));
+	let de = (e, t) => ce((n) => ya(n, e, t));
 	return l(() => {
-		Ki(), gt(A.props);
-	}, []), l(() => X.remember(B), [B]), l(() => Aa(R.current), []), l(() => {
-		let e = ya(R.current, te, { listed: (e) => ot(X, ae.current.loaded, ae.current.filter, ae.current.category).some((t) => t.id === e) });
+		qi(), _t(A.props);
+	}, []), l(() => X.remember(B), [B]), l(() => ja(R.current), []), l(() => {
+		let e = ba(R.current, te, { listed: (e) => st(X, ae.current.loaded, ae.current.filter, ae.current.category).some((t) => t.id === e) });
 		re.current = e;
-		let t = Sa(R.current, () => ie.current, null);
+		let t = Ca(R.current, () => ie.current, null);
 		return () => {
 			e.destroy(), t.destroy(), re.current = null;
 		};
@@ -4499,13 +4508,13 @@ function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 		ref: R,
 		"data-inbox-list": "",
 		tabIndex: -1,
-		onKeyDown: (e) => ka(e.nativeEvent, R.current),
+		onKeyDown: (e) => Aa(e.nativeEvent, R.current),
 		onClickCapture: (e) => {
-			let t = Ca(e.nativeEvent, H);
+			let t = wa(e.nativeEvent, H);
 			t?.action ? k?.(t.item, t.action, e) : t && T?.(t.item, e);
 		},
 		children: [
-			/* @__PURE__ */ D(Ra, {
+			/* @__PURE__ */ D(za, {
 				component: "NotificationList",
 				state: j,
 				filter: P,
@@ -4524,7 +4533,7 @@ function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 			}),
 			/* @__PURE__ */ D("div", {
 				"aria-live": "polite",
-				className: _i,
+				className: vi,
 				children: V.length > 0 && /* @__PURE__ */ D("button", {
 					type: "button",
 					"data-inbox-show-new": "",
@@ -4541,11 +4550,11 @@ function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 				as: "ul",
 				role: "list",
 				hidden: H.length === 0 || void 0,
-				"data-inbox-selecting": ue || void 0,
-				className: G(vi, s.list),
+				"data-inbox-selecting": K || void 0,
+				className: G(yi, s.list),
 				loading: /* @__PURE__ */ O("div", {
 					role: "status",
-					className: Ii,
+					className: Li,
 					children: [/* @__PURE__ */ D($, {
 						name: "spinner",
 						context: {
@@ -4554,7 +4563,7 @@ function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 						},
 						icons: i,
 						resolver: o,
-						className: si
+						className: ci
 					}), /* @__PURE__ */ D("span", {
 						className: "sr-only",
 						children: Z(I.loading)
@@ -4571,7 +4580,7 @@ function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 						children: Z(I.loadMore)
 					})
 				}) : void 0,
-				children: ne.map((e) => /* @__PURE__ */ D(Va, {
+				children: ne.map((e) => /* @__PURE__ */ D(Ha, {
 					group: e,
 					now: N,
 					labels: I,
@@ -4602,9 +4611,9 @@ function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 					className: "text-iui-inbox-icon size-8"
 				}), /* @__PURE__ */ D("p", { children: L })] })
 			}),
-			ue && /* @__PURE__ */ D("div", {
+			K && /* @__PURE__ */ D("div", {
 				className: "bg-iui-inbox-surface sticky bottom-0 z-20",
-				children: /* @__PURE__ */ D(Ha, {
+				children: /* @__PURE__ */ D(Ua, {
 					component: "NotificationList",
 					items: H,
 					selected: W,
@@ -4624,57 +4633,57 @@ function Ga({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 	});
 }
 // src/usePreferences.ts
-var Ka = () => On.load(X.getSnapshot().url);
-function qa() {
-	let { props: e } = a(), t = p(On.subscribe, On.getSnapshot, () => Kt), n = u(() => en(t), [t]);
+var qa = () => kn.load(X.getSnapshot().url);
+function Ja() {
+	let { props: e } = a(), t = p(kn.subscribe, kn.getSnapshot, () => qt), n = u(() => tn(t), [t]);
 	return l(() => {
-		Ki(), gt(e), Ka();
+		qi(), _t(e), qa();
 	}, []), {
 		...t,
 		sections: n,
-		load: Ka,
-		set: On.set,
-		setChannel: On.setChannel,
-		setFrequency: On.setFrequency,
-		setNotificationHours: On.setNotificationHours,
-		receives: (e, n) => rn(e, n, t.channels),
-		frequencyApplies: on,
-		isDisabled: (e, n) => an(e, n, t.channels)
+		load: qa,
+		set: kn.set,
+		setChannel: kn.setChannel,
+		setFrequency: kn.setFrequency,
+		setNotificationHours: kn.setNotificationHours,
+		receives: (e, n) => an(e, n, t.channels),
+		frequencyApplies: sn,
+		isDisabled: (e, n) => on(e, n, t.channels)
 	};
 }
 // src/usePush.ts
-var Ja = () => jn;
-function Ya() {
-	let { props: e } = a(), t = p(qn.subscribe, qn.getSnapshot, Ja);
+var Ya = () => Mn;
+function Xa() {
+	let { props: e } = a(), t = p(Jn.subscribe, Jn.getSnapshot, Ya);
 	return l(() => {
-		Ki(), gt(e);
+		qi(), _t(e);
 	}, []), {
 		...t,
-		deviceState: Mn(t),
-		subscribe: qn.enable,
-		unsubscribe: qn.disable,
-		loadDevices: qn.loadDevices,
-		removeDevice: qn.removeDevice
+		deviceState: Nn(t),
+		subscribe: Jn.enable,
+		unsubscribe: Jn.disable,
+		loadDevices: Jn.loadDevices,
+		removeDevice: Jn.removeDevice
 	};
 }
 // src/NotificationPreferences.tsx
-function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGroup: i, renderChannel: a, renderEmpty: o }) {
-	let { status: l, channels: u, categories: d, sections: m, notificationHours: h, frequencies: g, load: _, setChannel: v, setFrequency: y, setNotificationHours: b, receives: x, frequencyApplies: S, isDisabled: C } = qa(), w = Ya(), [T, k] = f(null), A = Dn(e), j = (e) => Z(A[e]), M = kn(u, d, g, A), N = u.some((e) => e.push) ? Nn(w) : null, [P] = f(Date.now), F = p(yt.subscribe, yt.getSnapshot, () => P), I = Jn(w.devices, A, F, n), L = c(), R = N !== null;
+function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGroup: i, renderChannel: a, renderEmpty: o }) {
+	let { status: l, channels: u, categories: d, sections: m, notificationHours: h, frequencies: g, load: _, setChannel: v, setFrequency: y, setNotificationHours: b, receives: x, frequencyApplies: S, isDisabled: C } = Ja(), w = Xa(), [T, k] = f(null), A = On(e), j = (e) => Z(A[e]), M = An(u, d, g, A), N = u.some((e) => e.push) ? Pn(w) : null, [P] = f(Date.now), F = p(bt.subscribe, bt.getSnapshot, () => P), I = Yn(w.devices, A, F, n), L = c(), R = N !== null;
 	s(() => {
-		R && qn.loadDevices();
+		R && Jn.loadDevices();
 	}, [R]);
 	let z = (e) => {
-		let t = _n(h, T, e);
+		let t = vn(h, T, e);
 		t && (k(t.editing), b({ days: { [e.day]: t.ranges } }));
 	};
 	return l === "error" ? /* @__PURE__ */ D("div", {
 		"data-inbox-preferences": "",
 		children: /* @__PURE__ */ O("div", {
 			"data-inbox-preferences-error": "",
-			className: Pi,
+			className: Fi,
 			children: [/* @__PURE__ */ D("p", { children: j("error") }), /* @__PURE__ */ D("button", {
 				type: "button",
-				className: Oi,
+				className: ki,
 				onClick: () => void _(),
 				children: j("retry")
 			})]
@@ -4683,18 +4692,18 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 		"data-inbox-preferences": "",
 		children: l === "ready" ? /* @__PURE__ */ D("div", {
 			"data-inbox-preferences-empty": "",
-			className: Pi,
+			className: Fi,
 			children: o ? o() : /* @__PURE__ */ D("p", { children: j("empty") })
 		}) : /* @__PURE__ */ O("div", {
 			role: "status",
-			className: Pi,
+			className: Fi,
 			children: [/* @__PURE__ */ D($, {
 				name: "spinner",
 				context: {
 					component: "NotificationPreferences",
 					part: "loading"
 				},
-				className: si
+				className: ci
 			}), /* @__PURE__ */ D("span", {
 				className: "sr-only",
 				children: j("loading")
@@ -4704,9 +4713,9 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 		"data-inbox-preferences": "",
 		children: [
 			/* @__PURE__ */ D("div", {
-				className: Li,
+				className: Ri,
 				children: /* @__PURE__ */ O("table", {
-					className: G(Ri, t.table),
+					className: G(zi, t.table),
 					children: [
 						/* @__PURE__ */ D("caption", {
 							className: "sr-only",
@@ -4715,12 +4724,12 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 						/* @__PURE__ */ D("thead", { children: /* @__PURE__ */ O("tr", { children: [
 							/* @__PURE__ */ D("th", {
 								scope: "col",
-								className: G(zi, t.head),
+								className: G(Bi, t.head),
 								children: j("category")
 							}),
 							u.map((e) => /* @__PURE__ */ D("th", {
 								scope: "col",
-								className: G(Bi, t.head),
+								className: G(Vi, t.head),
 								children: a ? a(e) : e.label
 							}, e.key)),
 							M.hasFrequencies && /* @__PURE__ */ D("th", {
@@ -4786,14 +4795,14 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 								})
 							}), e.categories.map((e) => /* @__PURE__ */ O("tr", {
 								"data-inbox-preference-category": e.key,
-								className: G(Vi, t.row),
+								className: G(Hi, t.row),
 								children: [
 									/* @__PURE__ */ D("th", {
 										scope: "row",
-										className: Hi,
+										className: Ui,
 										children: r ? r(e) : /* @__PURE__ */ O(E, { children: [
 											/* @__PURE__ */ D("span", {
-												className: G(Ui, t.label),
+												className: G(Wi, t.label),
 												children: e.label
 											}),
 											e.locked && /* @__PURE__ */ D("span", {
@@ -4807,7 +4816,7 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 										] })
 									}),
 									u.map((n) => /* @__PURE__ */ D("td", {
-										className: Wi,
+										className: Gi,
 										children: e.channels[n.key] !== void 0 && /* @__PURE__ */ D("button", {
 											type: "button",
 											role: "switch",
@@ -4819,7 +4828,7 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 											}),
 											"data-inbox-preference": `${e.key}.${n.key}`,
 											className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", t.switch),
-											onClick: () => An(e, n, u),
+											onClick: () => jn(e, n, u),
 											children: /* @__PURE__ */ D("span", {
 												"aria-hidden": "true",
 												className: "bg-iui-inbox-surface ms-0.5 size-4 rounded-full shadow-sm forced-color-adjust-none group-aria-checked/switch:translate-x-4 forced-colors:bg-[ButtonText] forced-colors:group-aria-checked/switch:bg-[Highlight] motion-safe:transition-transform rtl:group-aria-checked/switch:-translate-x-4"
@@ -4875,7 +4884,7 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 						"aria-disabled": N.state === "busy" || void 0,
 						"data-inbox-push-device-button": "",
 						className: G(N.button.primary ? "rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-accent text-iui-inbox-accent hover:bg-iui-inbox-accent-subtle border" : "rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-border bg-iui-inbox-surface hover:bg-iui-inbox-control-hover border", "shrink-0 whitespace-nowrap"),
-						onClick: () => Yn(N),
+						onClick: () => Xn(N),
 						children: [N.state === "busy" && /* @__PURE__ */ D($, {
 							name: "spinner",
 							context: {
@@ -4912,7 +4921,7 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 								"aria-label": e.removeLabel,
 								"data-inbox-push-other-device-remove": "",
 								className: G("rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-border bg-iui-inbox-surface hover:bg-iui-inbox-control-hover border", "shrink-0 whitespace-nowrap"),
-								onClick: () => void qn.removeDevice(e.id),
+								onClick: () => void Jn.removeDevice(e.id),
 								children: j("pushDeviceRemove")
 							})]
 						}, e.id))
@@ -4945,7 +4954,7 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 					})] })]
 				}), /* @__PURE__ */ D("div", {
 					className: "mt-3 flex flex-col gap-3 sm:gap-2",
-					children: gn(h, T, n).map(({ day: e, name: n, ranges: r, locked: i, canAdd: a }) => /* @__PURE__ */ O("div", {
+					children: _n(h, T, n).map(({ day: e, name: n, ranges: r, locked: i, canAdd: a }) => /* @__PURE__ */ O("div", {
 						role: "group",
 						"aria-label": n,
 						"data-inbox-notification-hours-day": e,
@@ -5066,33 +5075,33 @@ function Xa({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 	});
 }
 // src/useNotifications.ts
-function Za() {
+function Qa() {
 	let { props: e } = a(), t = p(X.subscribe, X.getSnapshot, X.getServerSnapshot);
 	return l(() => {
-		Ki(), gt(e);
+		qi(), _t(e);
 	}, []), {
 		...t,
-		...ht,
-		toast: Vr
+		...gt,
+		toast: Hr
 	};
 }
 // src/useToasts.ts
-var Qa = [], $a = (e, t, n) => n ? Fr(e, t, n.nativeEvent) : Pr(e, t);
-function eo(e) {
-	let { flash: t } = a(), n = p(Q.subscribe, Q.getSnapshot, () => Qa);
-	p(Q.subscribe, ar, () => 0);
-	let r = u(() => n.filter((t) => t.toaster === e), [n, e]), [i] = f(sr);
-	return l(() => Q.attach(e), [e]), l(() => (Ki(), hr(t), i.release), []), {
+var $a = [], eo = (e, t, n) => n ? Ir(e, t, n.nativeEvent) : Fr(e, t);
+function to(e) {
+	let { flash: t } = a(), n = p(Q.subscribe, Q.getSnapshot, () => $a);
+	p(Q.subscribe, or, () => 0);
+	let r = u(() => n.filter((t) => t.toaster === e), [n, e]), [i] = f(cr);
+	return l(() => Q.attach(e), [e]), l(() => (qi(), gr(t), i.release), []), {
 		toasts: r,
-		toast: Vr,
+		toast: Hr,
 		update: Q.update,
 		dismiss: Q.dismiss,
 		pause: i.pause,
 		resume: i.resume,
 		timer: Q.timer,
-		runAction: $a
+		runAction: eo
 	};
 }
 // src/iconResolver.ts
-var to = J, no = _e;
-export { br as DEFAULT_ERROR_MESSAGES, Ct as DEFAULT_INBOX_LABELS, Tn as DEFAULT_PREFERENCES_LABELS, Wa as NotificationCenter, Ba as NotificationItem, Ga as NotificationList, Xa as NotificationPreferences, $i as Toaster, st as groupItems, X as inboxStore, Ki as initNotifications, Le as isSnoozed, dt as pauseEnd, pt as pauseTime, On as preferencesStore, bt as relativeTime, Bt as requestNotificationPermission, no as resolveIcon, to as setIconResolver, xe as setTranslations, ct as snoozeOptions, Vr as toast, we as trans, Za as useNotifications, qa as usePreferences, Ya as usePush, eo as useToasts };
+var no = _e, ro = ve;
+export { xr as DEFAULT_ERROR_MESSAGES, wt as DEFAULT_INBOX_LABELS, En as DEFAULT_PREFERENCES_LABELS, Ga as NotificationCenter, Va as NotificationItem, Ka as NotificationList, Za as NotificationPreferences, ea as Toaster, ct as groupItems, X as inboxStore, qi as initNotifications, Re as isSnoozed, ft as pauseEnd, mt as pauseTime, kn as preferencesStore, xt as relativeTime, Vt as requestNotificationPermission, ro as resolveIcon, no as setIconResolver, Se as setTranslations, lt as snoozeOptions, Hr as toast, Te as trans, Qa as useNotifications, Ja as usePreferences, Xa as usePush, to as useToasts };

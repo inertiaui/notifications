@@ -72,7 +72,7 @@ return InboxMessage::make('Expense #:number needs your approval', ['number' => $
     );
 ```
 
-The result is saved once the action succeeds, including from the notification's [toast](notification-center-sending-notifications.md#showing-a-toast). A failed action keeps its buttons. The result is translated with its replacements, like the title.
+The result is saved once the action succeeds, including from the notification's [toast](notification-center-sending-notifications.md#showing-a-toast). A failed action keeps its buttons. The result is translated with its replacements, like the title. An action that redirects back keeps the page's state and scroll position, as described in [Preserving State and Scroll](toasts-actions.md#preserving-state-and-scroll).
 
 ### Completing Notifications on the Server
 
