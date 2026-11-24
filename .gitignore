@@ -16,6 +16,7 @@ composer.lock
 .env
 .env.*
 !.env.example
+!/demo-app/.env.testing
 
 # IDE
 .idea

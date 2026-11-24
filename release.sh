@@ -94,14 +94,6 @@ else
     success "CI green ($CI_PASSED workflow(s) passed)"
 fi
 
-# ── changelog ───────────────────────────────────────────────────────────
-# The release notes come from the CHANGELOG section of this version.
-NOTES=$(awk -v version="$VERSION" '
-    $0 ~ "^## " { if (found) exit; if ($2 == version) { found = 1; next } }
-    found { print }
-' CHANGELOG.md)
-[ -n "$(printf '%s' "$NOTES" | tr -d '[:space:]')" ] || die "CHANGELOG.md has no '## $VERSION' section — rename 'Unreleased' and commit it first"
-
 # ── confirm ─────────────────────────────────────────────────────────────
 MARK_LATEST=true
 [ "$PRERELEASE" = true ] && MARK_LATEST=false
@@ -168,7 +160,8 @@ git push "$REMOTE" "$TAG"
 
 # ── github release ──────────────────────────────────────────────────────
 info "Creating GitHub release..."
-RELEASE_FLAGS=(--title "$TAG" --notes "$NOTES")
+# GitHub generates the notes from the merged pull requests, and the update-changelog workflow then adds them to CHANGELOG.md.
+RELEASE_FLAGS=(--title "$TAG" --generate-notes)
 [ "$PRERELEASE" = true ] && RELEASE_FLAGS+=(--prerelease)
 [ "$MARK_LATEST" = false ] && RELEASE_FLAGS+=(--latest=false)
 gh release create "$TAG" "${RELEASE_FLAGS[@]}"
@@ -177,4 +170,5 @@ echo
 success "Released $TAG"
 info "The publish-to-npm workflow has been triggered by the release event."
 info "Packagist picks up the tag through its GitHub hook."
+info "The update-changelog workflow will commit the release notes to CHANGELOG.md on $BRANCH, so pull afterwards."
 info "Watch: gh run watch"

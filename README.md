@@ -26,7 +26,7 @@ The built `vue/dist` and `react/dist` folders are committed: the frontend packag
 
 ### Releasing
 
-Rename the `Unreleased` section of `CHANGELOG.md` to the new version, commit it, and run `./release.sh 1.2.3` from an up-to-date `main`. The script checks CI, bumps the Vue and React package versions, runs `composer build`, commits the versions and builds, pushes a tag, and creates a GitHub release with the changelog section as its notes. The release publishes both packages to npm through the `Publish to npm` workflow, and Packagist picks up the tag.
+Run `./release.sh 1.2.3` from an up-to-date `main`. The script checks CI, bumps the Vue and React package versions, runs `composer build`, commits the versions and builds, pushes a tag, and creates a GitHub release with notes generated from the merged pull requests. The `Update Changelog` workflow then adds those notes to `CHANGELOG.md` and commits it to `main`, so you don't edit the changelog by hand. The release publishes both packages to npm through the `Publish to npm` workflow, and Packagist picks up the tag.
 
 The Boost skill in `resources/boost` repeats each page of the docs for AI agents, as one reference file per page. The reference files and their list in `SKILL.md` are generated: run `pnpm docs:guide` after changing a page, and commit the result with the docs. CI fails when they are out of date.
 
