@@ -94,14 +94,6 @@ else
     success "CI green ($CI_PASSED workflow(s) passed)"
 fi
 
-# ── changelog ───────────────────────────────────────────────────────────
-# The release notes come from the CHANGELOG section of this version.
-NOTES=$(awk -v version="$VERSION" '
-    $0 ~ "^## " { if (found) exit; if ($2 == version) { found = 1; next } }
-    found { print }
-' CHANGELOG.md)
-[ -n "$(printf '%s' "$NOTES" | tr -d '[:space:]')" ] || die "CHANGELOG.md has no '## $VERSION' section — rename 'Unreleased' and commit it first"
-
 # ── confirm ─────────────────────────────────────────────────────────────
 MARK_LATEST=true
 [ "$PRERELEASE" = true ] && MARK_LATEST=false
