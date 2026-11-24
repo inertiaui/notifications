@@ -1,8 +1,8 @@
-import { InfiniteScroll as e, Link as t, http as n, router as r, socketId as i, usePage as a } from "@inertiajs/react";
-import { isValidElement as o, useEffect as s, useId as c, useLayoutEffect as l, useMemo as u, useRef as d, useState as f, useSyncExternalStore as p } from "react";
-import { createPortal as m } from "react-dom";
-import { extendTailwindMerge as h } from "tailwind-merge";
-import { animate as g, autoUpdateTopLayerPopover as _, cancelAnimations as v, createAnnouncer as y, createPopoverController as b, createTooltipController as x, isRightToLeft as S, positionTopLayerPopover as C, prefersReducedMotion as w, replacePlaceholders as T } from "@inertiaui/vanilla";
+import { isValidElement as e, useEffect as t, useId as n, useLayoutEffect as r, useMemo as i, useRef as a, useState as o, useSyncExternalStore as s } from "react";
+import { createPortal as c } from "react-dom";
+import { extendTailwindMerge as l } from "tailwind-merge";
+import { animate as u, autoUpdateTopLayerPopover as d, cancelAnimations as f, createAnnouncer as p, createPopoverController as m, createTooltipController as h, isRightToLeft as g, positionTopLayerPopover as _, prefersReducedMotion as v, replacePlaceholders as y } from "@inertiaui/vanilla";
+import { InfiniteScroll as b, Link as x, http as S, router as C, socketId as w, usePage as T } from "@inertiajs/react";
 import { Fragment as E, jsx as D, jsxs as O } from "react/jsx-runtime";
 // ../js/types.ts
 var k = [
@@ -158,7 +158,7 @@ function le(e, t, n, r, i) {
 	}), "pending";
 }
 // ../js/cn.ts
-var ue = h({ extend: { theme: { radius: ["iui-toast", "iui-inbox"] } } });
+var ue = l({ extend: { theme: { radius: ["iui-toast", "iui-inbox"] } } });
 function G(...e) {
 	return ue(e.filter(Boolean).join(" "));
 }
@@ -344,7 +344,7 @@ function Se(e) {
 }
 var Ce = (e) => Object.hasOwn(xe, e) ? xe[e] : void 0;
 function we(e, t = {}) {
-	return typeof e == "function" ? e(t) : T(e, t);
+	return typeof e == "function" ? e(t) : y(e, t);
 }
 function Te(e, t = {}) {
 	let n = Ce(e);
@@ -2584,26 +2584,26 @@ function ei(e, t) {
 }
 var ti = 0;
 function ni(e, t, n) {
-	let { region: r, host: i } = t, a = y({
+	let { region: r, host: i } = t, a = p({
 		polite: t.polite,
 		assertive: t.assertive
 	}), o = /* @__PURE__ */ new Map(), s = /* @__PURE__ */ new Map(), c = /* @__PURE__ */ new Map(), l = ++ti, u = {
 		hover: `hover-${l}`,
 		focus: `focus-${l}`,
 		swipe: `swipe-${l}`
-	}, d = null, f = null, p = 0, m = null, h = "pointer", g = null, _ = n().name, v = e.attach(_), b = () => e.getSnapshot().filter((e) => e.toaster === n().name && e.state !== "queued"), x = () => Array.from(r.querySelectorAll("[data-toast-list]")), S = (e) => r.querySelector(`[data-toast-id="${CSS.escape(e)}"]`), C = (e) => e instanceof Element ? e.closest("[data-toast-id]") ?? null : null, T = (e) => e.dataset.state !== "closing", E = () => b().reverse().map((e) => S(e.id)).filter((e) => e !== null && T(e)), D = (e) => (e.querySelector("[data-toast-body]")?.offsetHeight ?? e.offsetHeight) + (e.offsetHeight - e.clientHeight), O = () => {
+	}, d = null, f = null, m = 0, h = null, g = "pointer", _ = null, y = n().name, b = e.attach(y), x = () => e.getSnapshot().filter((e) => e.toaster === n().name && e.state !== "queued"), S = () => Array.from(r.querySelectorAll("[data-toast-list]")), C = (e) => r.querySelector(`[data-toast-id="${CSS.escape(e)}"]`), w = (e) => e instanceof Element ? e.closest("[data-toast-id]") ?? null : null, T = (e) => e.dataset.state !== "closing", E = () => x().reverse().map((e) => C(e.id)).filter((e) => e !== null && T(e)), D = (e) => (e.querySelector("[data-toast-body]")?.offsetHeight ?? e.offsetHeight) + (e.offsetHeight - e.clientHeight), O = () => {
 		let { visibleToasts: e, expand: t } = n();
-		for (let n of x()) {
+		for (let n of S()) {
 			let r = Array.from(n.querySelectorAll(":scope > [data-toast-id]")).filter(T), i = 0;
 			n.dataset.expanded = String(t || n === d || n.contains(document.activeElement)), r.forEach((t, n) => {
 				let a = D(t);
-				t.style.setProperty("--toast-index", String(n)), t.style.setProperty("--toast-before", `${i}px`), t.style.setProperty("--toast-height", `${a}px`), t.style.zIndex = String(r.length - n), t.dataset.front = String(n === 0), t.dataset.overflow = String(n >= e), t !== g?.item && (delete t.dataset.swipeOut, t.style.removeProperty("--toast-swipe")), i += a;
+				t.style.setProperty("--toast-index", String(n)), t.style.setProperty("--toast-before", `${i}px`), t.style.setProperty("--toast-height", `${a}px`), t.style.zIndex = String(r.length - n), t.dataset.front = String(n === 0), t.dataset.overflow = String(n >= e), t !== _?.item && (delete t.dataset.swipeOut, t.style.removeProperty("--toast-swipe")), i += a;
 			}), n.style.setProperty("--toast-count", String(r.length)), n.style.setProperty("--toast-visible", String(Math.max(1, Math.min(r.length, e)))), n.style.setProperty("--toast-front-height", `${r[0] ? D(r[0]) : 0}px`), n.style.setProperty("--toast-heights", `${i}px`);
 		}
 	}, k = typeof ResizeObserver == "function" ? new ResizeObserver(() => O()) : void 0, A = /* @__PURE__ */ new WeakSet(), j = () => {
-		let t = !w(), n = /* @__PURE__ */ new Set();
-		for (let r of b()) {
-			let i = S(r.id)?.querySelector("[data-toast-progress]"), a = e.timer(r.id);
+		let t = !v(), n = /* @__PURE__ */ new Set();
+		for (let r of x()) {
+			let i = C(r.id)?.querySelector("[data-toast-progress]"), a = e.timer(r.id);
 			if (!i || !a) continue;
 			n.add(r.id);
 			let o = Math.max(0, a.remaining / a.duration);
@@ -2632,17 +2632,17 @@ function ni(e, t, n) {
 	}, M = e.subscribe(j), N = () => {
 		f = null, e.resume(u.focus);
 	}, P = () => {
-		let e = E(), t = h === "pointer" ? void 0 : e[Math.min(p, e.length - 1)], n = m;
-		N(), t ? t.focus() : n?.isConnected && (m = null, n.focus({ preventScroll: !0 }));
+		let e = E(), t = g === "pointer" ? void 0 : e[Math.min(m, e.length - 1)], n = h;
+		N(), t ? t.focus() : n?.isConnected && (h = null, n.focus({ preventScroll: !0 }));
 	}, F = () => {
-		f && (!f.isConnected || !T(f)) ? P() : r.contains(document.activeElement) || (m = null, N());
+		f && (!f.isConnected || !T(f)) ? P() : r.contains(document.activeElement) || (h = null, N());
 	}, I = (t) => {
-		t.relatedTarget instanceof HTMLElement && !r.contains(t.relatedTarget) && (m = t.relatedTarget), f = C(t.target), p = f ? E().indexOf(f) : 0, e.pause(u.focus), O();
+		t.relatedTarget instanceof HTMLElement && !r.contains(t.relatedTarget) && (h = t.relatedTarget), f = w(t.target), m = f ? E().indexOf(f) : 0, e.pause(u.focus), O();
 	}, L = () => void setTimeout(() => {
 		F(), O();
 	}), R = (t) => {
-		h = "keyboard";
-		let n = C(t.target);
+		g = "keyboard";
+		let n = w(t.target);
 		t.key === "Escape" && n?.dataset.toastId !== void 0 && n.dataset.dismissible !== "false" && (t.preventDefault(), e.dismiss(n.dataset.toastId, "escape"));
 	}, z = (t) => {
 		d !== t && (d = t, t ? e.pause(u.hover) : e.resume(u.hover), O());
@@ -2657,9 +2657,9 @@ function ni(e, t, n) {
 		let n = te(e);
 		return n === "both" || (n === "right" ? t > 0 : t < 0);
 	}, ne = (e) => {
-		if (h = e.pointerType === "touch" ? "touch" : "pointer", g?.active) return;
-		let t = C(e.target), n = e.target instanceof Element && e.target.closest("a, button, input, select, textarea, [data-toast-no-swipe]");
-		e.button === 0 && t && !n && t.dataset.dismissible !== "false" && T(t) && (g = {
+		if (g = e.pointerType === "touch" ? "touch" : "pointer", _?.active) return;
+		let t = w(e.target), n = e.target instanceof Element && e.target.closest("a, button, input, select, textarea, [data-toast-no-swipe]");
+		e.button === 0 && t && !n && t.dataset.dismissible !== "false" && T(t) && (_ = {
 			item: t,
 			pointerId: e.pointerId,
 			x: e.clientX,
@@ -2668,33 +2668,33 @@ function ni(e, t, n) {
 			active: !1
 		});
 	}, U = (t) => {
-		if (!g || t.pointerId !== g.pointerId) return;
-		if (!g.active && (!(t.buttons & 1) || !g.item.isConnected || !T(g.item))) {
-			g = null;
+		if (!_ || t.pointerId !== _.pointerId) return;
+		if (!_.active && (!(t.buttons & 1) || !_.item.isConnected || !T(_.item))) {
+			_ = null;
 			return;
 		}
-		let n = t.clientX - g.x;
-		if (!g.active) {
+		let n = t.clientX - _.x;
+		if (!_.active) {
 			if (Math.abs(n) < 4) return;
-			g.active = !0, g.item.dataset.swiping = "true";
+			_.active = !0, _.item.dataset.swiping = "true";
 			try {
-				g.item.setPointerCapture(t.pointerId);
+				_.item.setPointerCapture(t.pointerId);
 			} catch {}
 			e.pause(u.swipe);
 		}
-		g.dx = n;
-		let r = H(g.item, n) ? n : Math.sign(n) * Math.min(Math.abs(n) * .15, 8);
-		g.item.style.setProperty("--toast-swipe", `${r}px`);
+		_.dx = n;
+		let r = H(_.item, n) ? n : Math.sign(n) * Math.min(Math.abs(n) * .15, 8);
+		_.item.style.setProperty("--toast-swipe", `${r}px`);
 	}, re = (t) => {
-		if (!g) return;
-		let { item: n, dx: r, active: i } = g, a = n.dataset.toastId;
-		g = null, i && (delete n.dataset.swiping, e.resume(u.swipe), t && a !== void 0 ? (n.dataset.swipeOut = r > 0 ? "right" : "left", e.dismiss(a, "swipe")) : n.style.removeProperty("--toast-swipe"));
+		if (!_) return;
+		let { item: n, dx: r, active: i } = _, a = n.dataset.toastId;
+		_ = null, i && (delete n.dataset.swiping, e.resume(u.swipe), t && a !== void 0 ? (n.dataset.swipeOut = r > 0 ? "right" : "left", e.dismiss(a, "swipe")) : n.style.removeProperty("--toast-swipe"));
 	}, ie = (e) => {
-		if (!g || e.pointerId !== g.pointerId) return;
-		let t = Math.abs(g.dx) / Math.max(1, Date.now() - g.time), n = (window.getSelection?.()?.toString() ?? "") !== "";
-		re(!n && H(g.item, g.dx) && (Math.abs(g.dx) >= qr || t > Jr));
+		if (!_ || e.pointerId !== _.pointerId) return;
+		let t = Math.abs(_.dx) / Math.max(1, Date.now() - _.time), n = (window.getSelection?.()?.toString() ?? "") !== "";
+		re(!n && H(_.item, _.dx) && (Math.abs(_.dx) >= qr || t > Jr));
 	}, ae = (e) => {
-		e.pointerId === g?.pointerId && re(!1);
+		e.pointerId === _?.pointerId && re(!1);
 	}, oe = (e) => {
 		let t = (t) => {
 			t.relatedTarget === e && t.stopImmediatePropagation();
@@ -2702,7 +2702,7 @@ function ni(e, t, n) {
 		ce && window.addEventListener("focusout", t, !0), e.focus(), window.removeEventListener("focusout", t, !0);
 	}, se = (e) => {
 		let { hotkey: t } = n(), i = t.length > 0 && t.every((t) => Wr.includes(t) ? e[t] : e.code === t), a = E()[0];
-		i && a && (e.preventDefault(), h = "keyboard", document.activeElement instanceof HTMLElement && document.activeElement !== document.body && !r.contains(document.activeElement) && (m = document.activeElement), oe(a));
+		i && a && (e.preventDefault(), g = "keyboard", document.activeElement instanceof HTMLElement && document.activeElement !== document.body && !r.contains(document.activeElement) && (h = document.activeElement), oe(a));
 	}, W = [], ce = !1, le = (e) => e.isConnected && (e instanceof HTMLDialogElement ? e.open && e.matches(":modal") : ce && e.matches(":popover-open")), ue = (e) => e instanceof HTMLElement && e !== i && e.hasAttribute("popover") && /^(alert)?dialog$/.test(e.getAttribute("role") ?? ""), G = (e) => {
 		let t = W.indexOf(e);
 		t !== -1 && W.splice(t, 1);
@@ -2735,7 +2735,7 @@ function ni(e, t, n) {
 	}, ge = (e) => e.stopPropagation(), J = (e) => {
 		e.relatedTarget instanceof Node && r.contains(e.relatedTarget) && e.stopPropagation();
 	}, _e = (e) => {
-		let t = C(e.target);
+		let t = w(e.target);
 		e.key === "Escape" && t && r.contains(t) && t.dataset.dismissible !== "false" && e.preventDefault();
 	}, ve = (e) => {
 		e.addEventListener("pointerdown", ge), e.addEventListener("focusin", ge), e.addEventListener("focusout", J), window.addEventListener("keydown", _e, !0), document.addEventListener("beforetoggle", me, !0), document.addEventListener("toggle", he, !0);
@@ -2761,12 +2761,12 @@ function ni(e, t, n) {
 		attributeFilter: ["open"]
 	}), fe()), be(n().aboveModals), r.addEventListener("focusin", I), r.addEventListener("focusout", L), r.addEventListener("keydown", R), r.addEventListener("pointerdown", ne), r.addEventListener("pointermove", U), r.addEventListener("pointerup", ie), r.addEventListener("pointercancel", ae), r.addEventListener("pointerover", ee), r.addEventListener("pointerout", V), document.addEventListener("keydown", se), {
 		update() {
-			be(n().aboveModals), n().name !== _ && (v(), _ = n().name, v = e.attach(_));
-			let t = b(), { typeLabels: r } = n(), i = !w();
+			be(n().aboveModals), n().name !== y && (b(), y = n().name, b = e.attach(y));
+			let t = x(), { typeLabels: r } = n(), i = !v();
 			for (let e of t) {
 				if (e.state === "closing") continue;
 				o.get(e.id) !== e.revision && (o.set(e.id, e.revision), a.announce($r(e, r), e.politeness ?? (e.type === "error" ? "assertive" : "polite")));
-				let t = S(e.id);
+				let t = C(e.id);
 				t && i && e.count > (s.get(e.id) ?? e.count) && typeof t.animate == "function" && t.animate([
 					{ scale: "1" },
 					{ scale: "1.03" },
@@ -2779,10 +2779,10 @@ function ni(e, t, n) {
 				n && k && !A.has(n) && (A.add(n), k.observe(n));
 			}
 			for (let e of [o, s]) for (let n of e.keys()) t.some((e) => e.id === n) || e.delete(n);
-			F(), f && (p = E().indexOf(f)), g && !g.item.isConnected && re(!1), d && !d.matches(":hover") && (d = null, e.resume(u.hover)), O(), j();
+			F(), f && (m = E().indexOf(f)), _ && !_.item.isConnected && re(!1), d && !d.matches(":hover") && (d = null, e.resume(u.hover)), O(), j();
 		},
 		destroy() {
-			r.removeEventListener("focusin", I), r.removeEventListener("focusout", L), r.removeEventListener("keydown", R), r.removeEventListener("pointerdown", ne), r.removeEventListener("pointermove", U), r.removeEventListener("pointerup", ie), r.removeEventListener("pointercancel", ae), r.removeEventListener("pointerover", ee), r.removeEventListener("pointerout", V), document.removeEventListener("keydown", se), be(!1), M(), k?.disconnect(), xe?.disconnect(), c.forEach((e) => e.animation?.cancel()), a.destroy(), e.resume(u.hover), e.resume(u.focus), e.resume(u.swipe), v();
+			r.removeEventListener("focusin", I), r.removeEventListener("focusout", L), r.removeEventListener("keydown", R), r.removeEventListener("pointerdown", ne), r.removeEventListener("pointermove", U), r.removeEventListener("pointerup", ie), r.removeEventListener("pointercancel", ae), r.removeEventListener("pointerover", ee), r.removeEventListener("pointerout", V), document.removeEventListener("keydown", se), be(!1), M(), k?.disconnect(), xe?.disconnect(), c.forEach((e) => e.animation?.cancel()), a.destroy(), e.resume(u.hover), e.resume(u.focus), e.resume(u.swipe), b();
 		}
 	};
 }
@@ -2837,10 +2837,19 @@ function Ki(e, t, n) {
 }
 // src/notifications.ts
 function qi(e) {
-	Mr(Ki(r, n, i), e);
+	Mr(Ki(C, S, w), e);
+}
+function Ji() {
+	let e;
+	try {
+		e = T().flash;
+	} catch {}
+	r(() => {
+		qi(), e && gr(e);
+	}, []);
 }
 // src/parts.tsx
-function Ji({ className: e }) {
+function Yi({ className: e }) {
 	return /* @__PURE__ */ O("svg", {
 		viewBox: "0 0 20 20",
 		fill: "none",
@@ -2859,16 +2868,16 @@ function Ji({ className: e }) {
 		})]
 	});
 }
-var Yi = (e) => typeof e == "function" || typeof e == "object" && !!e && "$$typeof" in e && !o(e);
-function Xi(e, t) {
-	return Yi(e) ? /* @__PURE__ */ D(e, {
+var Xi = (t) => typeof t == "function" || typeof t == "object" && !!t && "$$typeof" in t && !e(t);
+function Zi(e, t) {
+	return Xi(e) ? /* @__PURE__ */ D(e, {
 		className: t,
 		"aria-hidden": "true"
 	}) : e;
 }
 function $({ name: e, context: t, icons: n, resolver: r, className: i }) {
 	let a = ye(e, t, n, r);
-	return a === void 0 ? e === "spinner" ? /* @__PURE__ */ D(Ji, { className: i }) : /* @__PURE__ */ D("svg", {
+	return a === void 0 ? e === "spinner" ? /* @__PURE__ */ D(Yi, { className: i }) : /* @__PURE__ */ D("svg", {
 		viewBox: "0 0 20 20",
 		fill: "currentColor",
 		"aria-hidden": "true",
@@ -2878,106 +2887,105 @@ function $({ name: e, context: t, icons: n, resolver: r, className: i }) {
 			clipRule: "evenodd",
 			d: e
 		}, e))
-	}) : Xi(a, i);
+	}) : Zi(a, i);
 }
 // src/Toaster.tsx
-var Zi = [], Qi = () => () => {};
-function $i({ toast: e, icons: t, resolver: n }) {
-	if (e.image !== void 0) return /* @__PURE__ */ D("img", {
-		src: e.image,
+var Qi = [], $i = () => () => {};
+function ea({ toast: t, icons: n, resolver: r }) {
+	if (t.image !== void 0) return /* @__PURE__ */ D("img", {
+		src: t.image,
 		alt: "",
 		className: si
 	});
-	if (o(e.icon)) return e.icon;
-	let r = (r, i) => ye(r, {
+	if (e(t.icon)) return t.icon;
+	let i = (e, i) => ye(e, {
 		component: "Toaster",
 		part: i,
-		toast: e
-	}, t, n), i = (typeof e.icon == "string" ? r(e.icon, "icon") : void 0) ?? r(e.type, "type");
-	if (i !== void 0) return Xi(i, "size-5");
-	if (e.type === "loading") return /* @__PURE__ */ D($, {
+		toast: t
+	}, n, r), a = (typeof t.icon == "string" ? i(t.icon, "icon") : void 0) ?? i(t.type, "type");
+	if (a !== void 0) return Zi(a, "size-5");
+	if (t.type === "loading") return /* @__PURE__ */ D($, {
 		name: "spinner",
 		context: {
 			component: "Toaster",
 			part: "type",
-			toast: e
+			toast: t
 		},
-		icons: t,
-		resolver: n,
+		icons: n,
+		resolver: r,
 		className: ci
 	});
-	let a = K(de, e.type);
-	return a === void 0 ? /* @__PURE__ */ D("span", { className: oi }) : /* @__PURE__ */ D("svg", {
+	let o = K(de, t.type);
+	return o === void 0 ? /* @__PURE__ */ D("span", { className: oi }) : /* @__PURE__ */ D("svg", {
 		viewBox: "0 0 20 20",
 		fill: "currentColor",
 		className: "size-5",
 		children: /* @__PURE__ */ D("path", {
 			fillRule: "evenodd",
 			clipRule: "evenodd",
-			d: a
+			d: o
 		})
 	});
 }
-function ea({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, hotkey: i = Ur, typeLabels: o = {}, visibleToasts: s = 3, expand: c = !1, progress: u = !1, icons: h = {}, iconResolver: g, classes: _ = {}, renderToast: v, renderIcon: y, components: b = {}, aboveModals: x = !0 }) {
-	let { flash: S } = a(), C = p(Q.subscribe, Q.getSnapshot, () => Zi), w = p(Qi, () => !0, () => !1), [T] = f(() => typeof document > "u" ? null : Object.assign(document.createElement("div"), { className: "iui-toaster-host" })), k = d(null), A = d(null), j = d(null), M = d(null), N = d({
+function ta({ position: e = "bottom-right", name: t, label: n, dismissLabel: i, hotkey: l = Ur, typeLabels: u = {}, visibleToasts: d = 3, expand: f = !1, progress: p = !1, icons: m = {}, iconResolver: h, classes: g = {}, renderToast: _, renderIcon: v, components: y = {}, aboveModals: b = !0 }) {
+	Ji();
+	let x = s(Q.subscribe, Q.getSnapshot, () => Qi), S = s($i, () => !0, () => !1), [C] = o(() => typeof document > "u" ? null : Object.assign(document.createElement("div"), { className: "iui-toaster-host" })), w = a(null), T = a(null), k = a(null), A = a(null), j = a({
 		name: t,
-		hotkey: i,
-		typeLabels: o,
-		visibleToasts: s,
-		expand: c,
-		aboveModals: x
+		hotkey: l,
+		typeLabels: u,
+		visibleToasts: d,
+		expand: f,
+		aboveModals: b
 	});
-	if (l(() => {
-		N.current = {
+	if (r(() => {
+		j.current = {
 			name: t,
-			hotkey: i,
-			typeLabels: o,
-			visibleToasts: s,
-			expand: c,
-			aboveModals: x
+			hotkey: l,
+			typeLabels: u,
+			visibleToasts: d,
+			expand: f,
+			aboveModals: b
 		};
-	}), l(() => {
-		qi(), gr(S);
-	}, []), l(() => {
-		if (!T || !w) return;
-		document.body.append(T);
+	}), r(() => {
+		if (!C || !S) return;
+		document.body.append(C);
 		let e = ni(Q, {
-			region: k.current,
-			host: T,
-			polite: A.current,
-			assertive: j.current
-		}, () => N.current);
-		return M.current = e, () => {
-			e.destroy(), M.current = null, T.remove();
+			region: w.current,
+			host: C,
+			polite: T.current,
+			assertive: k.current
+		}, () => j.current);
+		return A.current = e, () => {
+			e.destroy(), A.current = null, C.remove();
 		};
-	}, [T, w]), l(() => M.current?.update()), !T || !w) return null;
-	let P = ei(C.filter((e) => e.toaster === t), e), F = (e) => {
-		let t = () => Q.dismiss(e.id, "user"), n = (t, n) => Ir(e.id, t, n.nativeEvent), i = K(b, e.type);
-		if (i) return /* @__PURE__ */ D(i, {
+	}, [C, S]), r(() => A.current?.update()), !C || !S) return null;
+	let M = ei(x.filter((e) => e.toaster === t), e), N = (e) => {
+		let t = () => Q.dismiss(e.id, "user"), n = (t, n) => Ir(e.id, t, n.nativeEvent), r = K(y, e.type);
+		if (r) return /* @__PURE__ */ D(r, {
 			toast: e,
 			dismiss: t,
 			runAction: n
 		});
-		if (v) return v(e, {
+		if (_) return _(e, {
 			dismiss: t,
 			runAction: n
 		});
-		let a = Qr(e.type, o);
+		let a = Qr(e.type, u);
 		return /* @__PURE__ */ O(E, { children: [
 			e.icon !== !1 && /* @__PURE__ */ D("span", {
 				"aria-hidden": "true",
-				className: G("flex size-5 shrink-0 items-center justify-center", K(ai, e.type) ?? ai.default, _.icon),
-				children: y ? y(e) : /* @__PURE__ */ D($i, {
+				className: G("flex size-5 shrink-0 items-center justify-center", K(ai, e.type) ?? ai.default, g.icon),
+				children: v ? v(e) : /* @__PURE__ */ D(ea, {
 					toast: e,
-					icons: h,
-					resolver: g
+					icons: m,
+					resolver: h
 				})
 			}),
 			/* @__PURE__ */ O("div", {
 				className: "min-w-0 flex-1",
 				children: [
 					/* @__PURE__ */ O("p", {
-						className: G(li, _.title),
+						className: G(li, g.title),
 						children: [
 							a && /* @__PURE__ */ O("span", {
 								className: "sr-only",
@@ -2993,7 +3001,7 @@ function ea({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 						]
 					}),
 					e.description && /* @__PURE__ */ D("p", {
-						className: G("text-iui-toast-muted-foreground mt-1 text-sm wrap-break-word", _.description),
+						className: G("text-iui-toast-muted-foreground mt-1 text-sm wrap-break-word", g.description),
 						children: e.description
 					}),
 					e.progress !== void 0 && /* @__PURE__ */ D("div", {
@@ -3010,13 +3018,13 @@ function ea({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 						})
 					}),
 					e.actions.length > 0 && /* @__PURE__ */ D("div", {
-						className: G("mt-3 flex flex-wrap gap-2", _.actions),
+						className: G("mt-3 flex flex-wrap gap-2", g.actions),
 						children: e.actions.map((t, r) => {
 							let i = H(t), a = {
 								"aria-disabled": e.pendingAction !== void 0 || void 0,
 								"aria-busy": e.pendingAction === r || void 0,
 								"data-toast-action": "",
-								className: G(r === 0 ? "rounded-iui-toast focus-visible:ring-iui-toast-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-toast-action text-iui-toast-action hover:bg-iui-toast-action/10 border" : "rounded-iui-toast focus-visible:ring-iui-toast-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-toast-border hover:bg-iui-toast-control-hover border", _.action),
+								className: G(r === 0 ? "rounded-iui-toast focus-visible:ring-iui-toast-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-toast-action text-iui-toast-action hover:bg-iui-toast-action/10 border" : "rounded-iui-toast focus-visible:ring-iui-toast-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-toast-border hover:bg-iui-toast-control-hover border", g.action),
 								onClick: (e) => n(r, e)
 							}, o = /* @__PURE__ */ O(E, { children: [e.pendingAction === r && /* @__PURE__ */ D($, {
 								name: "spinner",
@@ -3026,8 +3034,8 @@ function ea({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 									toast: e,
 									action: t
 								},
-								icons: h,
-								resolver: g,
+								icons: m,
+								resolver: h,
 								className: "size-3.5 motion-safe:animate-spin"
 							}), t.label] });
 							return i === void 0 ? /* @__PURE__ */ D("button", {
@@ -3047,8 +3055,8 @@ function ea({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 			}),
 			e.dismissible && /* @__PURE__ */ D("button", {
 				type: "button",
-				"aria-label": Zr(r, e),
-				className: G("rounded-iui-toast text-iui-toast-icon hover:bg-iui-toast-control-hover hover:text-iui-toast-icon-hover focus-visible:ring-iui-toast-ring -m-1 shrink-0 p-1 focus-visible:ring-2 focus-visible:outline-hidden", _.dismiss),
+				"aria-label": Zr(i, e),
+				className: G("rounded-iui-toast text-iui-toast-icon hover:bg-iui-toast-control-hover hover:text-iui-toast-icon-hover focus-visible:ring-iui-toast-ring -m-1 shrink-0 p-1 focus-visible:ring-2 focus-visible:outline-hidden", g.dismiss),
 				onClick: t,
 				children: /* @__PURE__ */ D($, {
 					name: "dismiss",
@@ -3057,21 +3065,21 @@ function ea({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 						part: "dismiss",
 						toast: e
 					},
-					icons: h,
-					resolver: g,
+					icons: m,
+					resolver: h,
 					className: "size-4"
 				})
 			})
 		] });
 	};
-	return m(/* @__PURE__ */ O("section", {
-		ref: k,
-		"aria-label": Xr(n, i),
+	return c(/* @__PURE__ */ O("section", {
+		ref: w,
+		"aria-label": Xr(n, l),
 		tabIndex: -1,
 		className: "iui-toaster outline-none",
 		"data-toaster": t,
 		children: [
-			P.map(([e, t]) => /* @__PURE__ */ D("ol", {
+			M.map(([e, t]) => /* @__PURE__ */ D("ol", {
 				role: "list",
 				"data-toast-list": "",
 				"data-position": e,
@@ -3083,81 +3091,81 @@ function ea({ position: e = "bottom-right", name: t, label: n, dismissLabel: r, 
 					"data-dismissible": String(e.dismissible),
 					"aria-busy": e.type === "loading" || void 0,
 					tabIndex: 0,
-					className: G(ri, _.toast),
+					className: G(ri, g.toast),
 					children: [/* @__PURE__ */ D("div", {
 						"data-toast-body": "",
 						className: ii,
-						children: F(e)
-					}), u && e.duration !== null && /* @__PURE__ */ D("div", {
+						children: N(e)
+					}), p && e.duration !== null && /* @__PURE__ */ D("div", {
 						"data-toast-progress": "",
 						"aria-hidden": "true",
-						className: G("iui-toast-progress", K(ai, e.type) ?? ai.default, _.progress)
+						className: G("iui-toast-progress", K(ai, e.type) ?? ai.default, g.progress)
 					})]
 				}, e.id))
 			}, e)),
 			/* @__PURE__ */ D("div", {
-				ref: A,
+				ref: T,
 				role: "status",
 				"aria-live": "polite",
 				"aria-atomic": "true",
 				className: "sr-only"
 			}),
 			/* @__PURE__ */ D("div", {
-				ref: j,
+				ref: k,
 				"aria-live": "assertive",
 				"aria-atomic": "true",
 				className: "sr-only"
 			})
 		]
-	}), T);
+	}), C);
 }
 // ../js/notificationCenter.ts
-var ta = [
+var na = [
 	"all",
 	"unread",
 	"snoozed",
 	"archived"
-], na = {
+], ra = {
 	all: "empty",
 	unread: "emptyUnread",
 	snoozed: "emptySnoozed",
 	archived: "emptyArchived"
-}, ra = (e) => [...ta, ...Object.keys(e)], ia = (e) => ra(e.tabs).filter((t) => Ne(t, e.allowedActions));
-function aa(e, t, n) {
-	return Object.hasOwn(na, e) ? Z(t[e]) : Object.hasOwn(n, e) ? n[e].label : e;
+}, ia = (e) => [...na, ...Object.keys(e)], aa = (e) => ia(e.tabs).filter((t) => Ne(t, e.allowedActions));
+function oa(e, t, n) {
+	return Object.hasOwn(ra, e) ? Z(t[e]) : Object.hasOwn(n, e) ? n[e].label : e;
 }
-var oa = (e, t) => Z(t[Object.hasOwn(na, e) ? na[e] : "empty"]), sa = (e, t, n) => e.map((e) => ({
+var sa = (e, t) => Z(t[Object.hasOwn(ra, e) ? ra[e] : "empty"]), ca = (e, t, n) => e.map((e) => ({
 	filter: e,
-	label: aa(e, n, t.tabs),
+	label: oa(e, n, t.tabs),
 	selected: t.filter === e,
 	count: e === "unread" ? t.counts.unread : null
-})), ca = (e, t) => t.length > 0 ? e.filter((e) => !t.includes(e.id)) : e;
-function la(e, t) {
+})), la = (e, t) => t.length > 0 ? e.filter((e) => !t.includes(e.id)) : e;
+function ua(e, t) {
 	return e.status === "idle" || e.status === "loading" && t === 0 ? "loading" : e.status === "error" ? "error" : t === 0 ? "empty" : "items";
 }
-function ua(e, t = e.category) {
+function da(e, t = e.category) {
 	Ie({
 		...e,
 		category: t
 	}) > 0 && X.markAllAsRead({ category: t });
 }
-var da = (e) => e.filter === "all" && e.allowedActions.includes("archive");
-function fa(e, t) {
+var fa = (e) => e.filter === "all" && e.allowedActions.includes("archive");
+function pa(e, t) {
 	e.length > 0 && X.archiveAll({ category: t });
 }
-function pa(e, t, n, r) {
+function ma(e, t, n, r) {
 	let i = new URL(e, "http://localhost"), a = i.searchParams;
 	return a.delete("filter"), a.delete("category"), r !== void 0 && a.delete(r), t !== "all" && a.set("filter", t), n !== null && a.set("category", n), `${i.pathname}${i.search}`;
 }
-function ma(e, t, n, r) {
+function ha(e, t, n, r) {
 	let i = new URL(e, "http://localhost").searchParams, a = i.get("filter");
 	return {
-		filter: n ?? (a !== null && ia(t).includes(a) ? a : "all"),
+		filter: n ?? (a !== null && aa(t).includes(a) ? a : "all"),
 		category: r === void 0 ? i.get("category") || null : r
 	};
 }
-var ha = (e, t, n, r) => Z(e.pausedUntil, { time: mt(t, n, r) }), ga = (e, t, n) => mt(ft(e.preset, new Date(t)), t, n);
-function _a(e, t) {
+var ga = (e, t, n, r) => Z(e.pausedUntil, { time: mt(t, n, r) }), _a = (e, t, n) => mt(ft(e.preset, new Date(t)), t, n);
+function va(e, t) {
 	let n = !t.includes("snooze") || e === "archived" ? [] : [e === "snoozed" ? {
 		action: "unsnooze",
 		icon: "unsnooze",
@@ -3195,12 +3203,12 @@ function _a(e, t) {
 		...i
 	];
 }
-var va = (e, t, n = /* @__PURE__ */ new Date()) => e ? e(n) : lt(t, n);
-function ya(e, t, n) {
+var ya = (e, t, n = /* @__PURE__ */ new Date()) => e ? e(n) : lt(t, n);
+function ba(e, t, n) {
 	let r = e.filter((e) => e !== t);
 	return n ? [...r, t] : r;
 }
-function ba(e, t, { scroller: n, listed: r }) {
+function xa(e, t, { scroller: n, listed: r }) {
 	let i = [], a = (e) => {
 		i = e, t(e);
 	}, o = n ?? window, s = () => n ? n.scrollTop > 0 : e.getBoundingClientRect().top < 0, c = X.onArrival((t) => {
@@ -3224,8 +3232,8 @@ function ba(e, t, { scroller: n, listed: r }) {
 		}
 	};
 }
-var xa = 1e3, Sa = 250;
-function Ca(e, t, n = e) {
+var Sa = 1e3, Ca = 250;
+function wa(e, t, n = e) {
 	let r = /* @__PURE__ */ new Map(), i = /* @__PURE__ */ new Set(), a = [], o, s = () => {
 		o = void 0;
 		let e = a, n = t().filter((t) => e.includes(t.id));
@@ -3235,11 +3243,11 @@ function Ca(e, t, n = e) {
 	}, l = (e) => {
 		r.delete(e);
 		let t = e.dataset.inboxId;
-		t !== void 0 && e.dataset.seen === "false" && e.isConnected && (u.unobserve(e), i.delete(e), a.push(t), o ??= setTimeout(s, Sa));
+		t !== void 0 && e.dataset.seen === "false" && e.isConnected && (u.unobserve(e), i.delete(e), a.push(t), o ??= setTimeout(s, Ca));
 	}, u = new IntersectionObserver((e) => {
 		for (let t of e) {
 			let e = t.target, n = t.rootBounds !== null && t.intersectionRect.height >= t.rootBounds.height / 2;
-			t.isIntersecting && (t.intersectionRatio >= .5 || n) ? r.set(e, r.get(e) ?? setTimeout(() => l(e), xa)) : c(e);
+			t.isIntersecting && (t.intersectionRatio >= .5 || n) ? r.set(e, r.get(e) ?? setTimeout(() => l(e), Sa)) : c(e);
 		}
 	}, {
 		root: n,
@@ -3261,7 +3269,7 @@ function Ca(e, t, n = e) {
 		f.disconnect(), u.disconnect(), r.forEach((e) => clearTimeout(e)), o !== void 0 && (clearTimeout(o), s());
 	} };
 }
-function wa(e, t) {
+function Ta(e, t) {
 	let n = (e.target instanceof Element ? e.target : null)?.closest("[data-inbox-link], [data-inbox-action]"), r = n?.closest("[data-inbox-item]")?.dataset.inboxId, i = r === void 0 ? void 0 : t.find((e) => e.id === r);
 	if (!n || !i) return;
 	if (!n.hasAttribute("data-inbox-action")) return { item: i };
@@ -3271,7 +3279,7 @@ function wa(e, t) {
 		action: o
 	} : void 0;
 }
-var Ta = 160, Ea = [
+var Ea = 160, Da = [
 	"position",
 	"box-sizing",
 	"inset",
@@ -3287,7 +3295,7 @@ var Ta = 160, Ea = [
 	"overflow-y",
 	"overscroll-behavior"
 ];
-function Da(e, t, n) {
+function Oa(e, t, n) {
 	let r, i = null, a, o = t.querySelector("[data-inbox-scroller]"), s = o !== null && typeof ResizeObserver == "function" ? new ResizeObserver(() => {
 		o.offsetHeight > 0 && o.querySelector(":scope > [role=\"status\"]") === null && t.style.setProperty("--inbox-list-height", `${o.offsetHeight}px`);
 	}) : void 0;
@@ -3298,33 +3306,33 @@ function Da(e, t, n) {
 	}, l = () => {
 		if (!t.matches(":popover-open")) return;
 		if (getComputedStyle(t).getPropertyValue("--inbox-layout").trim() === "sheet") {
-			a?.(), a = void 0, Ea.forEach((e) => t.style.removeProperty(e)), delete t.dataset.side;
+			a?.(), a = void 0, Da.forEach((e) => t.style.removeProperty(e)), delete t.dataset.side;
 			return;
 		}
-		let { placement: r } = C(e, t, {
+		let { placement: r } = _(e, t, {
 			placement: n.placement(),
 			offset: c("--inbox-gap", 8),
 			viewportMargin: c("--inbox-offset", 8),
 			anchorPositioning: !1
 		});
-		t.dataset.side = r.split("-")[0], a ??= _(e, t, l);
-	}, u = () => void (a === void 0 && l()), d = (e) => {
+		t.dataset.side = r.split("-")[0], a ??= d(e, t, l);
+	}, u = () => void (a === void 0 && l()), f = (e) => {
 		e.newState === "open" && requestAnimationFrame(() => a === void 0 && l());
-	}, f = (r) => {
+	}, p = (r) => {
 		let i = r.newState === "open";
 		i ? (a === void 0 && l(), window.addEventListener("resize", u), t.contains(document.activeElement) || t.focus({ preventScroll: !0 })) : (a?.(), a = void 0, window.removeEventListener("resize", u)), e.setAttribute("aria-expanded", String(i)), n.onToggle(i);
-	}, p = (n) => {
+	}, m = (n) => {
 		let r = n.relatedTarget;
 		r instanceof Node && !t.contains(r) && !e.contains(r) && t.matches(":popover-open") && t.hidePopover();
 	};
-	return t.addEventListener("beforetoggle", d), t.addEventListener("toggle", f), t.addEventListener("focusout", p), {
+	return t.addEventListener("beforetoggle", f), t.addEventListener("toggle", p), t.addEventListener("focusout", m), {
 		observe(e) {
 			let t = e?.closest("[data-inbox-scroller]") ?? null;
 			r && t === i || (r?.disconnect(), i = t, r = typeof IntersectionObserver == "function" ? new IntersectionObserver((e) => {
 				e.some((e) => e.isIntersecting) && n.onEndReached();
 			}, {
 				root: t,
-				rootMargin: `0px 0px ${Ta}px 0px`
+				rootMargin: `0px 0px ${Ea}px 0px`
 			}) : void 0), r?.disconnect(), e && r?.observe(e);
 		},
 		place: l,
@@ -3332,11 +3340,11 @@ function Da(e, t, n) {
 			t.matches(":popover-open") && t.hidePopover();
 		},
 		destroy() {
-			r?.disconnect(), s?.disconnect(), a?.(), t.removeEventListener("beforetoggle", d), t.removeEventListener("toggle", f), t.removeEventListener("focusout", p), window.removeEventListener("resize", u);
+			r?.disconnect(), s?.disconnect(), a?.(), t.removeEventListener("beforetoggle", f), t.removeEventListener("toggle", p), t.removeEventListener("focusout", m), window.removeEventListener("resize", u);
 		}
 	};
 }
-var Oa = {
+var ka = {
 	j: "next",
 	arrowdown: "next",
 	k: "previous",
@@ -3346,15 +3354,15 @@ var Oa = {
 	h: "snooze",
 	x: "select",
 	enter: "open"
-}, ka = {
+}, Aa = {
 	read: "[data-inbox-toggle-read]",
 	archive: "[data-inbox-toggle-archive]",
 	snooze: "[data-inbox-snooze]",
 	select: "[data-inbox-select]",
 	open: "[data-inbox-link]"
 };
-function Aa(e, t) {
-	let n = Oa[e.key.toLowerCase()], r = e.target instanceof HTMLElement ? e.target : null;
+function ja(e, t) {
+	let n = ka[e.key.toLowerCase()], r = e.target instanceof HTMLElement ? e.target : null;
 	if (!n || !r || e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || r.closest("input:not([type=\"checkbox\"]), textarea, select, [contenteditable]:not([contenteditable=\"false\"]), [role=\"tab\"]")) return;
 	let i = [...t.querySelectorAll("[data-inbox-item]")], a = r.closest("[data-inbox-item]"), o = a ? i.indexOf(a) : -1;
 	if ((n === "open" || e.key.startsWith("Arrow")) && r !== a && r !== t) return;
@@ -3363,10 +3371,10 @@ function Aa(e, t) {
 		t && (e.preventDefault(), t.focus());
 		return;
 	}
-	let s = a?.querySelector(ka[n]);
+	let s = a?.querySelector(Aa[n]);
 	a && s && (e.preventDefault(), s.click());
 }
-function ja(e, t = () => e) {
+function Ma(e, t = () => e) {
 	let n, r = (t) => e.querySelector(`[data-inbox-item][data-inbox-id="${CSS.escape(t)}"]`), i = () => Array.from(e.querySelectorAll("[data-inbox-item]"), (e) => e.dataset.inboxId ?? ""), a = () => {
 		let t = document.activeElement, r = t instanceof HTMLElement && e.contains(t) ? t.closest("[data-inbox-item]")?.dataset.inboxId : void 0;
 		n = r === void 0 ? void 0 : {
@@ -3397,17 +3405,17 @@ function ja(e, t = () => e) {
 		e.removeEventListener("focusin", a), e.removeEventListener("focusout", o), s?.disconnect();
 	};
 }
-function Ma(e, t, n, r, i = !1) {
+function Na(e, t, n, r, i = !1) {
 	let a = t > 0 ? Z(e.bellNew, {
 		count: St(t, n, r),
 		number: t
 	}) : Z(e.bell);
 	return i ? Z(e.bellPaused, { label: a }) : a;
 }
-function Na(e) {
+function Pa(e) {
 	return e.trim().split(/\s+/).slice(0, 2).map((e) => Array.from(e)[0]?.toLocaleUpperCase() ?? "").join("");
 }
-function Pa(e, t, n, r = !1) {
+function Fa(e, t, n, r = !1) {
 	let i = n.indexOf(t), a = {
 		ArrowRight: r ? -1 : 1,
 		ArrowLeft: r ? 1 : -1
@@ -3415,24 +3423,24 @@ function Pa(e, t, n, r = !1) {
 	return a === void 0 ? e === "Home" ? n[0] : e === "End" ? n.at(-1) : void 0 : n[(i + a + n.length) % n.length];
 }
 // ../js/overlay.ts
-var Fa = () => typeof HTMLElement < "u" && "showPopover" in HTMLElement.prototype, Ia = null;
-function La(e) {
+var Ia = () => typeof HTMLElement < "u" && "showPopover" in HTMLElement.prototype, La = null;
+function Ra(e) {
 	let t = null, n = (n) => {
-		n && Ia !== t ? (Ia?.hide(), Ia = t) : !n && Ia === t && (Ia = null), e.onOpenChange(n);
+		n && La !== t ? (La?.hide(), La = t) : !n && La === t && (La = null), e.onOpenChange(n);
 	}, r = (t) => {
 		let n = e.tooltip();
-		if (n) return v(n), w() ? void 0 : g(n, t ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 1 }, { opacity: 0 }], {
+		if (n) return f(n), v() ? void 0 : u(n, t ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 1 }, { opacity: 0 }], {
 			duration: t ? 150 : 75,
 			easing: t ? "out" : "in"
 		});
-	}, i = () => t ??= x({
+	}, i = () => t ??= h({
 		...e,
 		onOpenChange: n,
-		onMount: ({ popover: e }) => () => v(e),
+		onMount: ({ popover: e }) => () => f(e),
 		transition: r
 	});
 	return {
-		native: Fa(),
+		native: Ia(),
 		onPointerEnter: (e) => {
 			e.pointerType !== "touch" && i().onMouseEnter();
 		},
@@ -3444,31 +3452,31 @@ function La(e) {
 		onFocusOut: (e) => t?.onFocusOut(e),
 		mount: () => t?.mount(),
 		cleanup: () => {
-			t?.cleanup(), Ia === t && (Ia = null);
+			t?.cleanup(), La === t && (La = null);
 		}
 	};
 }
 // src/Tooltip.tsx
-function Ra({ text: e, shortcut: t, children: n }) {
-	let [r, i] = f(!1), a = d(null), o = d(null), s = d(null), c = () => s.current ??= La({
-		reference: () => a.current,
-		tooltip: () => o.current,
-		onOpenChange: i
+function za({ text: e, shortcut: t, children: n }) {
+	let [i, s] = o(!1), c = a(null), l = a(null), u = a(null), d = () => u.current ??= Ra({
+		reference: () => c.current,
+		tooltip: () => l.current,
+		onOpenChange: s
 	});
-	return l(() => () => s.current?.cleanup(), []), l(() => {
-		r && s.current?.mount();
-	}, [r]), /* @__PURE__ */ O("span", {
-		ref: a,
+	return r(() => () => u.current?.cleanup(), []), r(() => {
+		i && u.current?.mount();
+	}, [i]), /* @__PURE__ */ O("span", {
+		ref: c,
 		className: hi,
-		onPointerEnter: (e) => c().onPointerEnter(e.nativeEvent),
-		onPointerLeave: () => c().onPointerLeave(),
-		onPointerDown: () => c().onPointerDown(),
-		onFocus: (e) => c().onFocusIn(e.nativeEvent),
-		onBlur: (e) => c().onFocusOut(e.nativeEvent),
-		children: [n, r && /* @__PURE__ */ O("span", {
-			ref: o,
+		onPointerEnter: (e) => d().onPointerEnter(e.nativeEvent),
+		onPointerLeave: () => d().onPointerLeave(),
+		onPointerDown: () => d().onPointerDown(),
+		onFocus: (e) => d().onFocusIn(e.nativeEvent),
+		onBlur: (e) => d().onFocusOut(e.nativeEvent),
+		children: [n, i && /* @__PURE__ */ O("span", {
+			ref: l,
 			role: "tooltip",
-			popover: Fa() ? "manual" : void 0,
+			popover: Ia() ? "manual" : void 0,
 			"data-inbox-tooltip": "",
 			className: "bg-iui-inbox-tooltip text-iui-inbox-tooltip-foreground pointer-events-none m-0 flex w-max max-w-xs items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium shadow-md",
 			children: [e, t && /* @__PURE__ */ D("kbd", {
@@ -3479,17 +3487,17 @@ function Ra({ text: e, shortcut: t, children: n }) {
 	});
 }
 // src/InboxHeader.tsx
-function za({ component: e, state: n, filter: r, category: i, items: a, labels: o, icons: u, iconResolver: p, classes: m, locale: h, maxCount: g = 99, now: _, panel: v, href: y, open: x = !0, renderHeader: C, renderTab: w }) {
-	let T = c(), k = c(), A = (e) => Z(o[e]), j = ia(n), M = [[null, A("allCategories")], ...Object.entries(n.categoryFilter)], N = M.length > 1, P = Ie({
-		...n,
-		category: i
-	}), F = da({
-		filter: r,
-		allowedActions: n.allowedActions
-	}), I = r === "all" || r === "unread", L = F || n.canPause, R = I || L, z = (t) => ({
+function Ba({ component: e, state: i, filter: s, category: c, items: l, labels: u, icons: d, iconResolver: f, classes: p, locale: h, maxCount: _ = 99, now: v, panel: y, href: b, open: S = !0, renderHeader: C, renderTab: w }) {
+	let T = n(), k = n(), A = (e) => Z(u[e]), j = aa(i), M = [[null, A("allCategories")], ...Object.entries(i.categoryFilter)], N = M.length > 1, P = Ie({
+		...i,
+		category: c
+	}), F = fa({
+		filter: s,
+		allowedActions: i.allowedActions
+	}), I = s === "all" || s === "unread", L = F || i.canPause, R = I || L, z = (t) => ({
 		component: e,
 		part: t
-	}), B = d(null), ee = d(null), [V, te] = f(!1), H = pt(n.pausePresets, o, h), ne = d(null), U = () => ne.current ??= b({
+	}), B = a(null), ee = a(null), [V, te] = o(!1), H = pt(i.pausePresets, u, h), ne = a(null), U = () => ne.current ??= m({
 		reference: () => B.current,
 		popover: () => ee.current,
 		position: {
@@ -3499,30 +3507,30 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 		menu: !0,
 		onOpenChange: te
 	});
-	l(() => {
+	r(() => {
 		let e = ne.current;
 		if (V && e) return e.mount(), () => e.cleanup();
-	}, [V]), s(() => ne.current?.close(!1), [x]);
+	}, [V]), t(() => ne.current?.close(!1), [S]);
 	let re = (e) => void X.pause(ft(e.preset)), ie = (e) => {
 		let t = e.currentTarget.closest("[data-inbox-panel], [data-inbox-list]");
 		X.resume(), (B.current ?? t)?.focus();
-	}, ae = () => ua(n, i), oe = () => fa(a, i), se = (e, t) => void X.load(e, t), W = (e) => {
-		let t = S(e.currentTarget), n = Pa(e.key, r, j, t);
-		n !== void 0 && v && (e.preventDefault(), se(n, i), document.getElementById(v.tabId(n))?.focus());
+	}, ae = () => da(i, c), oe = () => pa(l, c), se = (e, t) => void X.load(e, t), W = (e) => {
+		let t = g(e.currentTarget), n = Fa(e.key, s, j, t);
+		n !== void 0 && y && (e.preventDefault(), se(n, c), document.getElementById(y.tabId(n))?.focus());
 	}, ce = (e) => w ? w(e) : /* @__PURE__ */ O(E, { children: [
 		e.label,
 		" ",
 		e.count !== null && e.count > 0 && /* @__PURE__ */ D("span", {
 			className: "bg-iui-inbox-accent-subtle text-iui-inbox-accent rounded-full px-1.5 text-xs/5 tabular-nums",
-			children: St(e.count, g, h)
+			children: St(e.count, _, h)
 		})
-	] }), le = (e) => j.length > 1 && y && /* @__PURE__ */ D("div", {
+	] }), le = (e) => j.length > 1 && b && /* @__PURE__ */ D("div", {
 		className: e,
-		children: sa(j, {
-			...n,
-			filter: r
-		}, o).map((e) => /* @__PURE__ */ D(t, {
-			href: y(e.filter, i),
+		children: ca(j, {
+			...i,
+			filter: s
+		}, u).map((e) => /* @__PURE__ */ D(x, {
+			href: b(e.filter, c),
 			"aria-current": e.selected ? "page" : void 0,
 			"data-inbox-tab": e.filter,
 			className: "text-iui-inbox-muted-foreground hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring aria-selected:border-iui-inbox-accent aria-selected:text-iui-inbox-accent aria-[current=page]:border-iui-inbox-accent aria-[current=page]:text-iui-inbox-accent -mb-px inline-flex items-center gap-1.5 rounded-t-md border-b-2 border-transparent px-1.5 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset",
@@ -3531,41 +3539,41 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 	}), ue = (e, t) => /* @__PURE__ */ O(E, { children: [
 		t,
 		" ",
-		e !== null && n.categoryCounts[e] ? /* @__PURE__ */ D("span", {
+		e !== null && i.categoryCounts[e] ? /* @__PURE__ */ D("span", {
 			className: gi,
-			children: St(n.categoryCounts[e], g, h)
+			children: St(i.categoryCounts[e], _, h)
 		}) : null
 	] });
 	return /* @__PURE__ */ O(E, { children: [
 		C ? C({
-			...v && {
-				titleId: v.titleId,
-				title: v.title,
-				close: v.close
+			...y && {
+				titleId: y.titleId,
+				title: y.title,
+				close: y.close
 			},
-			filter: r,
-			category: i,
+			filter: s,
+			category: c,
 			unread: P,
 			markAllAsRead: ae,
 			canArchiveAll: F,
 			archiveAll: oe,
-			allowedActions: n.allowedActions,
-			canPause: n.canPause,
-			pausedUntil: n.pausedUntil,
+			allowedActions: i.allowedActions,
+			canPause: i.canPause,
+			pausedUntil: i.pausedUntil,
 			pauseOptions: H,
 			pause: re,
 			resume: () => void X.resume()
-		}) : /* @__PURE__ */ D(E, { children: (v || j.length > 1 || R) && /* @__PURE__ */ O("div", {
-			className: v ? "flex items-center justify-between gap-3 px-4 pt-3 pb-1" : "border-iui-inbox-border flex flex-wrap-reverse items-stretch border-b pe-4",
+		}) : /* @__PURE__ */ D(E, { children: (y || j.length > 1 || R) && /* @__PURE__ */ O("div", {
+			className: y ? "flex items-center justify-between gap-3 px-4 pt-3 pb-1" : "border-iui-inbox-border flex flex-wrap-reverse items-stretch border-b pe-4",
 			children: [
-				v && /* @__PURE__ */ D("h2", {
-					id: v.titleId,
+				y && /* @__PURE__ */ D("h2", {
+					id: y.titleId,
 					className: "text-base font-semibold",
-					children: v.title
+					children: y.title
 				}),
 				le("iui-inbox-fade border-iui-inbox-border -mb-px flex min-w-0 flex-auto gap-1 overflow-x-auto border-b ps-2.5 pe-8 scrollbar-none"),
 				R && /* @__PURE__ */ O("div", {
-					className: v ? "-me-1.5 flex items-center gap-1" : "-me-1.5 flex shrink-0 items-center gap-1 py-2 ps-2.5",
+					className: y ? "-me-1.5 flex items-center gap-1" : "-me-1.5 flex shrink-0 items-center gap-1 py-2 ps-2.5",
 					children: [I && /* @__PURE__ */ D("button", {
 						type: "button",
 						"data-inbox-read-all": "",
@@ -3573,7 +3581,7 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 						className: "text-iui-inbox-muted-foreground hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring rounded-md px-1.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:pointer-events-none aria-disabled:opacity-50",
 						onClick: ae,
 						children: A("markAllAsRead")
-					}), L && /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D(Ra, {
+					}), L && /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D(za, {
 						text: A("moreActions"),
 						children: /* @__PURE__ */ D("button", {
 							ref: B,
@@ -3583,7 +3591,7 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 							"aria-label": A("moreActions"),
 							"aria-expanded": V,
 							"aria-controls": V ? T : void 0,
-							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", m.control),
+							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", p.control),
 							onClick: (e) => U().toggle(e.nativeEvent),
 							onPointerDown: () => U().onPointerDown(),
 							onKeyDown: (e) => U().onKeydown(e.nativeEvent),
@@ -3591,8 +3599,8 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 							children: /* @__PURE__ */ D($, {
 								name: "more",
 								context: z("more-actions"),
-								icons: u,
-								resolver: p,
+								icons: d,
+								resolver: f,
 								className: "size-4"
 							})
 						})
@@ -3601,7 +3609,7 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 						ref: ee,
 						role: "menu",
 						"aria-label": A("moreActions"),
-						popover: Fa() ? "auto" : void 0,
+						popover: Ia() ? "auto" : void 0,
 						"data-inbox-menu": "",
 						className: "border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground rounded-iui-inbox m-0 w-max min-w-48 border p-1 shadow-lg",
 						children: [
@@ -3609,22 +3617,22 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 								type: "button",
 								role: "menuitem",
 								"data-inbox-archive-all": "",
-								"aria-disabled": a.length === 0 || void 0,
+								"aria-disabled": l.length === 0 || void 0,
 								className: "hover:bg-iui-inbox-control-hover focus-visible:bg-iui-inbox-control-hover flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-start text-sm outline-hidden aria-disabled:pointer-events-none aria-disabled:opacity-50",
 								onClick: oe,
 								children: [/* @__PURE__ */ D($, {
 									name: "archive",
 									context: z("archive-all"),
-									icons: u,
-									resolver: p,
+									icons: d,
+									resolver: f,
 									className: "text-iui-inbox-icon size-4 shrink-0"
 								}), A("archiveAll")]
 							}),
-							F && n.canPause && /* @__PURE__ */ D("div", {
+							F && i.canPause && /* @__PURE__ */ D("div", {
 								role: "separator",
 								className: "bg-iui-inbox-border -mx-1 my-1 h-px"
 							}),
-							n.canPause && /* @__PURE__ */ O("div", {
+							i.canPause && /* @__PURE__ */ O("div", {
 								role: "group",
 								"aria-labelledby": k,
 								children: [/* @__PURE__ */ O("div", {
@@ -3633,8 +3641,8 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 									children: [/* @__PURE__ */ D($, {
 										name: "pause",
 										context: z("pause"),
-										icons: u,
-										resolver: p,
+										icons: d,
+										resolver: f,
 										className: "text-iui-inbox-icon size-4 shrink-0"
 									}), A("pause")]
 								}), H.map((e) => /* @__PURE__ */ O("button", {
@@ -3648,7 +3656,7 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 										" ",
 										/* @__PURE__ */ D("span", {
 											className: "text-iui-inbox-muted-foreground ms-auto ps-6 tabular-nums",
-											children: ga(e, _, h)
+											children: _a(e, v, h)
 										})
 									]
 								}, e.label))]
@@ -3660,20 +3668,20 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 		}) }),
 		/* @__PURE__ */ D("div", {
 			"aria-live": "polite",
-			children: n.pausedUntil !== null && /* @__PURE__ */ O("p", {
+			children: i.pausedUntil !== null && /* @__PURE__ */ O("p", {
 				"data-inbox-paused": "",
 				className: "bg-iui-inbox-control-hover text-iui-inbox-foreground mx-4 mt-1 mb-2 flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-xs",
 				children: [
 					/* @__PURE__ */ D($, {
 						name: "paused",
 						context: z("paused"),
-						icons: u,
-						resolver: p,
+						icons: d,
+						resolver: f,
 						className: "text-iui-inbox-icon size-4 shrink-0"
 					}),
 					/* @__PURE__ */ D("span", {
 						className: "min-w-0 flex-1",
-						children: ha(o, n.pausedUntil, _, h)
+						children: ga(u, i.pausedUntil, v, h)
 					}),
 					/* @__PURE__ */ D("button", {
 						type: "button",
@@ -3686,24 +3694,24 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 			})
 		}),
 		C && le("iui-inbox-fade border-iui-inbox-border flex shrink-0 gap-1 overflow-x-auto border-b ps-2.5 pe-8 scrollbar-none"),
-		j.length > 1 && !y && v && /* @__PURE__ */ D("div", {
+		j.length > 1 && !b && y && /* @__PURE__ */ D("div", {
 			role: "tablist",
-			"aria-labelledby": v.titleId,
+			"aria-labelledby": y.titleId,
 			className: "iui-inbox-fade border-iui-inbox-border flex shrink-0 gap-1 overflow-x-auto border-b ps-2.5 pe-8 scrollbar-none",
 			onKeyDown: W,
-			children: sa(j, {
-				...n,
-				filter: r
-			}, o).map((e) => /* @__PURE__ */ D("button", {
-				id: v.tabId(e.filter),
+			children: ca(j, {
+				...i,
+				filter: s
+			}, u).map((e) => /* @__PURE__ */ D("button", {
+				id: y.tabId(e.filter),
 				type: "button",
 				role: "tab",
 				"aria-selected": e.selected,
-				"aria-controls": v.listId,
+				"aria-controls": y.listId,
 				tabIndex: e.selected ? 0 : -1,
 				"data-inbox-tab": e.filter,
 				className: "text-iui-inbox-muted-foreground hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring aria-selected:border-iui-inbox-accent aria-selected:text-iui-inbox-accent aria-[current=page]:border-iui-inbox-accent aria-[current=page]:text-iui-inbox-accent -mb-px inline-flex items-center gap-1.5 rounded-t-md border-b-2 border-transparent px-1.5 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset",
-				onClick: () => se(e.filter, i),
+				onClick: () => se(e.filter, c),
 				children: ce(e)
 			}, e.filter))
 		}),
@@ -3711,35 +3719,35 @@ function za({ component: e, state: n, filter: r, category: i, items: a, labels: 
 			role: "group",
 			"aria-label": A("categories"),
 			className: "iui-inbox-fade border-iui-inbox-border flex shrink-0 gap-1.5 overflow-x-auto border-b ps-4 pe-8 py-2 scrollbar-none",
-			children: M.map(([e, n]) => y ? /* @__PURE__ */ D(t, {
-				href: y(r, e),
+			children: M.map(([e, t]) => b ? /* @__PURE__ */ D(x, {
+				href: b(s, e),
 				"data-inbox-category": e ?? "",
-				"aria-current": i === e ? "page" : void 0,
+				"aria-current": c === e ? "page" : void 0,
 				className: "border-iui-inbox-border text-iui-inbox-muted-foreground hover:bg-iui-inbox-control-hover hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring aria-pressed:border-iui-inbox-accent aria-pressed:bg-iui-inbox-accent-subtle aria-pressed:text-iui-inbox-accent aria-[current=page]:border-iui-inbox-accent aria-[current=page]:bg-iui-inbox-accent-subtle aria-[current=page]:text-iui-inbox-accent inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden",
-				children: ue(e, n)
+				children: ue(e, t)
 			}, e ?? "") : /* @__PURE__ */ D("button", {
 				type: "button",
 				"data-inbox-category": e ?? "",
-				"aria-pressed": i === e,
+				"aria-pressed": c === e,
 				className: "border-iui-inbox-border text-iui-inbox-muted-foreground hover:bg-iui-inbox-control-hover hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring aria-pressed:border-iui-inbox-accent aria-pressed:bg-iui-inbox-accent-subtle aria-pressed:text-iui-inbox-accent aria-[current=page]:border-iui-inbox-accent aria-[current=page]:bg-iui-inbox-accent-subtle aria-[current=page]:text-iui-inbox-accent inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden",
-				onClick: () => se(r, e),
-				children: ue(e, n)
+				onClick: () => se(s, e),
+				children: ue(e, t)
 			}, e ?? ""))
 		})
 	] });
 }
 // src/NotificationItem.tsx
-var Ba = [
+var Va = [
 	"snooze",
 	"archive",
 	"mute"
 ];
-function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i, classes: a = {}, locale: o, pendingAction: l, snooze: u, allowedActions: p = Ba, selected: m = !1, onSelectedChange: h }) {
-	let g = e.readAt === null, _ = e.archivedAt !== null, v = Re(e, t), y = Dt(n, e), b = Et(e), x = (e) => p.includes(e), S = (t) => Z(n.itemControl, {
+function Ha({ item: e, now: r, labels: i = Tt(), icons: s = {}, iconResolver: c, classes: l = {}, locale: u, pendingAction: d, snooze: f, allowedActions: p = Va, selected: m = !1, onSelectedChange: h }) {
+	let g = e.readAt === null, _ = e.archivedAt !== null, v = Re(e, r), y = Dt(i, e), b = Et(e), x = (e) => p.includes(e), S = (t) => Z(i.itemControl, {
 		action: Z(t),
 		title: e.title
-	}), C = x("snooze"), w = c(), [T, k] = f(null), A = d(null);
-	T && !C && k(null), s(() => {
+	}), C = x("snooze"), w = n(), [T, k] = o(null), A = a(null);
+	T && !C && k(null), t(() => {
 		T && A.current?.querySelector("button")?.focus();
 	}, [T]);
 	let j = () => {
@@ -3747,40 +3755,40 @@ function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i,
 		else if (T) k(null);
 		else {
 			let e = /* @__PURE__ */ new Date();
-			k(u ? u(e) : lt(n, e));
+			k(f ? f(e) : lt(i, e));
 		}
 	}, M = (t) => ({
 		component: "NotificationItem",
 		part: t,
 		item: e
-	}), N = e.icon ? ye(e.icon, M("media"), r, i) : void 0, P = new Date(e.createdAt).toLocaleString(o, {
+	}), N = e.icon ? ye(e.icon, M("media"), s, c) : void 0, P = new Date(e.createdAt).toLocaleString(u, {
 		dateStyle: "medium",
 		timeStyle: "short"
 	}), F = /* @__PURE__ */ D($, {
 		name: e.announcement ? "announcement" : "notification",
 		context: M("media"),
-		icons: r,
-		resolver: i,
+		icons: s,
+		resolver: c,
 		className: "size-5"
 	});
 	e.actor?.avatar ? F = /* @__PURE__ */ D("img", {
 		src: e.actor.avatar,
 		alt: "",
 		className: "size-full object-cover"
-	}) : N === void 0 ? e.actor?.name && (F = Na(e.actor.name)) : F = Xi(N, "size-5");
+	}) : N === void 0 ? e.actor?.name && (F = Pa(e.actor.name)) : F = Zi(N, "size-5");
 	let I = h ? "label" : "span";
 	return /* @__PURE__ */ O("div", {
 		"data-read": String(!g),
 		"data-archived": String(_),
 		"data-selected": h ? String(m) : void 0,
-		className: G(xi, a.item),
+		className: G(xi, l.item),
 		children: [
 			/* @__PURE__ */ O(I, {
 				className: G(Si, h && "z-10 cursor-pointer"),
 				children: [
 					/* @__PURE__ */ D("span", {
 						"aria-hidden": "true",
-						className: G(Ci, a.media),
+						className: G(Ci, l.media),
 						children: F
 					}),
 					h && /* @__PURE__ */ D("span", {
@@ -3790,7 +3798,7 @@ function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i,
 							"data-inbox-select": "",
 							"aria-keyshortcuts": "X",
 							checked: m,
-							"aria-label": Z(n.select, { title: e.title }),
+							"aria-label": Z(i.select, { title: e.title }),
 							className: "accent-iui-inbox-accent size-4 cursor-pointer",
 							onChange: (e) => h(e.target.checked)
 						})
@@ -3805,15 +3813,15 @@ function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i,
 				className: "min-w-0 flex-1",
 				children: [
 					/* @__PURE__ */ O("p", {
-						className: G(wi, a.title),
+						className: G(wi, l.title),
 						children: [
 							g && /* @__PURE__ */ O("span", {
 								className: "sr-only",
-								children: [Z(n.unreadState), ": "]
+								children: [Z(i.unreadState), ": "]
 							}),
 							e.announcement && /* @__PURE__ */ O("span", {
 								className: "sr-only",
-								children: [Z(n.announcement), ": "]
+								children: [Z(i.announcement), ": "]
 							}),
 							e.url ? /* @__PURE__ */ D("a", {
 								"data-inbox-link": "",
@@ -3825,7 +3833,7 @@ function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i,
 						]
 					}),
 					e.body && /* @__PURE__ */ D("p", {
-						className: G("text-iui-inbox-muted-foreground mt-0.5 line-clamp-3 text-sm wrap-break-word", a.body),
+						className: G("text-iui-inbox-muted-foreground mt-0.5 line-clamp-3 text-sm wrap-break-word", l.body),
 						children: e.body
 					}),
 					e.image && /* @__PURE__ */ D("img", {
@@ -3835,7 +3843,7 @@ function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i,
 					}),
 					y && /* @__PURE__ */ O("p", {
 						"data-inbox-actors": "",
-						className: G("text-iui-inbox-muted-foreground mt-1.5 flex items-center gap-1.5 text-xs", a.actors),
+						className: G("text-iui-inbox-muted-foreground mt-1.5 flex items-center gap-1.5 text-xs", l.actors),
 						children: [/* @__PURE__ */ D("span", {
 							"aria-hidden": "true",
 							className: "isolate flex",
@@ -3846,79 +3854,79 @@ function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i,
 									src: e.avatar,
 									alt: "",
 									className: "size-full object-cover"
-								}) : e.name && Na(e.name)
+								}) : e.name && Pa(e.name)
 							}, t))
 						}), y]
 					}),
 					v && e.snoozedUntil ? /* @__PURE__ */ O("p", {
 						"data-inbox-snoozed-until": "",
 						suppressHydrationWarning: !0,
-						className: G(Di, a.time),
+						className: G(Di, l.time),
 						children: [/* @__PURE__ */ D($, {
 							name: "snooze",
 							context: M("snoozed-until"),
-							icons: r,
-							resolver: i,
+							icons: s,
+							resolver: c,
 							className: "size-3.5"
-						}), Z(n.snoozedUntil, { time: ut(e.snoozedUntil, t, o) })]
+						}), Z(i.snoozedUntil, { time: ut(e.snoozedUntil, r, u) })]
 					}) : /* @__PURE__ */ D("time", {
 						dateTime: e.createdAt,
 						title: P,
 						suppressHydrationWarning: !0,
-						className: G(Ei, a.time),
-						children: xt(e.createdAt, t, o)
+						className: G(Ei, l.time),
+						children: xt(e.createdAt, r, u)
 					}),
 					e.muted && /* @__PURE__ */ O("p", {
 						"data-inbox-muted": "",
-						className: G("text-iui-inbox-muted-foreground mt-1 flex items-center gap-1 text-xs", a.time),
+						className: G("text-iui-inbox-muted-foreground mt-1 flex items-center gap-1 text-xs", l.time),
 						children: [/* @__PURE__ */ D($, {
 							name: "mute",
 							context: M("muted"),
-							icons: r,
-							resolver: i,
+							icons: s,
+							resolver: c,
 							className: "size-3.5"
-						}), Z(n.muted)]
+						}), Z(i.muted)]
 					}),
 					e.result !== null && /* @__PURE__ */ O("p", {
 						"data-inbox-result": "",
-						className: G("text-iui-inbox-muted-foreground mt-2 flex items-center gap-1.5 text-xs font-medium", a.result),
+						className: G("text-iui-inbox-muted-foreground mt-2 flex items-center gap-1.5 text-xs font-medium", l.result),
 						children: [/* @__PURE__ */ D($, {
 							name: "result",
 							context: M("result"),
-							icons: r,
-							resolver: i,
+							icons: s,
+							resolver: c,
 							className: "size-3.5"
 						}), e.result]
 					}),
 					e.result === null && e.actions.length > 0 && /* @__PURE__ */ D("div", {
 						className: "relative z-10 mt-2 flex flex-wrap gap-2",
 						children: e.actions.map((t, n) => {
-							let o = H(t), s = {
-								"aria-disabled": l !== void 0 || void 0,
-								"aria-busy": l === n || void 0,
+							let r = H(t), i = {
+								"aria-disabled": d !== void 0 || void 0,
+								"aria-busy": d === n || void 0,
 								"data-inbox-action": String(n),
-								className: G(n === 0 ? "rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-accent text-iui-inbox-accent hover:bg-iui-inbox-accent-subtle border" : "rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-border bg-iui-inbox-surface hover:bg-iui-inbox-control-hover border", a.action),
+								className: G(n === 0 ? "rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-accent text-iui-inbox-accent hover:bg-iui-inbox-accent-subtle border" : "rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-border bg-iui-inbox-surface hover:bg-iui-inbox-control-hover border", l.action),
 								onClick: (t) => X.runAction(e, n, t.nativeEvent)
-							}, c = /* @__PURE__ */ O(E, { children: [l === n && /* @__PURE__ */ D($, {
+							}, a = /* @__PURE__ */ O(E, { children: [d === n && /* @__PURE__ */ D($, {
 								name: "spinner",
 								context: {
 									...M("action"),
 									action: t
 								},
-								icons: r,
-								resolver: i,
+								icons: s,
+								resolver: c,
 								className: "size-3.5 motion-safe:animate-spin"
 							}), t.label] });
-							return o === void 0 ? /* @__PURE__ */ D("button", {
+							return r === void 0 ? /* @__PURE__ */ D("button", {
 								type: "button",
-								...s,
-								children: c
+								...i,
+								children: a
 							}, n) : /* @__PURE__ */ D("a", {
-								href: o,
+								href: r,
 								target: t.newTab ? "_blank" : void 0,
 								rel: t.newTab ? "noopener noreferrer" : void 0,
-								...s,
-								children: c
+								...i,
+								children: a
 							}, n);
 						})
 					}),
@@ -3926,120 +3934,120 @@ function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i,
 						id: w,
 						ref: A,
 						role: "group",
-						"aria-label": Z(n.snoozeUntil),
+						"aria-label": Z(i.snoozeUntil),
 						"data-inbox-snooze-options": "",
 						className: "relative z-10 mt-2 flex flex-wrap gap-2",
-						children: T.map((n) => /* @__PURE__ */ O("button", {
+						children: T.map((t) => /* @__PURE__ */ O("button", {
 							type: "button",
 							"data-inbox-snooze-option": "",
-							className: G("rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-border bg-iui-inbox-surface hover:bg-iui-inbox-control-hover border", a.action),
+							className: G("rounded-md focus-visible:ring-iui-inbox-ring inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-60 border-iui-inbox-border bg-iui-inbox-surface hover:bg-iui-inbox-control-hover border", l.action),
 							onClick: () => {
-								k(null), X.snooze(e, n.until);
+								k(null), X.snooze(e, t.until);
 							},
 							children: [
-								n.label,
+								t.label,
 								" ",
 								/* @__PURE__ */ D("span", {
 									className: "text-iui-inbox-muted-foreground font-normal",
-									children: ut(n.until, t, o)
+									children: ut(t.until, r, u)
 								})
 							]
-						}, n.label))
+						}, t.label))
 					})
 				]
 			}),
 			/* @__PURE__ */ O("div", {
 				className: Ai,
 				children: [
-					/* @__PURE__ */ D(Ra, {
-						text: Z(g ? n.markAsRead : n.markAsUnread),
+					/* @__PURE__ */ D(za, {
+						text: Z(g ? i.markAsRead : i.markAsUnread),
 						shortcut: "U",
 						children: /* @__PURE__ */ D("button", {
 							type: "button",
 							"data-inbox-toggle-read": "",
 							"aria-keyshortcuts": "U",
-							"aria-label": S(g ? n.markAsRead : n.markAsUnread),
-							className: G(Pi, a.control),
+							"aria-label": S(g ? i.markAsRead : i.markAsUnread),
+							className: G(Pi, l.control),
 							onClick: () => void (g ? X.markAsRead(e) : X.markAsUnread(e)),
 							children: /* @__PURE__ */ D($, {
 								name: g ? "read" : "unread",
 								context: M("toggle-read"),
-								icons: r,
-								resolver: i,
+								icons: s,
+								resolver: c,
 								className: "size-4"
 							})
 						})
 					}),
-					C && !_ && /* @__PURE__ */ D(Ra, {
-						text: Z(v ? n.unsnooze : n.snooze),
+					C && !_ && /* @__PURE__ */ D(za, {
+						text: Z(v ? i.unsnooze : i.snooze),
 						shortcut: "H",
 						children: /* @__PURE__ */ D("button", {
 							type: "button",
 							"data-inbox-snooze": "",
 							"aria-keyshortcuts": "H",
-							"aria-label": S(v ? n.unsnooze : n.snooze),
+							"aria-label": S(v ? i.unsnooze : i.snooze),
 							"aria-expanded": v ? void 0 : T !== null,
 							"aria-controls": v || !T ? void 0 : w,
-							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", a.control),
+							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", l.control),
 							onClick: j,
 							children: /* @__PURE__ */ D($, {
 								name: v ? "unsnooze" : "snooze",
 								context: M("snooze"),
-								icons: r,
-								resolver: i,
+								icons: s,
+								resolver: c,
 								className: "size-4"
 							})
 						})
 					}),
-					e.group !== null && x("mute") && /* @__PURE__ */ D(Ra, {
-						text: Z(e.muted ? n.unmute : n.mute),
+					e.group !== null && x("mute") && /* @__PURE__ */ D(za, {
+						text: Z(e.muted ? i.unmute : i.mute),
 						children: /* @__PURE__ */ D("button", {
 							type: "button",
 							"data-inbox-mute": "",
-							"aria-label": S(e.muted ? n.unmute : n.mute),
-							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", a.control),
+							"aria-label": S(e.muted ? i.unmute : i.mute),
+							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", l.control),
 							onClick: () => void (e.muted ? X.unmute(e) : X.mute(e)),
 							children: /* @__PURE__ */ D($, {
 								name: e.muted ? "unmute" : "mute",
 								context: M("mute"),
-								icons: r,
-								resolver: i,
+								icons: s,
+								resolver: c,
 								className: "size-4"
 							})
 						})
 					}),
-					x("archive") && /* @__PURE__ */ D(Ra, {
-						text: Z(_ ? n.unarchive : n.archive),
+					x("archive") && /* @__PURE__ */ D(za, {
+						text: Z(_ ? i.unarchive : i.archive),
 						shortcut: "E",
 						children: /* @__PURE__ */ D("button", {
 							type: "button",
 							"data-inbox-toggle-archive": "",
 							"aria-keyshortcuts": "E",
-							"aria-label": S(_ ? n.unarchive : n.archive),
-							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", a.control),
+							"aria-label": S(_ ? i.unarchive : i.archive),
+							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", l.control),
 							onClick: () => void (_ ? X.unarchive(e) : X.archive(e)),
 							children: /* @__PURE__ */ D($, {
 								name: _ ? "unarchive" : "archive",
 								context: M("archive"),
-								icons: r,
-								resolver: i,
+								icons: s,
+								resolver: c,
 								className: "size-4"
 							})
 						})
 					}),
-					x("delete") && /* @__PURE__ */ D(Ra, {
-						text: Z(n.delete),
+					x("delete") && /* @__PURE__ */ D(za, {
+						text: Z(i.delete),
 						children: /* @__PURE__ */ D("button", {
 							type: "button",
 							"data-inbox-delete": "",
-							"aria-label": S(n.delete),
-							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", a.control),
+							"aria-label": S(i.delete),
+							className: G("text-iui-inbox-icon hover:bg-iui-inbox-control-hover hover:text-iui-inbox-icon-hover focus-visible:ring-iui-inbox-ring rounded-md p-1.5 focus-visible:ring-2 focus-visible:outline-hidden [@media(hover:hover)]:p-1", l.control),
 							onClick: () => void X.delete(e),
 							children: /* @__PURE__ */ D($, {
 								name: "delete",
 								context: M("delete"),
-								icons: r,
-								resolver: i,
+								icons: s,
+								resolver: c,
 								className: "size-4"
 							})
 						})
@@ -4050,22 +4058,22 @@ function Va({ item: e, now: t, labels: n = Tt(), icons: r = {}, iconResolver: i,
 	});
 }
 // src/ItemGroup.tsx
-function Ha({ group: e, now: t, labels: n, icons: r, iconResolver: i, classes: a, locale: o, pendingActions: s, snooze: l, allowedActions: u, selected: d, select: p, renderItem: m }) {
-	let [h, g] = f(!1), _ = c();
+function Ua({ group: e, now: t, labels: r, icons: i, iconResolver: a, classes: s, locale: c, pendingActions: l, snooze: u, allowedActions: d, selected: f, select: p, renderItem: m }) {
+	let [h, g] = o(!1), _ = n();
 	h && e.others.length === 0 && g(!1);
-	let v = (e, c) => {
-		let f = {
+	let v = (e, n) => {
+		let o = {
 			item: e,
 			now: t,
-			labels: n,
-			icons: r,
-			iconResolver: i,
-			classes: a,
-			locale: o,
-			pendingAction: s[e.id],
-			snooze: l,
-			allowedActions: u,
-			selected: d?.includes(e.id) ?? !1,
+			labels: r,
+			icons: i,
+			iconResolver: a,
+			classes: s,
+			locale: c,
+			pendingAction: l[e.id],
+			snooze: u,
+			allowedActions: d,
+			selected: f?.includes(e.id) ?? !1,
 			onSelectedChange: p ? (t) => p(e.id, t) : void 0
 		};
 		return /* @__PURE__ */ O("li", {
@@ -4077,7 +4085,7 @@ function Ha({ group: e, now: t, labels: n, icons: r, iconResolver: i, classes: a
 			"data-archived": String(e.archivedAt !== null),
 			"data-announcement": e.announcement ? "true" : void 0,
 			className: bi,
-			children: [m ? m(e, t, f) : /* @__PURE__ */ D(Va, { ...f }), c]
+			children: [m ? m(e, t, o) : /* @__PURE__ */ D(Ha, { ...o }), n]
 		}, e.id);
 	};
 	return v(e.item, e.others.length > 0 && /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D("button", {
@@ -4087,7 +4095,7 @@ function Ha({ group: e, now: t, labels: n, icons: r, iconResolver: i, classes: a
 		"aria-controls": h ? _ : void 0,
 		className: "text-iui-inbox-muted-foreground hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring ms-15 -mt-2 mb-2.5 rounded-md px-1 py-0.5 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden",
 		onClick: () => g(!h),
-		children: h ? Z(n.showLess) : Z(n.showMore, { count: e.others.length })
+		children: h ? Z(r.showLess) : Z(r.showMore, { count: e.others.length })
 	}), h && /* @__PURE__ */ D("ul", {
 		id: _,
 		role: "list",
@@ -4096,13 +4104,13 @@ function Ha({ group: e, now: t, labels: n, icons: r, iconResolver: i, classes: a
 	})] }));
 }
 // src/SelectionBar.tsx
-function Ua({ component: e, items: t, selected: n, onSelectedChange: r, filter: i, allowedActions: a, now: o, labels: l, icons: u, iconResolver: p, classes: m, locale: h, snooze: g }) {
-	let _ = c(), v = (e) => Z(l[e]), y = t.filter((e) => n.includes(e.id)), b = y.length === t.length, x = d(null), [S, C] = f(null);
-	S !== null && y.length === 0 && C(null), s(() => {
+function Wa({ component: e, items: r, selected: i, onSelectedChange: s, filter: c, allowedActions: l, now: u, labels: d, icons: f, iconResolver: p, classes: m, locale: h, snooze: g }) {
+	let _ = n(), v = (e) => Z(d[e]), y = r.filter((e) => i.includes(e.id)), b = y.length === r.length, x = a(null), [S, C] = o(null);
+	S !== null && y.length === 0 && C(null), t(() => {
 		S && x.current?.querySelector("button")?.focus();
 	}, [S]);
 	let w = (e, t) => {
-		r([]), X.batch(e, y, t);
+		s([]), X.batch(e, y, t);
 	};
 	return y.length === 0 ? null : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ O("div", {
 		role: "group",
@@ -4120,14 +4128,14 @@ function Ua({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 				checked: b,
 				"aria-label": v("selectAll"),
 				className: Ni,
-				onChange: () => r(b ? [] : t.map((e) => e.id))
+				onChange: () => s(b ? [] : r.map((e) => e.id))
 			}), /* @__PURE__ */ D("span", {
 				"aria-live": "polite",
-				children: Z(l.selected, { count: y.length })
+				children: Z(d.selected, { count: y.length })
 			})]
 		}), /* @__PURE__ */ O("div", {
 			className: mi,
-			children: [_a(i, a).map((t) => /* @__PURE__ */ D("button", {
+			children: [va(c, l).map((t) => /* @__PURE__ */ D("button", {
 				type: "button",
 				"data-inbox-batch": t.action,
 				"aria-label": v(t.label),
@@ -4135,7 +4143,7 @@ function Ua({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 				"aria-expanded": t.action === "snooze" ? S !== null : void 0,
 				"aria-controls": t.action === "snooze" && S ? _ : void 0,
 				className: G(Pi, m.control),
-				onClick: () => t.action === "snooze" ? C(S ? null : va(g, l)) : w(t.action),
+				onClick: () => t.action === "snooze" ? C(S ? null : ya(g, d)) : w(t.action),
 				children: /* @__PURE__ */ D($, {
 					name: t.icon,
 					context: {
@@ -4143,7 +4151,7 @@ function Ua({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 						part: "selection",
 						action: t.action
 					},
-					icons: u,
+					icons: f,
 					resolver: p,
 					className: "size-4"
 				})
@@ -4153,14 +4161,14 @@ function Ua({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 				"aria-label": v("clearSelection"),
 				title: v("clearSelection"),
 				className: G(Pi, m.control),
-				onClick: () => r([]),
+				onClick: () => s([]),
 				children: /* @__PURE__ */ D($, {
 					name: "dismiss",
 					context: {
 						component: e,
 						part: "clear-selection"
 					},
-					icons: u,
+					icons: f,
 					resolver: p,
 					className: "size-4"
 				})
@@ -4185,29 +4193,29 @@ function Ua({ component: e, items: t, selected: n, onSelectedChange: r, filter: 
 				" ",
 				/* @__PURE__ */ D("span", {
 					className: "text-iui-inbox-muted-foreground font-normal",
-					children: ut(e.until, o, h)
+					children: ut(e.until, u, h)
 				})
 			]
 		}, e.label))
 	})] });
 }
 // src/NotificationCenter.tsx
-var Wa = () => () => {};
-function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 99, href: s, icons: u = {}, iconResolver: m, classes: h = {}, locale: g, renderItem: _, renderEmpty: v, group: y = !0, snooze: b, placement: x = "bottom-end", open: S, onOpenChange: C, onItemClick: w, onAction: T, renderTrigger: k, renderBadge: A, renderHeader: j, renderTab: M, renderLoading: N, renderError: P, renderFooter: F }) {
-	let { props: I } = a(), L = c(), R = {
+var Ga = () => () => {};
+function Ka({ labels: e, badge: t = "count", count: i = "unseen", maxCount: c = 99, href: l, icons: u = {}, iconResolver: d, classes: f = {}, locale: p, renderItem: m, renderEmpty: h, group: g = !0, snooze: _, placement: v = "bottom-end", open: y, onOpenChange: b, onItemClick: S, onAction: w, renderTrigger: k, renderBadge: A, renderHeader: j, renderTab: M, renderLoading: N, renderError: P, renderFooter: F }) {
+	let { props: I } = T(), L = n(), R = {
 		panel: `${L}-panel`,
 		title: `${L}-title`,
 		list: `${L}-list`,
 		tab: (e) => `${L}-tab-${e}`
-	}, z = p(X.subscribe, X.getSnapshot, X.getServerSnapshot), [B, ee] = f(!1), [V] = f(Date.now), te = p(B ? bt.subscribe : Wa, bt.getSnapshot, () => V), H = Tt(e), ne = (e) => Z(H[e]), U = z.counts[i], re = oa(z.filter, H), ie = ia(z), ae = z.categoryFilter, [oe, se] = f([]), W = ca(z.items, oe), ce = ct(W, y), le = ie.length > 1, ue = d(null), K = d(null), de = d(null), q = d(null), fe = d(null), pe = d(null), me = d(ie), he = d(ae), ge = d(x), J = d(C);
-	l(() => {
+	}, z = s(X.subscribe, X.getSnapshot, X.getServerSnapshot), [B, ee] = o(!1), [V] = o(Date.now), te = s(B ? bt.subscribe : Ga, bt.getSnapshot, () => V), H = Tt(e), ne = (e) => Z(H[e]), U = z.counts[i], re = sa(z.filter, H), ie = aa(z), ae = z.categoryFilter, [oe, se] = o([]), W = la(z.items, oe), ce = ct(W, g), le = ie.length > 1, ue = a(null), K = a(null), de = a(null), q = a(null), fe = a(null), pe = a(null), me = a(ie), he = a(ae), ge = a(v), J = a(b);
+	r(() => {
 		qi(), _t(I);
-		let e, t = !1, n = ja(K.current), i = ba(q.current, se, {
+		let e, t = !1, n = Ma(K.current), r = xa(q.current, se, {
 			scroller: q.current,
 			listed: (e) => X.getSnapshot().items.some((t) => t.id === e)
 		});
-		fe.current = i;
-		let a = Ca(q.current, () => X.getSnapshot().items), o = Da(ue.current, K.current, {
+		fe.current = r;
+		let i = wa(q.current, () => X.getSnapshot().items), a = Oa(ue.current, K.current, {
 			onToggle(n) {
 				ee(n), t = n, J.current?.(n), n ? (e = window.location.href, X.opened(me.current, {
 					markAllAsSeen: !1,
@@ -4217,37 +4225,37 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 			onEndReached: () => void X.loadMore(),
 			placement: () => ge.current
 		});
-		pe.current = o;
-		let s = r.on("navigate", () => {
-			window.location.href !== e && o.close();
+		pe.current = a;
+		let o = C.on("navigate", () => {
+			window.location.href !== e && a.close();
 		});
 		return () => {
-			t && X.closed({ markAllAsSeen: !1 }), s(), n(), i.destroy(), a.destroy(), o.destroy(), pe.current = null;
+			t && X.closed({ markAllAsSeen: !1 }), o(), n(), r.destroy(), i.destroy(), a.destroy(), pe.current = null;
 		};
-	}, []), l(() => pe.current?.observe(B ? de.current : null), [
+	}, []), r(() => pe.current?.observe(B ? de.current : null), [
 		z,
 		B,
 		W.length > 0
-	]), l(() => {
-		J.current = C, me.current = ie, he.current = ae;
-	}), l(() => {
+	]), r(() => {
+		J.current = b, me.current = ie, he.current = ae;
+	}), r(() => {
 		let e = K.current?.matches(":popover-open") ?? !1;
-		S === !0 && !e ? K.current?.showPopover() : S === !1 && e && pe.current?.close();
-	}, [S]), l(() => {
-		ge.current = x, pe.current?.place();
-	}, [x]), l(() => {
+		y === !0 && !e ? K.current?.showPopover() : y === !1 && e && pe.current?.close();
+	}, [y]), r(() => {
+		ge.current = v, pe.current?.place();
+	}, [v]), r(() => {
 		B && ie.length > 0 && !ie.includes(z.filter) && X.load(ie[0], z.category);
 	}, [ie.join()]);
 	let _e = () => {
 		let e = document.getElementById(R.panel);
 		e?.matches(":popover-open") && e.hidePopover();
-	}, ve = `${z.filter}|${z.category}|${B}|${z.selectable}`, [ye, be] = f([]), [xe, Se] = f(ve);
+	}, ve = `${z.filter}|${z.category}|${B}|${z.selectable}`, [ye, be] = o([]), [xe, Se] = o(ve);
 	xe !== ve && (Se(ve), be([]));
 	let Ce = W.some((e) => ye.includes(e.id));
-	l(() => fe.current?.release(), [ve]);
-	let we = (e, t) => be((n) => ya(n, e, t)), Te = (e) => {
-		let t = wa(e.nativeEvent, z.items);
-		t?.action ? T?.(t.item, t.action, e) : t && w?.(t.item, e);
+	r(() => fe.current?.release(), [ve]);
+	let we = (e, t) => be((n) => ba(n, e, t)), Te = (e) => {
+		let t = Ta(e.nativeEvent, z.items);
+		t?.action ? w?.(t.item, t.action, e) : t && S?.(t.item, e);
 	}, Ee = (e) => /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D("p", {
 		role: "alert",
 		children: ne("error")
@@ -4257,7 +4265,7 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 		className: ki,
 		onClick: e,
 		children: ne("retry")
-	})] }), De = la(z, W.length), Oe;
+	})] }), De = ua(z, W.length), Oe;
 	return Oe = De === "loading" ? /* @__PURE__ */ D("div", {
 		role: "status",
 		className: Fi,
@@ -4268,7 +4276,7 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 				part: "loading"
 			},
 			icons: u,
-			resolver: m,
+			resolver: d,
 			className: G(Ii, "motion-safe:animate-spin")
 		}), /* @__PURE__ */ D("span", {
 			className: "sr-only",
@@ -4284,7 +4292,7 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 	}) : De === "empty" ? /* @__PURE__ */ D("div", {
 		"data-inbox-empty": "",
 		className: Fi,
-		children: v ? v(z.filter) : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D($, {
+		children: h ? h(z.filter) : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D($, {
 			name: "empty",
 			context: {
 				component: "NotificationCenter",
@@ -4292,28 +4300,28 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 				filter: z.filter
 			},
 			icons: u,
-			resolver: m,
+			resolver: d,
 			className: Ii
 		}), /* @__PURE__ */ D("p", { children: re })] })
 	}) : /* @__PURE__ */ O(E, { children: [
 		/* @__PURE__ */ D("ul", {
 			role: "list",
 			"data-inbox-selecting": Ce || void 0,
-			className: G(yi, h.list),
-			children: ce.map((e) => /* @__PURE__ */ D(Ha, {
+			className: G(yi, f.list),
+			children: ce.map((e) => /* @__PURE__ */ D(Ua, {
 				group: e,
 				now: te,
 				labels: H,
 				icons: u,
-				iconResolver: m,
-				classes: h,
-				locale: g,
+				iconResolver: d,
+				classes: f,
+				locale: p,
 				pendingActions: z.pendingActions,
-				snooze: b,
+				snooze: _,
 				allowedActions: z.allowedActions,
 				selected: z.selectable ? ye : void 0,
 				select: z.selectable ? we : void 0,
-				renderItem: _
+				renderItem: m
 			}, e.key))
 		}),
 		z.hasMore && z.moreFailed && /* @__PURE__ */ D("div", {
@@ -4335,7 +4343,7 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 					part: "loading-more"
 				},
 				icons: u,
-				resolver: m,
+				resolver: d,
 				className: "size-5 motion-safe:animate-spin"
 			})
 		})
@@ -4349,10 +4357,10 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 			"aria-haspopup": "dialog",
 			"aria-expanded": B,
 			"aria-controls": R.panel,
-			"aria-label": Ma(H, U, o, g, z.pausedUntil !== null),
+			"aria-label": Na(H, U, c, p, z.pausedUntil !== null),
 			"data-inbox-bell": "",
 			"data-paused": z.pausedUntil === null ? void 0 : "true",
-			className: G(di, h.bell),
+			className: G(di, f.bell),
 			children: k ? k({
 				open: B,
 				count: U,
@@ -4365,23 +4373,23 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 						part: "bell"
 					},
 					icons: u,
-					resolver: m,
+					resolver: d,
 					className: "size-5"
 				}),
-				n !== "none" && U > 0 && A && A({
+				t !== "none" && U > 0 && A && A({
 					count: U,
-					text: St(U, o, g)
+					text: St(U, c, p)
 				}),
-				n === "count" && U > 0 && !A && /* @__PURE__ */ D("span", {
+				t === "count" && U > 0 && !A && /* @__PURE__ */ D("span", {
 					"data-inbox-badge": "",
 					"aria-hidden": "true",
-					className: G("bg-iui-inbox-badge text-iui-inbox-badge-foreground absolute -inset-e-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full px-1 text-[0.6875rem] leading-none font-semibold tabular-nums", h.badge),
-					children: St(U, o, g)
+					className: G("bg-iui-inbox-badge text-iui-inbox-badge-foreground absolute -inset-e-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full px-1 text-[0.6875rem] leading-none font-semibold tabular-nums", f.badge),
+					children: St(U, c, p)
 				}),
-				n === "dot" && U > 0 && !A && /* @__PURE__ */ D("span", {
+				t === "dot" && U > 0 && !A && /* @__PURE__ */ D("span", {
 					"data-inbox-badge": "",
 					"aria-hidden": "true",
-					className: G("bg-iui-inbox-badge absolute inset-e-1.5 top-1.5 size-2 rounded-full forced-color-adjust-none forced-colors:bg-[Highlight]", h.badge)
+					className: G("bg-iui-inbox-badge absolute inset-e-1.5 top-1.5 size-2 rounded-full forced-color-adjust-none forced-colors:bg-[Highlight]", f.badge)
 				})
 			] })
 		}), /* @__PURE__ */ D("div", {
@@ -4392,13 +4400,13 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 			"aria-labelledby": R.title,
 			tabIndex: -1,
 			"data-inbox-panel": "",
-			className: G(fi, h.panel),
-			onKeyDown: (e) => Aa(e.nativeEvent, K.current),
+			className: G(fi, f.panel),
+			onKeyDown: (e) => ja(e.nativeEvent, K.current),
 			onClickCapture: Te,
 			children: /* @__PURE__ */ O("div", {
 				className: pi,
 				children: [
-					/* @__PURE__ */ D(za, {
+					/* @__PURE__ */ D(Ba, {
 						component: "NotificationCenter",
 						state: z,
 						filter: z.filter,
@@ -4406,10 +4414,10 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 						items: z.items,
 						labels: H,
 						icons: u,
-						iconResolver: m,
-						classes: h,
-						locale: g,
-						maxCount: o,
+						iconResolver: d,
+						classes: f,
+						locale: p,
+						maxCount: c,
 						now: te,
 						panel: {
 							titleId: R.title,
@@ -4442,7 +4450,7 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 							})
 						}), Oe]
 					}),
-					/* @__PURE__ */ D(Ua, {
+					/* @__PURE__ */ D(Wa, {
 						component: "NotificationCenter",
 						items: W,
 						selected: ye,
@@ -4452,16 +4460,16 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 						now: te,
 						labels: H,
 						icons: u,
-						iconResolver: m,
-						classes: h,
-						locale: g,
-						snooze: b
+						iconResolver: d,
+						classes: f,
+						locale: p,
+						snooze: _
 					}),
 					F ? F({
-						href: s,
+						href: l,
 						close: _e
-					}) : s && /* @__PURE__ */ D(t, {
-						href: s,
+					}) : l && /* @__PURE__ */ D(x, {
+						href: l,
 						"data-inbox-view-all": "",
 						className: "border-iui-inbox-border text-iui-inbox-accent hover:bg-iui-inbox-control-hover focus-visible:ring-iui-inbox-ring block border-t px-4 py-2.5 text-center text-sm font-medium focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-inset",
 						children: ne("viewAll")
@@ -4472,35 +4480,35 @@ function Ga({ labels: e, badge: n = "count", count: i = "unseen", maxCount: o = 
 	});
 }
 // src/NotificationList.tsx
-function Ka({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, classes: s = {}, locale: c, buffer: m = 250, manual: h = !1, preserveUrl: g = !1, renderItem: _, renderEmpty: v, category: y, group: b = !0, snooze: x, maxCount: S = 99, renderHeader: C, renderTab: w, onItemClick: T, onAction: k }) {
-	let A = a(), j = p(X.subscribe, X.getSnapshot, X.getServerSnapshot), [M] = f(Date.now), N = p(bt.subscribe, bt.getSnapshot, () => M), { filter: P, category: F } = ma(A.url, j, n, y), I = Tt(r), L = oa(P, I), R = d(null), z = A.props[t]?.data, B = u(() => Array.isArray(z) ? z.map(We).filter((e) => e !== void 0) : [], [z]), ee = u(() => st(X, B, P, F), [
+function qa({ data: e, filter: t, labels: n, icons: c = {}, iconResolver: l, classes: u = {}, locale: d, buffer: f = 250, manual: p = !1, preserveUrl: m = !1, renderItem: h, renderEmpty: g, category: _, group: v = !0, snooze: y, maxCount: x = 99, renderHeader: S, renderTab: C, onItemClick: w, onAction: k }) {
+	let A = T(), j = s(X.subscribe, X.getSnapshot, X.getServerSnapshot), [M] = o(Date.now), N = s(bt.subscribe, bt.getSnapshot, () => M), { filter: P, category: F } = ha(A.url, j, t, _), I = Tt(n), L = sa(P, I), R = a(null), z = A.props[e]?.data, B = i(() => Array.isArray(z) ? z.map(We).filter((e) => e !== void 0) : [], [z]), ee = i(() => st(X, B, P, F), [
 		B,
 		P,
 		F,
 		j
-	]), [V, te] = f([]), H = ca(ee, V), ne = ct(H, b), U = !!A.scrollProps?.[t]?.nextPage, re = d(null), ie = d(H), ae = d({
+	]), [V, te] = o([]), H = la(ee, V), ne = ct(H, v), U = !!A.scrollProps?.[e]?.nextPage, re = a(null), ie = a(H), ae = a({
 		loaded: B,
 		filter: P,
 		category: F
 	});
-	l(() => {
+	r(() => {
 		ie.current = H, ae.current = {
 			loaded: B,
 			filter: P,
 			category: F
 		};
 	});
-	let oe = (e, n) => pa(A.url, e, n, A.scrollProps?.[t]?.pageName), se = `${P}|${F}|${j.selectable}`, [W, ce] = f([]), [le, ue] = f(se);
+	let oe = (t, n) => ma(A.url, t, n, A.scrollProps?.[e]?.pageName), se = `${P}|${F}|${j.selectable}`, [W, ce] = o([]), [le, ue] = o(se);
 	le !== se && (ue(se), ce([]));
 	let K = H.some((e) => W.includes(e.id));
-	l(() => re.current?.release(), [se]);
-	let de = (e, t) => ce((n) => ya(n, e, t));
-	return l(() => {
+	r(() => re.current?.release(), [se]);
+	let de = (e, t) => ce((n) => ba(n, e, t));
+	return r(() => {
 		qi(), _t(A.props);
-	}, []), l(() => X.remember(B), [B]), l(() => ja(R.current), []), l(() => {
-		let e = ba(R.current, te, { listed: (e) => st(X, ae.current.loaded, ae.current.filter, ae.current.category).some((t) => t.id === e) });
+	}, []), r(() => X.remember(B), [B]), r(() => Ma(R.current), []), r(() => {
+		let e = xa(R.current, te, { listed: (e) => st(X, ae.current.loaded, ae.current.filter, ae.current.category).some((t) => t.id === e) });
 		re.current = e;
-		let t = Ca(R.current, () => ie.current, null);
+		let t = wa(R.current, () => ie.current, null);
 		return () => {
 			e.destroy(), t.destroy(), re.current = null;
 		};
@@ -4508,28 +4516,28 @@ function Ka({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 		ref: R,
 		"data-inbox-list": "",
 		tabIndex: -1,
-		onKeyDown: (e) => Aa(e.nativeEvent, R.current),
+		onKeyDown: (e) => ja(e.nativeEvent, R.current),
 		onClickCapture: (e) => {
-			let t = wa(e.nativeEvent, H);
-			t?.action ? k?.(t.item, t.action, e) : t && T?.(t.item, e);
+			let t = Ta(e.nativeEvent, H);
+			t?.action ? k?.(t.item, t.action, e) : t && w?.(t.item, e);
 		},
 		children: [
-			/* @__PURE__ */ D(za, {
+			/* @__PURE__ */ D(Ba, {
 				component: "NotificationList",
 				state: j,
 				filter: P,
 				category: F,
 				items: H,
 				labels: I,
-				icons: i,
-				iconResolver: o,
-				classes: s,
-				locale: c,
-				maxCount: S,
+				icons: c,
+				iconResolver: l,
+				classes: u,
+				locale: d,
+				maxCount: x,
 				now: N,
 				href: oe,
-				renderHeader: C,
-				renderTab: w
+				renderHeader: S,
+				renderTab: C
 			}),
 			/* @__PURE__ */ D("div", {
 				"aria-live": "polite",
@@ -4542,16 +4550,16 @@ function Ka({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 					children: Z(I.showNew, { count: V.length })
 				})
 			}),
-			/* @__PURE__ */ D(e, {
-				data: t,
-				buffer: m,
-				manual: h,
-				preserveUrl: g,
+			/* @__PURE__ */ D(b, {
+				data: e,
+				buffer: f,
+				manual: p,
+				preserveUrl: m,
 				as: "ul",
 				role: "list",
 				hidden: H.length === 0 || void 0,
 				"data-inbox-selecting": K || void 0,
-				className: G(yi, s.list),
+				className: G(yi, u.list),
 				loading: /* @__PURE__ */ O("div", {
 					role: "status",
 					className: Li,
@@ -4561,15 +4569,15 @@ function Ka({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 							component: "NotificationList",
 							part: "loading-more"
 						},
-						icons: i,
-						resolver: o,
+						icons: c,
+						resolver: l,
 						className: ci
 					}), /* @__PURE__ */ D("span", {
 						className: "sr-only",
 						children: Z(I.loading)
 					})]
 				}),
-				next: h ? ({ fetch: e, hasMore: t, loading: n }) => t && /* @__PURE__ */ D("div", {
+				next: p ? ({ fetch: e, hasMore: t, loading: n }) => t && /* @__PURE__ */ D("div", {
 					className: "text-iui-inbox-muted-foreground flex justify-center py-3",
 					children: /* @__PURE__ */ D("button", {
 						type: "button",
@@ -4580,40 +4588,40 @@ function Ka({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 						children: Z(I.loadMore)
 					})
 				}) : void 0,
-				children: ne.map((e) => /* @__PURE__ */ D(Ha, {
+				children: ne.map((e) => /* @__PURE__ */ D(Ua, {
 					group: e,
 					now: N,
 					labels: I,
-					icons: i,
-					iconResolver: o,
-					classes: s,
-					locale: c,
+					icons: c,
+					iconResolver: l,
+					classes: u,
+					locale: d,
 					pendingActions: j.pendingActions,
-					snooze: x,
+					snooze: y,
 					allowedActions: j.allowedActions,
 					selected: j.selectable ? W : void 0,
 					select: j.selectable ? de : void 0,
-					renderItem: _
+					renderItem: h
 				}, e.key))
 			}),
 			H.length === 0 && !U && /* @__PURE__ */ D("div", {
 				"data-inbox-empty": "",
 				className: "text-iui-inbox-muted-foreground flex flex-col items-center gap-3 px-6 py-12 text-center text-sm",
-				children: v ? v(P) : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D($, {
+				children: g ? g(P) : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D($, {
 					name: "empty",
 					context: {
 						component: "NotificationList",
 						part: "empty",
 						filter: P
 					},
-					icons: i,
-					resolver: o,
+					icons: c,
+					resolver: l,
 					className: "text-iui-inbox-icon size-8"
 				}), /* @__PURE__ */ D("p", { children: L })] })
 			}),
 			K && /* @__PURE__ */ D("div", {
 				className: "bg-iui-inbox-surface sticky bottom-0 z-20",
-				children: /* @__PURE__ */ D(Ua, {
+				children: /* @__PURE__ */ D(Wa, {
 					component: "NotificationList",
 					items: H,
 					selected: W,
@@ -4622,26 +4630,26 @@ function Ka({ data: t, filter: n, labels: r, icons: i = {}, iconResolver: o, cla
 					allowedActions: j.allowedActions,
 					now: N,
 					labels: I,
-					icons: i,
-					iconResolver: o,
-					classes: s,
-					locale: c,
-					snooze: x
+					icons: c,
+					iconResolver: l,
+					classes: u,
+					locale: d,
+					snooze: y
 				})
 			})
 		]
 	});
 }
 // src/usePreferences.ts
-var qa = () => kn.load(X.getSnapshot().url);
-function Ja() {
-	let { props: e } = a(), t = p(kn.subscribe, kn.getSnapshot, () => qt), n = u(() => tn(t), [t]);
-	return l(() => {
-		qi(), _t(e), qa();
+var Ja = () => kn.load(X.getSnapshot().url);
+function Ya() {
+	let { props: e } = T(), t = s(kn.subscribe, kn.getSnapshot, () => qt), n = i(() => tn(t), [t]);
+	return r(() => {
+		qi(), _t(e), Ja();
 	}, []), {
 		...t,
 		sections: n,
-		load: qa,
+		load: Ja,
 		set: kn.set,
 		setChannel: kn.setChannel,
 		setFrequency: kn.setFrequency,
@@ -4652,10 +4660,10 @@ function Ja() {
 	};
 }
 // src/usePush.ts
-var Ya = () => Mn;
-function Xa() {
-	let { props: e } = a(), t = p(Jn.subscribe, Jn.getSnapshot, Ya);
-	return l(() => {
+var Xa = () => Mn;
+function Za() {
+	let { props: e } = T(), t = s(Jn.subscribe, Jn.getSnapshot, Xa);
+	return r(() => {
 		qi(), _t(e);
 	}, []), {
 		...t,
@@ -4667,16 +4675,16 @@ function Xa() {
 	};
 }
 // src/NotificationPreferences.tsx
-function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGroup: i, renderChannel: a, renderEmpty: o }) {
-	let { status: l, channels: u, categories: d, sections: m, notificationHours: h, frequencies: g, load: _, setChannel: v, setFrequency: y, setNotificationHours: b, receives: x, frequencyApplies: S, isDisabled: C } = Ja(), w = Xa(), [T, k] = f(null), A = On(e), j = (e) => Z(A[e]), M = An(u, d, g, A), N = u.some((e) => e.push) ? Pn(w) : null, [P] = f(Date.now), F = p(bt.subscribe, bt.getSnapshot, () => P), I = Yn(w.devices, A, F, n), L = c(), R = N !== null;
-	s(() => {
+function Qa({ labels: e, classes: r = {}, locale: i, renderCategory: a, renderGroup: c, renderChannel: l, renderEmpty: u }) {
+	let { status: d, channels: f, categories: p, sections: m, notificationHours: h, frequencies: g, load: _, setChannel: v, setFrequency: y, setNotificationHours: b, receives: x, frequencyApplies: S, isDisabled: C } = Ya(), w = Za(), [T, k] = o(null), A = On(e), j = (e) => Z(A[e]), M = An(f, p, g, A), N = f.some((e) => e.push) ? Pn(w) : null, [P] = o(Date.now), F = s(bt.subscribe, bt.getSnapshot, () => P), I = Yn(w.devices, A, F, i), L = n(), R = N !== null;
+	t(() => {
 		R && Jn.loadDevices();
 	}, [R]);
 	let z = (e) => {
 		let t = vn(h, T, e);
 		t && (k(t.editing), b({ days: { [e.day]: t.ranges } }));
 	};
-	return l === "error" ? /* @__PURE__ */ D("div", {
+	return d === "error" ? /* @__PURE__ */ D("div", {
 		"data-inbox-preferences": "",
 		children: /* @__PURE__ */ O("div", {
 			"data-inbox-preferences-error": "",
@@ -4688,12 +4696,12 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 				children: j("retry")
 			})]
 		})
-	}) : d.length === 0 ? /* @__PURE__ */ D("div", {
+	}) : p.length === 0 ? /* @__PURE__ */ D("div", {
 		"data-inbox-preferences": "",
-		children: l === "ready" ? /* @__PURE__ */ D("div", {
+		children: d === "ready" ? /* @__PURE__ */ D("div", {
 			"data-inbox-preferences-empty": "",
 			className: Fi,
-			children: o ? o() : /* @__PURE__ */ D("p", { children: j("empty") })
+			children: u ? u() : /* @__PURE__ */ D("p", { children: j("empty") })
 		}) : /* @__PURE__ */ O("div", {
 			role: "status",
 			className: Fi,
@@ -4715,7 +4723,7 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 			/* @__PURE__ */ D("div", {
 				className: Ri,
 				children: /* @__PURE__ */ O("table", {
-					className: G(zi, t.table),
+					className: G(zi, r.table),
 					children: [
 						/* @__PURE__ */ D("caption", {
 							className: "sr-only",
@@ -4724,37 +4732,37 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 						/* @__PURE__ */ D("thead", { children: /* @__PURE__ */ O("tr", { children: [
 							/* @__PURE__ */ D("th", {
 								scope: "col",
-								className: G(Bi, t.head),
+								className: G(Bi, r.head),
 								children: j("category")
 							}),
-							u.map((e) => /* @__PURE__ */ D("th", {
+							f.map((e) => /* @__PURE__ */ D("th", {
 								scope: "col",
-								className: G(Vi, t.head),
-								children: a ? a(e) : e.label
+								className: G(Vi, r.head),
+								children: l ? l(e) : e.label
 							}, e.key)),
 							M.hasFrequencies && /* @__PURE__ */ D("th", {
 								scope: "col",
-								className: G("text-iui-inbox-muted-foreground w-40 px-4 py-2.5 text-start text-xs font-medium", t.head),
+								className: G("text-iui-inbox-muted-foreground w-40 px-4 py-2.5 text-start text-xs font-medium", r.head),
 								children: j("frequency")
 							})
 						] }) }),
 						M.hasGlobalSwitches && /* @__PURE__ */ D("tbody", {
 							"data-inbox-preferences-global": "",
 							children: /* @__PURE__ */ O("tr", {
-								className: G("border-iui-inbox-border border-t", t.row),
+								className: G("border-iui-inbox-border border-t", r.row),
 								children: [
 									/* @__PURE__ */ O("th", {
 										scope: "row",
 										className: "min-w-36 px-4 py-3 text-start align-top font-normal",
 										children: [/* @__PURE__ */ D("span", {
-											className: G("text-iui-inbox-foreground font-medium", t.label),
+											className: G("text-iui-inbox-foreground font-medium", r.label),
 											children: j("global")
 										}), /* @__PURE__ */ D("span", {
-											className: G("text-iui-inbox-muted-foreground mt-0.5 block", t.description),
+											className: G("text-iui-inbox-muted-foreground mt-0.5 block", r.description),
 											children: j("globalDescription")
 										})]
 									}),
-									u.map((e) => /* @__PURE__ */ D("td", {
+									f.map((e) => /* @__PURE__ */ D("td", {
 										className: "px-2 py-3 text-center align-middle",
 										children: e.globalSwitch && /* @__PURE__ */ D("button", {
 											type: "button",
@@ -4765,7 +4773,7 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 												channel: e.label
 											}),
 											"data-inbox-preference-channel": e.key,
-											className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", t.switch),
+											className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", r.switch),
 											onClick: () => void v(e.key, !e.enabled),
 											children: /* @__PURE__ */ D("span", {
 												"aria-hidden": "true",
@@ -4784,65 +4792,65 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 								children: /* @__PURE__ */ D("th", {
 									scope: "rowgroup",
 									colSpan: M.columns,
-									className: G("bg-iui-inbox-control-hover/50 px-4 pt-4 pb-2 text-start font-normal", t.group),
-									children: i ? i(e.group) : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D("span", {
+									className: G("bg-iui-inbox-control-hover/50 px-4 pt-4 pb-2 text-start font-normal", r.group),
+									children: c ? c(e.group) : /* @__PURE__ */ O(E, { children: [/* @__PURE__ */ D("span", {
 										className: "text-iui-inbox-foreground font-semibold",
 										children: e.group.label
 									}), e.group.description && /* @__PURE__ */ D("span", {
-										className: G("text-iui-inbox-muted-foreground mt-0.5 block", t.description),
+										className: G("text-iui-inbox-muted-foreground mt-0.5 block", r.description),
 										children: e.group.description
 									})] })
 								})
 							}), e.categories.map((e) => /* @__PURE__ */ O("tr", {
 								"data-inbox-preference-category": e.key,
-								className: G(Hi, t.row),
+								className: G(Hi, r.row),
 								children: [
 									/* @__PURE__ */ D("th", {
 										scope: "row",
 										className: Ui,
-										children: r ? r(e) : /* @__PURE__ */ O(E, { children: [
+										children: a ? a(e) : /* @__PURE__ */ O(E, { children: [
 											/* @__PURE__ */ D("span", {
-												className: G(Wi, t.label),
+												className: G(Wi, r.label),
 												children: e.label
 											}),
 											e.locked && /* @__PURE__ */ D("span", {
-												className: G("bg-iui-inbox-control-hover text-iui-inbox-muted-foreground inline-block rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap", t.badge),
+												className: G("bg-iui-inbox-control-hover text-iui-inbox-muted-foreground inline-block rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap", r.badge),
 												children: j("locked")
 											}),
 											e.description && /* @__PURE__ */ D("span", {
-												className: G("text-iui-inbox-muted-foreground mt-0.5 block", t.description),
+												className: G("text-iui-inbox-muted-foreground mt-0.5 block", r.description),
 												children: e.description
 											})
 										] })
 									}),
-									u.map((n) => /* @__PURE__ */ D("td", {
+									f.map((t) => /* @__PURE__ */ D("td", {
 										className: Gi,
-										children: e.channels[n.key] !== void 0 && /* @__PURE__ */ D("button", {
+										children: e.channels[t.key] !== void 0 && /* @__PURE__ */ D("button", {
 											type: "button",
 											role: "switch",
-											"aria-checked": x(e, n),
-											"aria-disabled": C(e, n) || void 0,
+											"aria-checked": x(e, t),
+											"aria-disabled": C(e, t) || void 0,
 											"aria-label": Z(A.toggle, {
 												category: e.label,
-												channel: n.label
+												channel: t.label
 											}),
-											"data-inbox-preference": `${e.key}.${n.key}`,
-											className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", t.switch),
-											onClick: () => jn(e, n, u),
+											"data-inbox-preference": `${e.key}.${t.key}`,
+											className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", r.switch),
+											onClick: () => jn(e, t, f),
 											children: /* @__PURE__ */ D("span", {
 												"aria-hidden": "true",
 												className: "bg-iui-inbox-surface ms-0.5 size-4 rounded-full shadow-sm forced-color-adjust-none group-aria-checked/switch:translate-x-4 forced-colors:bg-[ButtonText] forced-colors:group-aria-checked/switch:bg-[Highlight] motion-safe:transition-transform rtl:group-aria-checked/switch:-translate-x-4"
 											})
 										})
-									}, n.key)),
+									}, t.key)),
 									M.hasFrequencies && /* @__PURE__ */ D("td", {
 										className: "px-4 py-3 text-start align-middle",
 										children: e.frequency !== null && /* @__PURE__ */ D("select", {
 											value: e.frequency,
-											disabled: !S(e, u),
+											disabled: !S(e, f),
 											"aria-label": Z(A.frequencyLabel, { category: e.label }),
 											"data-inbox-preference-frequency": e.key,
-											className: G("rounded-iui-inbox border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring min-w-full border px-2 py-1 text-sm focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-default disabled:opacity-50", t.select),
+											className: G("rounded-iui-inbox border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring min-w-full border px-2 py-1 text-sm focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-default disabled:opacity-50", r.select),
 											onChange: (t) => void y(e.key, t.target.value),
 											children: M.frequencyOptions.map((e) => /* @__PURE__ */ D("option", {
 												value: e.value,
@@ -4866,16 +4874,16 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 					children: [/* @__PURE__ */ O("div", {
 						className: "min-w-0 grow basis-64",
 						children: [/* @__PURE__ */ D("span", {
-							className: G("text-iui-inbox-foreground font-medium", t.label),
+							className: G("text-iui-inbox-foreground font-medium", r.label),
 							children: j("pushDevice")
 						}), /* @__PURE__ */ D("div", {
 							"aria-live": "polite",
 							"data-inbox-push-device-status": "",
 							children: N.hint ? /* @__PURE__ */ D("p", {
-								className: G("bg-iui-inbox-control-hover text-iui-inbox-foreground mt-2 rounded-md px-3 py-2", t.description),
+								className: G("bg-iui-inbox-control-hover text-iui-inbox-foreground mt-2 rounded-md px-3 py-2", r.description),
 								children: j(N.text)
 							}) : /* @__PURE__ */ D("span", {
-								className: G("text-iui-inbox-muted-foreground mt-0.5 block", t.description),
+								className: G("text-iui-inbox-muted-foreground mt-0.5 block", r.description),
 								children: j(N.text)
 							})
 						})]
@@ -4910,10 +4918,10 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 							children: [/* @__PURE__ */ O("div", {
 								className: "min-w-0 grow",
 								children: [/* @__PURE__ */ D("span", {
-									className: G("text-iui-inbox-foreground font-medium", t.label),
+									className: G("text-iui-inbox-foreground font-medium", r.label),
 									children: e.name
 								}), /* @__PURE__ */ D("span", {
-									className: G("text-iui-inbox-muted-foreground mt-0.5 block", t.description),
+									className: G("text-iui-inbox-muted-foreground mt-0.5 block", r.description),
 									children: e.active
 								})]
 							}), /* @__PURE__ */ D("button", {
@@ -4939,24 +4947,24 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 						"aria-checked": h.enabled,
 						"aria-label": j("notificationHours"),
 						"data-inbox-notification-hours": "",
-						className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", t.switch),
+						className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", r.switch),
 						onClick: () => void b({ enabled: !h.enabled }),
 						children: /* @__PURE__ */ D("span", {
 							"aria-hidden": "true",
 							className: "bg-iui-inbox-surface ms-0.5 size-4 rounded-full shadow-sm forced-color-adjust-none group-aria-checked/switch:translate-x-4 forced-colors:bg-[ButtonText] forced-colors:group-aria-checked/switch:bg-[Highlight] motion-safe:transition-transform rtl:group-aria-checked/switch:-translate-x-4"
 						})
 					}), /* @__PURE__ */ O("div", { children: [/* @__PURE__ */ D("span", {
-						className: G("text-iui-inbox-foreground font-medium", t.label),
+						className: G("text-iui-inbox-foreground font-medium", r.label),
 						children: j("notificationHours")
 					}), /* @__PURE__ */ D("span", {
-						className: G("text-iui-inbox-muted-foreground mt-0.5 block", t.description),
+						className: G("text-iui-inbox-muted-foreground mt-0.5 block", r.description),
 						children: j("notificationHoursDescription")
 					})] })]
 				}), /* @__PURE__ */ D("div", {
 					className: "mt-3 flex flex-col gap-3 sm:gap-2",
-					children: _n(h, T, n).map(({ day: e, name: n, ranges: r, locked: i, canAdd: a }) => /* @__PURE__ */ O("div", {
+					children: _n(h, T, i).map(({ day: e, name: t, ranges: n, locked: i, canAdd: a }) => /* @__PURE__ */ O("div", {
 						role: "group",
-						"aria-label": n,
+						"aria-label": t,
 						"data-inbox-notification-hours-day": e,
 						className: "flex flex-wrap items-start gap-x-4 gap-y-2",
 						onBlur: (e) => {
@@ -4967,11 +4975,11 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 							children: [/* @__PURE__ */ D("button", {
 								type: "button",
 								role: "switch",
-								"aria-checked": r.length > 0,
+								"aria-checked": n.length > 0,
 								"aria-disabled": i || void 0,
-								"aria-label": Z(A.notificationHoursDay, { day: n }),
+								"aria-label": Z(A.notificationHoursDay, { day: t }),
 								"data-inbox-notification-hours-day-switch": "",
-								className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", t.switch),
+								className: G("group/switch bg-iui-inbox-icon aria-checked:bg-iui-inbox-accent focus-visible:ring-iui-inbox-ring focus-visible:ring-offset-iui-inbox-surface relative inline-flex h-5 w-9 shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden aria-disabled:cursor-default aria-disabled:opacity-50 forced-colors:border motion-safe:transition-colors", r.switch),
 								onClick: () => z({
 									kind: "toggle",
 									day: e
@@ -4980,10 +4988,10 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 									"aria-hidden": "true",
 									className: "bg-iui-inbox-surface ms-0.5 size-4 rounded-full shadow-sm forced-color-adjust-none group-aria-checked/switch:translate-x-4 forced-colors:bg-[ButtonText] forced-colors:group-aria-checked/switch:bg-[Highlight] motion-safe:transition-transform rtl:group-aria-checked/switch:-translate-x-4"
 								})
-							}), /* @__PURE__ */ D("span", { children: n })]
-						}), r.length > 0 ? /* @__PURE__ */ D("div", {
+							}), /* @__PURE__ */ D("span", { children: t })]
+						}), n.length > 0 ? /* @__PURE__ */ D("div", {
 							className: "flex min-w-0 grow basis-60 flex-col items-start gap-2",
-							children: r.map(([i, o], s) => /* @__PURE__ */ O("div", {
+							children: n.map(([i, o], s) => /* @__PURE__ */ O("div", {
 								className: "flex flex-wrap items-center gap-x-3 gap-y-2",
 								children: [
 									/* @__PURE__ */ O("label", {
@@ -4997,7 +5005,7 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 											value: i,
 											disabled: !h.enabled,
 											"data-inbox-notification-hours-start": "",
-											className: G("rounded-iui-inbox border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring border px-2 py-1 text-sm focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-default disabled:opacity-50", t.time),
+											className: G("rounded-iui-inbox border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring border px-2 py-1 text-sm focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-default disabled:opacity-50", r.time),
 											onChange: (t) => z({
 												kind: "time",
 												day: e,
@@ -5023,7 +5031,7 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 											value: o,
 											disabled: !h.enabled,
 											"data-inbox-notification-hours-end": "",
-											className: G("rounded-iui-inbox border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring border px-2 py-1 text-sm focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-default disabled:opacity-50", t.time),
+											className: G("rounded-iui-inbox border-iui-inbox-border bg-iui-inbox-surface text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring border px-2 py-1 text-sm focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-default disabled:opacity-50", r.time),
 											onChange: (t) => z({
 												kind: "time",
 												day: e,
@@ -5033,13 +5041,13 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 											})
 										})]
 									}),
-									r.length > 1 && /* @__PURE__ */ D("button", {
+									n.length > 1 && /* @__PURE__ */ D("button", {
 										type: "button",
 										disabled: !h.enabled,
 										"aria-label": Z(A.notificationHoursRemoveLabel, {
 											start: i,
 											end: o,
-											day: n
+											day: t
 										}),
 										"data-inbox-notification-hours-remove": "",
 										className: "text-iui-inbox-muted-foreground -ms-2 hover:bg-iui-inbox-control-hover hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring rounded-md px-2 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-default disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-iui-inbox-muted-foreground",
@@ -5050,10 +5058,10 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 										}),
 										children: j("notificationHoursRemove")
 									}),
-									s === r.length - 1 && /* @__PURE__ */ D("button", {
+									s === n.length - 1 && /* @__PURE__ */ D("button", {
 										type: "button",
 										disabled: !a,
-										"aria-label": Z(A.notificationHoursAddLabel, { day: n }),
+										"aria-label": Z(A.notificationHoursAddLabel, { day: t }),
 										"data-inbox-notification-hours-add": "",
 										className: "text-iui-inbox-muted-foreground -ms-2 hover:bg-iui-inbox-control-hover hover:text-iui-inbox-foreground focus-visible:ring-iui-inbox-ring rounded-md px-2 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:outline-hidden disabled:cursor-default disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-iui-inbox-muted-foreground",
 										onClick: () => z({
@@ -5075,9 +5083,9 @@ function Za({ labels: e, classes: t = {}, locale: n, renderCategory: r, renderGr
 	});
 }
 // src/useNotifications.ts
-function Qa() {
-	let { props: e } = a(), t = p(X.subscribe, X.getSnapshot, X.getServerSnapshot);
-	return l(() => {
+function $a() {
+	let { props: e } = T(), t = s(X.subscribe, X.getSnapshot, X.getServerSnapshot);
+	return r(() => {
 		qi(), _t(e);
 	}, []), {
 		...t,
@@ -5086,22 +5094,23 @@ function Qa() {
 	};
 }
 // src/useToasts.ts
-var $a = [], eo = (e, t, n) => n ? Ir(e, t, n.nativeEvent) : Fr(e, t);
-function to(e) {
-	let { flash: t } = a(), n = p(Q.subscribe, Q.getSnapshot, () => $a);
-	p(Q.subscribe, or, () => 0);
-	let r = u(() => n.filter((t) => t.toaster === e), [n, e]), [i] = f(cr);
-	return l(() => Q.attach(e), [e]), l(() => (qi(), gr(t), i.release), []), {
-		toasts: r,
+var eo = [], to = (e, t, n) => n ? Ir(e, t, n.nativeEvent) : Fr(e, t);
+function no(e) {
+	Ji();
+	let t = s(Q.subscribe, Q.getSnapshot, () => eo);
+	s(Q.subscribe, or, () => 0);
+	let n = i(() => t.filter((t) => t.toaster === e), [t, e]), [a] = o(cr);
+	return r(() => Q.attach(e), [e]), r(() => a.release, []), {
+		toasts: n,
 		toast: Hr,
 		update: Q.update,
 		dismiss: Q.dismiss,
-		pause: i.pause,
-		resume: i.resume,
+		pause: a.pause,
+		resume: a.resume,
 		timer: Q.timer,
-		runAction: eo
+		runAction: to
 	};
 }
 // src/iconResolver.ts
-var no = _e, ro = ve;
-export { xr as DEFAULT_ERROR_MESSAGES, wt as DEFAULT_INBOX_LABELS, En as DEFAULT_PREFERENCES_LABELS, Ga as NotificationCenter, Va as NotificationItem, Ka as NotificationList, Za as NotificationPreferences, ea as Toaster, ct as groupItems, X as inboxStore, qi as initNotifications, Re as isSnoozed, ft as pauseEnd, mt as pauseTime, kn as preferencesStore, xt as relativeTime, Vt as requestNotificationPermission, ro as resolveIcon, no as setIconResolver, Se as setTranslations, lt as snoozeOptions, Hr as toast, Te as trans, Qa as useNotifications, Ja as usePreferences, Xa as usePush, to as useToasts };
+var ro = _e, io = ve;
+export { xr as DEFAULT_ERROR_MESSAGES, wt as DEFAULT_INBOX_LABELS, En as DEFAULT_PREFERENCES_LABELS, Ka as NotificationCenter, Ha as NotificationItem, qa as NotificationList, Qa as NotificationPreferences, ta as Toaster, ct as groupItems, X as inboxStore, qi as initNotifications, Re as isSnoozed, ft as pauseEnd, mt as pauseTime, kn as preferencesStore, xt as relativeTime, Vt as requestNotificationPermission, io as resolveIcon, ro as setIconResolver, Se as setTranslations, lt as snoozeOptions, Hr as toast, Te as trans, $a as useNotifications, Ya as usePreferences, Za as usePush, no as useToasts };
