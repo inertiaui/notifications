@@ -40,3 +40,32 @@
 .iui-toaster-host :is(a, button) {
     all: revert-layer;
 }
+
+/* Next to the sidebar, VitePress fits the site title into the sidebar's width, and "Notifications Documentation" runs into the
+   search. The title takes at least that width and grows with its text, so the search starts after it. The bar behind both
+   stays one surface, as when the content reached under the title. */
+@media (min-width: 960px) {
+    .VPNav .VPNavBar.has-sidebar .container {
+        background-color: var(--vp-nav-bg-color);
+        backdrop-filter: blur(16px);
+    }
+
+    .VPNav .VPNavBar.has-sidebar .container > .title {
+        position: relative;
+        width: auto;
+        min-width: var(--vp-sidebar-width);
+        padding-right: 0;
+    }
+
+    .VPNav .VPNavBar.has-sidebar .container > .content {
+        padding-left: 0;
+        background: none;
+        backdrop-filter: none;
+    }
+}
+
+@media (min-width: 1440px) {
+    .VPNav .VPNavBar.has-sidebar .container > .title {
+        min-width: calc((100% - (var(--vp-layout-max-width) - 64px)) / 2 + var(--vp-sidebar-width) - 32px);
+    }
+}
