@@ -104,7 +104,6 @@ use InertiaUI\Notifications\ToastAction;
 Toast::make('Message archived')
     ->action(ToastAction::make('Undo')
         ->post(route('messages.restore', $message))
-        ->preserveScroll()
     )
     ->flash();
 ```

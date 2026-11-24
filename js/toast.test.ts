@@ -704,6 +704,37 @@ describe('toast actions', () => {
         expect(assign).toHaveBeenCalledWith('/invoices/7.pdf')
     })
 
+    it('keeps the state and scroll position of the page when a change lands on the page the user is on', () => {
+        runToastAction(toast('Invoice deleted', { action: { label: 'Undo', href: '/invoices/7/restore', method: 'post' } }), 0)
+        runToastAction(toast('Invoice paid', { action: { label: 'Open', href: '/invoices/7' } }), 0)
+        runToastAction(
+            toast('Invoice sent', {
+                action: { label: 'Unsend', href: '/invoices/7/unsend', method: 'patch', visit: { preserveState: false, preserveScroll: true } },
+            }),
+            0,
+        )
+
+        const [undo, open, unsend] = visits.map((visit) => visit.options)
+        const landsOnCurrentPage = undo!.preserveState as (page: { url: string }) => boolean
+
+        expect(undo!.preserveScroll).toBe(landsOnCurrentPage)
+        expect(landsOnCurrentPage({ url: '/dashboard' })).toBe(true)
+        expect(landsOnCurrentPage({ url: 'https://app.test/dashboard#activity' })).toBe(true)
+        expect(landsOnCurrentPage({ url: '/dashboard?tab=archived' })).toBe(false)
+        expect(landsOnCurrentPage({ url: '/invoices' })).toBe(false)
+        expect(landsOnCurrentPage({ url: 'https://admin.app.test/dashboard' })).toBe(false)
+
+        // Laravel sorts and encodes the query of the page it redirects back to, unlike the URL infinite scroll left behind.
+        windowStub.location.href = 'https://app.test/invoices?status=open&q=late+fee&page=2'
+        expect(landsOnCurrentPage({ url: '/invoices?page=2&q=late%20fee&status=open' })).toBe(true)
+        expect(landsOnCurrentPage({ url: '/invoices?page=2&q=late%20fee&status=paid' })).toBe(false)
+        windowStub.location.href = 'https://app.test/dashboard'
+
+        expect(open).not.toHaveProperty('preserveState')
+        expect(open).not.toHaveProperty('preserveScroll')
+        expect(unsend).toMatchObject({ preserveState: false, preserveScroll: true })
+    })
+
     it("loads the View action of a notification's toast in the browser when it links to another origin, and visits other methods with Inertia", () => {
         assign.mockClear()
         listeners.onFlash!({
